@@ -1,0 +1,3306 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-06-01T23:50:09.553661",
+  "data": {
+    "asset_schema": {
+      "metadata": {
+        "name": "中国10kV-0.4kV配网规划系统工程对象模型",
+        "version": "1.0.1",
+        "purpose": "为图元库拖拽建模、参数录入、pandapower映射、规范校验和规划方案比较提供统一元数据。"
+      },
+      "base_system": {
+        "frequency_hz": 50,
+        "nominal_voltage_levels_kv": [
+          0.22,
+          0.38,
+          0.4,
+          10,
+          10.5,
+          35,
+          110
+        ],
+        "area_classes": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "operation_states": [
+          "normal",
+          "maintenance",
+          "n_1",
+          "fault",
+          "islanded",
+          "black_start"
+        ]
+      },
+      "classes": {
+        "source_grid": {
+          "display_name": "上级电网/外部电源",
+          "palette_group": "电源",
+          "pandapower_element": "ext_grid",
+          "graphical": {
+            "symbol": "source-grid",
+            "icon_hint": "plug-zap",
+            "min_size": [
+              72,
+              48
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "vn_kv",
+            "vm_pu",
+            "s_sc_max_mva",
+            "rx_max"
+          ],
+          "optional_fields": [
+            "s_sc_min_mva",
+            "rx_min",
+            "r0x0_max",
+            "x0x_max",
+            "controllable"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "n_1",
+            "opf"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar",
+              "line_overhead",
+              "line_cable",
+              "switch_breaker"
+            ]
+          }
+        },
+        "busbar": {
+          "display_name": "母线/节点",
+          "palette_group": "一次接线",
+          "pandapower_element": "bus",
+          "graphical": {
+            "symbol": "busbar",
+            "icon_hint": "minus",
+            "min_size": [
+              96,
+              28
+            ]
+          },
+          "ports": [
+            {
+              "name": "terminal",
+              "kind": "ac_node",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "vn_kv",
+            "name"
+          ],
+          "optional_fields": [
+            "min_vm_pu",
+            "max_vm_pu",
+            "zone",
+            "area_class",
+            "geodata"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "state_estimation",
+            "power_quality"
+          ],
+          "connection_rules": {
+            "terminal": [
+              "source_grid",
+              "transformer_2w",
+              "transformer_3w",
+              "line_overhead",
+              "line_cable",
+              "load",
+              "sgen",
+              "storage",
+              "switch_breaker",
+              "switch_disconnector"
+            ]
+          }
+        },
+        "transformer_2w": {
+          "display_name": "双绕组变压器",
+          "palette_group": "变压器",
+          "pandapower_element": "trafo",
+          "graphical": {
+            "symbol": "transformer-2w",
+            "icon_hint": "circle-dot",
+            "min_size": [
+              80,
+              88
+            ]
+          },
+          "ports": [
+            {
+              "name": "hv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "lv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.4,
+                10,
+                10.5,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "std_type",
+            "sn_mva",
+            "vn_hv_kv",
+            "vn_lv_kv",
+            "vk_percent",
+            "vkr_percent",
+            "pfe_kw",
+            "i0_percent",
+            "vector_group"
+          ],
+          "optional_fields": [
+            "tap_side",
+            "tap_min",
+            "tap_max",
+            "tap_step_percent",
+            "tap_pos",
+            "cooling_type",
+            "winding_type",
+            "winding_material",
+            "insulation_class",
+            "loss_level",
+            "installation",
+            "short_circuit_impedance_zero_sequence",
+            "dimensions_mm",
+            "total_weight_kg",
+            "oil_weight_kg",
+            "cost_estimate_cny"
+          ],
+          "planning_fields": [
+            "normal_loading_limit_percent",
+            "emergency_loading_limit_percent",
+            "loss_cost_cny_per_year",
+            "spare_policy"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "n_1",
+            "opf",
+            "loss_evaluation"
+          ],
+          "connection_rules": {
+            "hv": [
+              "busbar",
+              "switch_breaker",
+              "line_cable",
+              "line_overhead"
+            ],
+            "lv": [
+              "busbar",
+              "switch_breaker",
+              "line_cable",
+              "line_overhead",
+              "load",
+              "sgen",
+              "storage"
+            ]
+          }
+        },
+        "transformer_3w": {
+          "display_name": "三绕组主变",
+          "palette_group": "变压器",
+          "pandapower_element": "trafo3w",
+          "graphical": {
+            "symbol": "transformer-3w",
+            "icon_hint": "circle-dot-dashed",
+            "min_size": [
+              96,
+              96
+            ]
+          },
+          "ports": [
+            {
+              "name": "hv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "mv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                35,
+                38.5
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "lv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                11
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "std_type",
+            "sn_hv_mva",
+            "sn_mv_mva",
+            "sn_lv_mva",
+            "vn_hv_kv",
+            "vn_mv_kv",
+            "vn_lv_kv",
+            "vector_group"
+          ],
+          "optional_fields": [
+            "tap_side",
+            "tap_min",
+            "tap_max",
+            "tap_step_percent",
+            "pfe_kw",
+            "i0_percent",
+            "cost_estimate_cny"
+          ],
+          "planning_fields": [
+            "normal_loading_limit_percent",
+            "emergency_loading_limit_percent",
+            "parallel_operation_group"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "n_1",
+            "opf"
+          ],
+          "connection_rules": {
+            "hv": [
+              "busbar",
+              "switch_breaker"
+            ],
+            "mv": [
+              "busbar",
+              "switch_breaker"
+            ],
+            "lv": [
+              "busbar",
+              "switch_breaker"
+            ]
+          }
+        },
+        "line_cable": {
+          "display_name": "电力电缆",
+          "palette_group": "线路",
+          "pandapower_element": "line",
+          "graphical": {
+            "symbol": "cable",
+            "icon_hint": "route",
+            "min_size": [
+              120,
+              24
+            ]
+          },
+          "ports": [
+            {
+              "name": "from",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "to",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "std_type",
+            "length_km",
+            "r_ohm_per_km",
+            "x_ohm_per_km",
+            "c_nf_per_km",
+            "max_i_ka"
+          ],
+          "optional_fields": [
+            "r0_ohm_per_km",
+            "x0_ohm_per_km",
+            "c0_nf_per_km",
+            "conductor_material",
+            "cross_section_mm2",
+            "insulation_type",
+            "armor_type",
+            "laying_method",
+            "soil_thermal_resistivity",
+            "ambient_temperature_c",
+            "parallel",
+            "df",
+            "short_circuit_current_1s_ka",
+            "endtemp_degree",
+            "cost_cny_per_km"
+          ],
+          "planning_fields": [
+            "corridor_id",
+            "route_length_km",
+            "max_voltage_drop_percent",
+            "thermal_margin_percent",
+            "civil_work_cost_cny_per_km"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "n_1",
+            "voltage_drop",
+            "ampacity",
+            "loss_evaluation"
+          ],
+          "connection_rules": {
+            "from": [
+              "busbar",
+              "switch_breaker",
+              "switch_disconnector"
+            ],
+            "to": [
+              "busbar",
+              "switch_breaker",
+              "switch_disconnector",
+              "ring_main_unit"
+            ]
+          }
+        },
+        "line_overhead": {
+          "display_name": "架空线路",
+          "palette_group": "线路",
+          "pandapower_element": "line",
+          "graphical": {
+            "symbol": "overhead-line",
+            "icon_hint": "utility-pole",
+            "min_size": [
+              120,
+              24
+            ]
+          },
+          "ports": [
+            {
+              "name": "from",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "to",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "std_type",
+            "length_km",
+            "r_ohm_per_km",
+            "x_ohm_per_km",
+            "c_nf_per_km",
+            "max_i_ka"
+          ],
+          "optional_fields": [
+            "conductor_material",
+            "cross_section_mm2",
+            "pole_type",
+            "span_m",
+            "ice_thickness_mm",
+            "wind_pressure_pa",
+            "r0_ohm_per_km",
+            "x0_ohm_per_km",
+            "cost_cny_per_km"
+          ],
+          "planning_fields": [
+            "right_of_way",
+            "tree_clearance_m",
+            "lightning_trip_rate_per_100km_year",
+            "route_difficulty"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "n_1",
+            "voltage_drop",
+            "ampacity",
+            "reliability"
+          ],
+          "connection_rules": {
+            "from": [
+              "busbar",
+              "switch_breaker",
+              "recloser"
+            ],
+            "to": [
+              "busbar",
+              "switch_breaker",
+              "recloser",
+              "sectionalizer"
+            ]
+          }
+        },
+        "switch_breaker": {
+          "display_name": "断路器",
+          "palette_group": "开关保护",
+          "pandapower_element": "switch",
+          "graphical": {
+            "symbol": "breaker",
+            "icon_hint": "toggle-right",
+            "min_size": [
+              56,
+              36
+            ]
+          },
+          "ports": [
+            {
+              "name": "terminal",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_voltage_kv",
+            "rated_current_a",
+            "rated_short_circuit_breaking_current_ka"
+          ],
+          "optional_fields": [
+            "mechanical_life_count",
+            "operating_sequence",
+            "protection_functions",
+            "remote_control",
+            "in_ka"
+          ],
+          "planning_fields": [
+            "automation_level",
+            "fault_isolation_time_s",
+            "cost_estimate_cny"
+          ],
+          "calculations": [
+            "topology_switching",
+            "short_circuit_check",
+            "n_1",
+            "reliability"
+          ],
+          "connection_rules": {
+            "terminal": [
+              "busbar",
+              "line_cable",
+              "line_overhead",
+              "transformer_2w",
+              "transformer_3w"
+            ]
+          }
+        },
+        "switch_disconnector": {
+          "display_name": "隔离/负荷开关",
+          "palette_group": "开关保护",
+          "pandapower_element": "switch",
+          "graphical": {
+            "symbol": "disconnector",
+            "icon_hint": "split",
+            "min_size": [
+              56,
+              36
+            ]
+          },
+          "ports": [
+            {
+              "name": "terminal",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_voltage_kv",
+            "rated_current_a",
+            "switch_type"
+          ],
+          "optional_fields": [
+            "short_time_withstand_current_ka",
+            "remote_control",
+            "motorized",
+            "visible_break"
+          ],
+          "planning_fields": [
+            "sectionalizing_role",
+            "normal_open",
+            "operation_policy"
+          ],
+          "calculations": [
+            "topology_switching",
+            "n_1",
+            "reliability"
+          ],
+          "connection_rules": {
+            "terminal": [
+              "busbar",
+              "line_cable",
+              "line_overhead",
+              "ring_main_unit"
+            ]
+          }
+        },
+        "fuse": {
+          "display_name": "熔断器",
+          "palette_group": "开关保护",
+          "pandapower_element": "fuse",
+          "graphical": {
+            "symbol": "fuse",
+            "icon_hint": "badge-alert",
+            "min_size": [
+              56,
+              36
+            ]
+          },
+          "ports": [
+            {
+              "name": "terminal",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "i_rated_a",
+            "rated_voltage_kv",
+            "rated_breaking_current_ka"
+          ],
+          "optional_fields": [
+            "time_current_curve",
+            "fuse_element_current_series",
+            "coordination_margin_s"
+          ],
+          "planning_fields": [
+            "protection_zone",
+            "backup_protection"
+          ],
+          "calculations": [
+            "protection_coordination",
+            "short_circuit_check"
+          ],
+          "connection_rules": {
+            "terminal": [
+              "line_overhead",
+              "transformer_2w",
+              "ring_main_unit"
+            ]
+          }
+        },
+        "ring_main_unit": {
+          "display_name": "环网柜/RMU",
+          "palette_group": "成套设备",
+          "pandapower_element": "group",
+          "graphical": {
+            "symbol": "ring-main-unit",
+            "icon_hint": "box",
+            "min_size": [
+              112,
+              72
+            ]
+          },
+          "ports": [
+            {
+              "name": "in",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "out",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "trafo",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_voltage_kv",
+            "rated_current_a",
+            "unit_scheme",
+            "feeder_count"
+          ],
+          "optional_fields": [
+            "gas_insulation",
+            "automation_terminal",
+            "fault_indicator",
+            "protection_functions"
+          ],
+          "planning_fields": [
+            "ring_section_id",
+            "normal_open_switch",
+            "automation_level",
+            "cost_estimate_cny"
+          ],
+          "calculations": [
+            "topology_switching",
+            "n_1",
+            "reliability"
+          ],
+          "connection_rules": {
+            "in": [
+              "line_cable"
+            ],
+            "out": [
+              "line_cable"
+            ],
+            "trafo": [
+              "transformer_2w",
+              "switch_breaker",
+              "fuse"
+            ]
+          }
+        },
+        "box_substation": {
+          "display_name": "箱式变电站/台区",
+          "palette_group": "成套设备",
+          "pandapower_element": "group",
+          "graphical": {
+            "symbol": "box-substation",
+            "icon_hint": "warehouse",
+            "min_size": [
+              120,
+              88
+            ]
+          },
+          "ports": [
+            {
+              "name": "hv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                10,
+                10.5
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "lv",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "std_type",
+            "sn_kva",
+            "hv_feeder_count",
+            "lv_feeder_count"
+          ],
+          "optional_fields": [
+            "enclosure_class",
+            "transformer_std_type",
+            "switchgear_scheme",
+            "metering_scheme"
+          ],
+          "planning_fields": [
+            "service_radius_m",
+            "household_count",
+            "load_density_kw_per_km2",
+            "cost_estimate_cny"
+          ],
+          "calculations": [
+            "power_flow",
+            "short_circuit",
+            "load_forecast",
+            "planning_comparison"
+          ],
+          "connection_rules": {
+            "hv": [
+              "line_cable",
+              "line_overhead",
+              "ring_main_unit"
+            ],
+            "lv": [
+              "line_cable",
+              "line_overhead",
+              "load",
+              "ev_charger",
+              "pv_inverter"
+            ]
+          }
+        },
+        "load": {
+          "display_name": "负荷",
+          "palette_group": "负荷",
+          "pandapower_element": "load",
+          "graphical": {
+            "symbol": "load",
+            "icon_hint": "factory",
+            "min_size": [
+              72,
+              52
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "p_mw",
+            "q_mvar",
+            "load_type"
+          ],
+          "optional_fields": [
+            "cos_phi",
+            "annual_energy_mwh",
+            "profile_id",
+            "voltage_dependency",
+            "criticality_level"
+          ],
+          "planning_fields": [
+            "growth_rate_percent_per_year",
+            "simultaneity_factor",
+            "demand_response_capable"
+          ],
+          "calculations": [
+            "power_flow",
+            "load_forecast",
+            "reliability_impact",
+            "planning_comparison"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar",
+              "line_cable",
+              "line_overhead",
+              "box_substation"
+            ]
+          }
+        },
+        "pv_array": {
+          "display_name": "光伏组件阵列",
+          "palette_group": "新能源",
+          "pandapower_element": "sgen",
+          "graphical": {
+            "symbol": "pv-array",
+            "icon_hint": "solar-panel",
+            "min_size": [
+              88,
+              60
+            ]
+          },
+          "ports": [
+            {
+              "name": "dc",
+              "kind": "dc_terminal",
+              "voltage_levels_kv": [],
+              "phase": "DC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "module_type",
+            "module_count",
+            "dc_capacity_kwp",
+            "tilt_degree",
+            "azimuth_degree"
+          ],
+          "optional_fields": [
+            "string_count",
+            "modules_per_string",
+            "temperature_model",
+            "degradation_percent_per_year"
+          ],
+          "planning_fields": [
+            "generation_profile_id",
+            "curtailment_allowed",
+            "land_or_roof_area_m2"
+          ],
+          "calculations": [
+            "pv_yield",
+            "hosting_capacity",
+            "power_quality"
+          ],
+          "connection_rules": {
+            "dc": [
+              "pv_inverter"
+            ]
+          }
+        },
+        "pv_inverter": {
+          "display_name": "光伏逆变器",
+          "palette_group": "新能源",
+          "pandapower_element": "sgen",
+          "graphical": {
+            "symbol": "pv-inverter",
+            "icon_hint": "sun",
+            "min_size": [
+              88,
+              60
+            ]
+          },
+          "ports": [
+            {
+              "name": "dc",
+              "kind": "dc_terminal",
+              "voltage_levels_kv": [],
+              "phase": "DC",
+              "direction": "bidirectional"
+            },
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.4,
+                10,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_power_kw",
+            "sn_mva",
+            "rated_ac_voltage_v",
+            "power_factor_range"
+          ],
+          "optional_fields": [
+            "mppt_count",
+            "max_dc_power_kw",
+            "q_capability_curve",
+            "anti_islanding",
+            "low_voltage_ride_through"
+          ],
+          "planning_fields": [
+            "hosting_capacity_limit",
+            "volt_var_enabled",
+            "curtailment_priority"
+          ],
+          "calculations": [
+            "power_flow",
+            "opf",
+            "hosting_capacity",
+            "voltage_rise",
+            "power_quality"
+          ],
+          "connection_rules": {
+            "dc": [
+              "pv_array"
+            ],
+            "ac": [
+              "busbar",
+              "line_cable",
+              "box_substation"
+            ]
+          }
+        },
+        "wind_turbine": {
+          "display_name": "分布式风机",
+          "palette_group": "新能源",
+          "pandapower_element": "sgen",
+          "graphical": {
+            "symbol": "wind-turbine",
+            "icon_hint": "wind",
+            "min_size": [
+              88,
+              72
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.4,
+                10,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_power_kw",
+            "rated_voltage_v",
+            "cut_in_speed_m_s",
+            "rated_wind_speed_m_s"
+          ],
+          "optional_fields": [
+            "power_curve",
+            "reactive_control_mode",
+            "fault_ride_through"
+          ],
+          "planning_fields": [
+            "wind_profile_id",
+            "capacity_factor_percent",
+            "curtailment_allowed"
+          ],
+          "calculations": [
+            "power_flow",
+            "opf",
+            "hosting_capacity",
+            "power_quality"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar",
+              "line_cable",
+              "line_overhead"
+            ]
+          }
+        },
+        "storage": {
+          "display_name": "电化学储能",
+          "palette_group": "新能源",
+          "pandapower_element": "storage",
+          "graphical": {
+            "symbol": "battery-storage",
+            "icon_hint": "battery-charging",
+            "min_size": [
+              88,
+              60
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.4,
+                10,
+                35
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "p_mw",
+            "max_e_mwh",
+            "soc_percent",
+            "sn_mva"
+          ],
+          "optional_fields": [
+            "min_e_mwh",
+            "round_trip_efficiency_percent",
+            "cycle_life_count",
+            "pcs_type",
+            "battery_type"
+          ],
+          "planning_fields": [
+            "dispatch_strategy",
+            "peak_shaving_target_kw",
+            "backup_duration_h",
+            "revenue_streams"
+          ],
+          "calculations": [
+            "power_flow",
+            "opf",
+            "time_series",
+            "resilience",
+            "planning_comparison"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar",
+              "line_cable",
+              "box_substation"
+            ]
+          }
+        },
+        "ev_charger": {
+          "display_name": "充电桩/充电站",
+          "palette_group": "新能源负荷",
+          "pandapower_element": "load",
+          "graphical": {
+            "symbol": "ev-charger",
+            "icon_hint": "battery-charging",
+            "min_size": [
+              80,
+              56
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_power_kw",
+            "charger_type",
+            "connector_count",
+            "power_factor"
+          ],
+          "optional_fields": [
+            "charging_profile_id",
+            "simultaneity_factor",
+            "harmonic_current_percent",
+            "v2g_capable"
+          ],
+          "planning_fields": [
+            "evening_peak_factor",
+            "managed_charging",
+            "station_queue_model"
+          ],
+          "calculations": [
+            "power_flow",
+            "load_forecast",
+            "power_quality",
+            "planning_comparison"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar",
+              "line_cable",
+              "box_substation"
+            ]
+          }
+        },
+        "reactive_compensation": {
+          "display_name": "无功补偿/电容电抗",
+          "palette_group": "无功与电能质量",
+          "pandapower_element": "shunt",
+          "graphical": {
+            "symbol": "capacitor-bank",
+            "icon_hint": "badge-plus",
+            "min_size": [
+              80,
+              52
+            ]
+          },
+          "ports": [
+            {
+              "name": "ac",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "q_mvar",
+            "vn_kv",
+            "step_count"
+          ],
+          "optional_fields": [
+            "detuning_reactor_percent",
+            "switching_mode",
+            "controller_type",
+            "harmonic_filter_order"
+          ],
+          "planning_fields": [
+            "target_power_factor",
+            "voltage_control_band_pu",
+            "switching_times_limit_per_day"
+          ],
+          "calculations": [
+            "power_flow",
+            "opf",
+            "voltage_control",
+            "power_quality"
+          ],
+          "connection_rules": {
+            "ac": [
+              "busbar"
+            ]
+          }
+        },
+        "metering_ct_pt": {
+          "display_name": "计量/互感器",
+          "palette_group": "计量监测",
+          "pandapower_element": "measurement",
+          "graphical": {
+            "symbol": "metering",
+            "icon_hint": "gauge",
+            "min_size": [
+              72,
+              48
+            ]
+          },
+          "ports": [
+            {
+              "name": "sense",
+              "kind": "measurement_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "device_type",
+            "ratio",
+            "accuracy_class"
+          ],
+          "optional_fields": [
+            "burden_va",
+            "protection_class",
+            "metering_class",
+            "communication_protocol"
+          ],
+          "planning_fields": [
+            "measurement_point_role",
+            "state_estimation_weight"
+          ],
+          "calculations": [
+            "state_estimation",
+            "power_quality",
+            "operation_monitoring"
+          ],
+          "connection_rules": {
+            "sense": [
+              "busbar",
+              "line_cable",
+              "line_overhead",
+              "transformer_2w"
+            ]
+          }
+        },
+        "surge_arrester": {
+          "display_name": "避雷器",
+          "palette_group": "防雷接地",
+          "pandapower_element": "auxiliary_asset",
+          "graphical": {
+            "symbol": "surge-arrester",
+            "icon_hint": "shield-zap",
+            "min_size": [
+              64,
+              48
+            ]
+          },
+          "ports": [
+            {
+              "name": "protected",
+              "kind": "ac_terminal",
+              "voltage_levels_kv": [
+                0.22,
+                0.38,
+                0.4,
+                10,
+                10.5,
+                35,
+                110
+              ],
+              "phase": "ABC",
+              "direction": "bidirectional"
+            }
+          ],
+          "required_fields": [
+            "rated_voltage_kv",
+            "continuous_operating_voltage_kv",
+            "nominal_discharge_current_ka"
+          ],
+          "optional_fields": [
+            "residual_voltage_kv",
+            "creepage_distance_mm",
+            "pollution_level"
+          ],
+          "planning_fields": [
+            "protected_equipment_id",
+            "lightning_zone",
+            "maintenance_interval_year"
+          ],
+          "calculations": [
+            "insulation_coordination",
+            "reliability"
+          ],
+          "connection_rules": {
+            "protected": [
+              "busbar",
+              "line_overhead",
+              "transformer_2w",
+              "switch_breaker"
+            ]
+          }
+        }
+      }
+    },
+    "compliance_constraints": {
+      "metadata": {
+        "name": "中国配网一次设备合规约束库",
+        "version": "1.0.1",
+        "purpose": "pandapower负责计算潮流、短路、时序和优化结果，本库负责按设备类型判定一次设备是否满足国标/行标/工程约束。",
+        "standard_reference_basis": [
+          {
+            "code": "GB/T 15544.1-2023",
+            "name": "三相交流系统短路电流计算 第1部分：电流计算",
+            "use": "短路电流计算结果口径"
+          },
+          {
+            "code": "GB/T 1984-2024",
+            "name": "高压交流断路器",
+            "use": "中压断路器开断、关合和额定值"
+          },
+          {
+            "code": "GB/T 11022-2020",
+            "name": "高压开关设备和控制设备标准的共用技术要求",
+            "use": "高压开关设备通用额定值、短时耐受和温升"
+          },
+          {
+            "code": "GB/T 3906-2020",
+            "name": "3.6kV~40.5kV交流金属封闭开关设备和控制设备",
+            "use": "10kV开关柜成套设备"
+          },
+          {
+            "code": "GB/T 6451-2023",
+            "name": "油浸式电力变压器技术参数和要求",
+            "use": "油浸式变压器参数与温升"
+          },
+          {
+            "code": "GB/T 10228-2023",
+            "name": "干式电力变压器技术参数和要求",
+            "use": "干式变压器参数与温升"
+          },
+          {
+            "code": "GB/T 1094.3-2017",
+            "name": "电力变压器 第3部分：绝缘水平、绝缘试验和外绝缘空气间隙",
+            "use": "变压器绝缘水平"
+          },
+          {
+            "code": "GB 1094.5-2008",
+            "name": "电力变压器 第5部分：承受短路的能力",
+            "use": "变压器短路承受能力"
+          },
+          {
+            "code": "GB/T 17467-2020",
+            "name": "高压/低压预装式变电站",
+            "use": "箱式变电站成套要求"
+          },
+          {
+            "code": "GB/T 12706.1~3-2020",
+            "name": "额定电压1kV到35kV挤包绝缘电力电缆及附件",
+            "use": "低压、中压电缆参数、试验和热稳定"
+          },
+          {
+            "code": "GB/T 15166.2-2023",
+            "name": "高压交流熔断器 第2部分：限流熔断器",
+            "use": "高压熔断器开断能力和时间-电流特性"
+          },
+          {
+            "code": "GB/T 15166.6-2023",
+            "name": "高压交流熔断器 第6部分：用于变压器回路的熔断件选用导则",
+            "use": "配变熔断件选择"
+          },
+          {
+            "code": "GB/T 14048.2-2020",
+            "name": "低压开关设备和控制设备 第2部分：断路器",
+            "use": "低压ACB/MCCB分断能力和额定值"
+          },
+          {
+            "code": "GB/T 20840.2-2014",
+            "name": "互感器 第2部分：电流互感器的补充技术要求",
+            "use": "CT热稳定、动稳定和准确级"
+          },
+          {
+            "code": "GB/T 20840.3-2013",
+            "name": "互感器 第3部分：电磁式电压互感器的补充技术要求",
+            "use": "PT二次负荷和准确级"
+          }
+        ],
+        "calculation_boundary": {
+          "pandapower_outputs": [
+            "bus voltage vm_pu",
+            "line/trafo loading_percent",
+            "short-circuit ikss_ka, ip_ka, ith_ka",
+            "branch current/loading",
+            "sgen/storage/load p_mw and q_mvar"
+          ],
+          "library_checks": [
+            "额定电压",
+            "持续载流",
+            "短路开断",
+            "短时耐受",
+            "峰值耐受/关合",
+            "热稳定",
+            "绝缘与避雷配合",
+            "保护灵敏度与配合",
+            "新能源接入和电能质量约束"
+          ]
+        }
+      },
+      "pandapower_result_fields": {
+        "power_flow": {
+          "bus": [
+            "vm_pu",
+            "va_degree"
+          ],
+          "line": [
+            "loading_percent",
+            "i_ka",
+            "p_from_mw",
+            "q_from_mvar",
+            "pl_mw"
+          ],
+          "trafo": [
+            "loading_percent",
+            "i_hv_ka",
+            "i_lv_ka",
+            "p_hv_mw",
+            "q_hv_mvar",
+            "pl_mw"
+          ],
+          "trafo3w": [
+            "loading_percent",
+            "p_hv_mw",
+            "p_mv_mw",
+            "p_lv_mw",
+            "pl_mw"
+          ],
+          "load": [
+            "p_mw",
+            "q_mvar"
+          ],
+          "sgen": [
+            "p_mw",
+            "q_mvar"
+          ],
+          "storage": [
+            "p_mw",
+            "q_mvar"
+          ]
+        },
+        "short_circuit": {
+          "bus": [
+            "ikss_ka",
+            "skss_mw",
+            "ip_ka",
+            "ith_ka"
+          ],
+          "line": [
+            "ikss_ka",
+            "ip_ka",
+            "ith_ka"
+          ],
+          "trafo": [
+            "ikss_hv_ka",
+            "ikss_lv_ka",
+            "ip_hv_ka",
+            "ip_lv_ka",
+            "ith_hv_ka",
+            "ith_lv_ka"
+          ],
+          "switchgear": [
+            "ikss_ka",
+            "ip_ka",
+            "ith_ka"
+          ]
+        }
+      },
+      "global_margins": {
+        "rated_voltage_margin_percent": 0,
+        "continuous_current_margin_percent": 0,
+        "short_circuit_breaking_margin_percent": 0,
+        "short_time_withstand_margin_percent": 0,
+        "peak_withstand_margin_percent": 0,
+        "planning_loading_margin_percent": 15
+      },
+      "constraints_by_equipment_type": {
+        "source_grid": [
+          {
+            "rule_id": "SRC_SC_001",
+            "name": "上级电网最大/最小短路容量完整性",
+            "required_equipment_fields": [
+              "s_sc_max_mva",
+              "s_sc_min_mva",
+              "rx_max",
+              "rx_min"
+            ],
+            "required_result_fields": [],
+            "criterion": "短路计算前必须录入上级电网最大、最小短路容量和R/X比。",
+            "standard": "GB/T 15544.1-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SRC_V_001",
+            "name": "电源电压设定范围",
+            "required_equipment_fields": [
+              "vn_kv",
+              "vm_pu"
+            ],
+            "required_result_fields": [],
+            "criterion": "vm_pu应处于规划或运行允许电压范围内。",
+            "standard": "GB/T 12325-2008",
+            "severity": "error"
+          }
+        ],
+        "busbar": [
+          {
+            "rule_id": "BUS_V_001",
+            "name": "母线运行电压偏差",
+            "required_equipment_fields": [
+              "vn_kv"
+            ],
+            "required_result_fields": [
+              "vm_pu"
+            ],
+            "criterion": "母线vm_pu应满足对应电压等级允许范围。",
+            "standard": "GB/T 12325-2008",
+            "severity": "error"
+          },
+          {
+            "rule_id": "BUS_SC_001",
+            "name": "母线短路电流水平记录",
+            "required_equipment_fields": [
+              "vn_kv"
+            ],
+            "required_result_fields": [
+              "ikss_ka",
+              "ip_ka",
+              "ith_ka"
+            ],
+            "criterion": "母线短路电流作为下游开关、母排、互感器、箱变校验输入。",
+            "standard": "GB/T 15544.1-2023",
+            "severity": "warning"
+          }
+        ],
+        "transformer_2w": [
+          {
+            "rule_id": "TR2_LOAD_001",
+            "name": "双绕组变压器正常负载率",
+            "required_equipment_fields": [
+              "sn_mva"
+            ],
+            "required_result_fields": [
+              "loading_percent"
+            ],
+            "criterion": "正常运行负载率不应超过工程参数库设定的normal_loading_limit_percent。",
+            "standard": "GB 50052-2009",
+            "severity": "error"
+          },
+          {
+            "rule_id": "TR2_SC_PARAM_001",
+            "name": "双绕组变压器短路参数完整性",
+            "required_equipment_fields": [
+              "vk_percent",
+              "vkr_percent",
+              "vk0_percent",
+              "vkr0_percent"
+            ],
+            "required_result_fields": [],
+            "criterion": "三相和接地短路计算应具备正序及零序阻抗参数。",
+            "standard": "GB/T 15544.1-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "TR2_THERMAL_001",
+            "name": "变压器短时热稳定校核",
+            "required_equipment_fields": [
+              "short_time_thermal_current_ka",
+              "short_time_duration_s"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "ith_ka不得超过变压器短时热稳定电流。",
+            "standard": "GB 1094.5-2008 / GB/T 6451-2023 / GB/T 10228-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "TR2_INS_001",
+            "name": "变压器绝缘水平校核",
+            "required_equipment_fields": [
+              "rated_voltage_kv",
+              "power_frequency_withstand_kv",
+              "lightning_impulse_withstand_kv"
+            ],
+            "required_result_fields": [],
+            "criterion": "绝缘水平应不低于设备最高电压对应要求。",
+            "standard": "GB/T 1094.3-2017",
+            "severity": "error"
+          },
+          {
+            "rule_id": "TR2_TEMP_001",
+            "name": "变压器温升/温控保护",
+            "required_equipment_fields": [
+              "cooling_type",
+              "insulation_class"
+            ],
+            "required_result_fields": [
+              "loading_percent"
+            ],
+            "criterion": "长期负载、冷却方式和温度保护定值应匹配。",
+            "standard": "GB/T 6451-2023 / GB/T 10228-2023",
+            "severity": "error"
+          }
+        ],
+        "transformer_3w": [
+          {
+            "rule_id": "TR3_LOAD_001",
+            "name": "三绕组变压器负载率",
+            "required_equipment_fields": [
+              "sn_hv_mva",
+              "sn_mv_mva",
+              "sn_lv_mva"
+            ],
+            "required_result_fields": [
+              "loading_percent"
+            ],
+            "criterion": "各侧绕组负载率不应超过规划约束。",
+            "standard": "GB 50052-2009",
+            "severity": "error"
+          },
+          {
+            "rule_id": "TR3_SC_PARAM_001",
+            "name": "三绕组短路阻抗完整性",
+            "required_equipment_fields": [
+              "vk_hv_percent",
+              "vk_mv_percent",
+              "vk_lv_percent",
+              "vkr_hv_percent",
+              "vkr_mv_percent",
+              "vkr_lv_percent"
+            ],
+            "required_result_fields": [],
+            "criterion": "三绕组短路计算前应具备各绕组短路阻抗。",
+            "standard": "GB/T 15544.1-2023",
+            "severity": "error"
+          }
+        ],
+        "box_substation": [
+          {
+            "rule_id": "BOX_LOAD_001",
+            "name": "箱变容量校核",
+            "required_equipment_fields": [
+              "sn_kva"
+            ],
+            "required_result_fields": [
+              "loading_percent"
+            ],
+            "criterion": "箱变内变压器和低压出线负载率均应满足规划限值。",
+            "standard": "GB/T 17467-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "BOX_SC_001",
+            "name": "箱变成套短路耐受",
+            "required_equipment_fields": [
+              "rated_short_time_withstand_ka",
+              "rated_peak_withstand_ka"
+            ],
+            "required_result_fields": [
+              "ith_ka",
+              "ip_ka"
+            ],
+            "criterion": "箱变高低压成套设备短时和峰值耐受不应低于安装点短路水平。",
+            "standard": "GB/T 17467-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "BOX_IP_001",
+            "name": "箱变外壳防护等级",
+            "required_equipment_fields": [
+              "protection_class",
+              "installation_environment"
+            ],
+            "required_result_fields": [],
+            "criterion": "户外或污染环境下防护等级应满足安装环境要求。",
+            "standard": "GB/T 17467-2020",
+            "severity": "warning"
+          }
+        ],
+        "line_cable": [
+          {
+            "rule_id": "CAB_LOAD_001",
+            "name": "电缆持续载流量",
+            "required_equipment_fields": [
+              "max_i_ka"
+            ],
+            "required_result_fields": [
+              "i_ka"
+            ],
+            "criterion": "运行电流不得超过敷设方式修正后的允许载流量。",
+            "standard": "GB/T 12706.1~3-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CAB_THERMAL_001",
+            "name": "电缆短路热稳定",
+            "required_equipment_fields": [
+              "short_circuit_current_1s_ka"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "按I²t折算后，短路热效应不得超过电缆热稳定能力。",
+            "standard": "GB/T 12706.1~3-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CAB_VDROP_001",
+            "name": "电缆压降",
+            "required_equipment_fields": [
+              "r_ohm_per_km",
+              "x_ohm_per_km",
+              "length_km"
+            ],
+            "required_result_fields": [
+              "voltage_drop_percent"
+            ],
+            "criterion": "线路末端压降应满足电压质量和规划目标。",
+            "standard": "GB 50054-2011 / GB 50052-2009",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CAB_ZERO_001",
+            "name": "电缆零序参数完整性",
+            "required_equipment_fields": [
+              "r0_ohm_per_km",
+              "x0_ohm_per_km",
+              "c0_nf_per_km"
+            ],
+            "required_result_fields": [],
+            "criterion": "接地短路计算应具备零序参数。",
+            "standard": "GB/T 15544.1-2023",
+            "severity": "warning"
+          }
+        ],
+        "line_overhead": [
+          {
+            "rule_id": "OHL_LOAD_001",
+            "name": "架空线路持续载流量",
+            "required_equipment_fields": [
+              "max_i_ka"
+            ],
+            "required_result_fields": [
+              "i_ka"
+            ],
+            "criterion": "运行电流不得超过环境修正后的允许载流量。",
+            "standard": "GB/T 1179-2017",
+            "severity": "error"
+          },
+          {
+            "rule_id": "OHL_THERMAL_001",
+            "name": "架空导线热稳定",
+            "required_equipment_fields": [
+              "short_circuit_current_1s_ka"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "导线短路热稳定应满足故障切除时间。",
+            "standard": "GB/T 1179-2017",
+            "severity": "error"
+          },
+          {
+            "rule_id": "OHL_VDROP_001",
+            "name": "架空线路压降",
+            "required_equipment_fields": [
+              "r_ohm_per_km",
+              "x_ohm_per_km",
+              "length_km"
+            ],
+            "required_result_fields": [
+              "voltage_drop_percent"
+            ],
+            "criterion": "末端压降应满足电压质量和规划目标。",
+            "standard": "GB 50052-2009",
+            "severity": "error"
+          },
+          {
+            "rule_id": "OHL_MECH_001",
+            "name": "架空线路机械条件",
+            "required_equipment_fields": [
+              "span_m",
+              "ice_thickness_mm",
+              "wind_pressure_pa"
+            ],
+            "required_result_fields": [],
+            "criterion": "杆塔、档距、覆冰、风压应满足线路机械设计条件。",
+            "standard": "GB 50061-2010",
+            "severity": "warning"
+          }
+        ],
+        "switchgear_cabinet": [
+          {
+            "rule_id": "SWG_V_001",
+            "name": "开关柜额定电压",
+            "required_equipment_fields": [
+              "rated_voltage_kv"
+            ],
+            "required_result_fields": [
+              "operating_voltage_kv"
+            ],
+            "criterion": "运行电压不得超过设备额定电压。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SWG_I_001",
+            "name": "开关柜额定电流",
+            "required_equipment_fields": [
+              "rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流不得超过开关柜额定电流。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SWG_BREAK_001",
+            "name": "开关柜短路开断能力",
+            "required_equipment_fields": [
+              "rated_short_circuit_breaking_ka"
+            ],
+            "required_result_fields": [
+              "ikss_ka"
+            ],
+            "criterion": "安装点最大三相短路电流不得超过额定短路开断电流。",
+            "standard": "GB/T 1984-2024",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SWG_MAKE_001",
+            "name": "开关柜短路关合/峰值耐受",
+            "required_equipment_fields": [
+              "rated_short_circuit_making_ka"
+            ],
+            "required_result_fields": [
+              "ip_ka"
+            ],
+            "criterion": "短路峰值电流不得超过额定短路关合或峰值耐受电流。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SWG_THERMAL_001",
+            "name": "开关柜短时耐受",
+            "required_equipment_fields": [
+              "rated_short_time_withstand_ka_4s"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "短时热电流不得超过额定短时耐受电流，需按持续时间折算。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          }
+        ],
+        "switch_breaker": [
+          {
+            "rule_id": "CB_I_001",
+            "name": "断路器额定电流",
+            "required_equipment_fields": [
+              "rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流不得超过额定电流。",
+            "standard": "GB/T 1984-2024",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CB_BREAK_001",
+            "name": "断路器短路开断",
+            "required_equipment_fields": [
+              "rated_short_circuit_breaking_ka"
+            ],
+            "required_result_fields": [
+              "ikss_ka"
+            ],
+            "criterion": "最大短路电流不得超过额定短路开断电流。",
+            "standard": "GB/T 1984-2024",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CB_MAKE_001",
+            "name": "断路器短路关合",
+            "required_equipment_fields": [
+              "rated_short_circuit_making_ka"
+            ],
+            "required_result_fields": [
+              "ip_ka"
+            ],
+            "criterion": "短路峰值电流不得超过额定关合电流。",
+            "standard": "GB/T 1984-2024",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CB_THERMAL_001",
+            "name": "断路器短时耐受",
+            "required_equipment_fields": [
+              "rated_short_time_withstand_ka_4s"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "短时热电流不得超过额定短时耐受电流。",
+            "standard": "GB/T 1984-2024 / GB/T 11022-2020",
+            "severity": "error"
+          }
+        ],
+        "load_switch": [
+          {
+            "rule_id": "LS_I_001",
+            "name": "负荷开关额定电流",
+            "required_equipment_fields": [
+              "rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流不得超过额定电流。",
+            "standard": "GB/T 3804-2017",
+            "severity": "error"
+          },
+          {
+            "rule_id": "LS_MAKE_001",
+            "name": "负荷开关关合能力",
+            "required_equipment_fields": [
+              "rated_short_circuit_making_ka"
+            ],
+            "required_result_fields": [
+              "ip_ka"
+            ],
+            "criterion": "短路峰值电流不得超过额定短路关合电流。",
+            "standard": "GB/T 3804-2017",
+            "severity": "error"
+          },
+          {
+            "rule_id": "LS_THERMAL_001",
+            "name": "负荷开关短时耐受",
+            "required_equipment_fields": [
+              "rated_short_time_withstand_ka_4s"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "短时热电流不得超过额定短时耐受电流。",
+            "standard": "GB/T 3804-2017 / GB/T 11022-2020",
+            "severity": "error"
+          }
+        ],
+        "fuse": [
+          {
+            "rule_id": "FUSE_BREAK_001",
+            "name": "熔断器开断能力",
+            "required_equipment_fields": [
+              "rated_breaking_current_ka"
+            ],
+            "required_result_fields": [
+              "ikss_ka"
+            ],
+            "criterion": "安装点最大预期短路电流不得超过熔断器额定开断电流。",
+            "standard": "GB/T 15166.2-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "FUSE_SELECT_001",
+            "name": "熔体额定电流选择",
+            "required_equipment_fields": [
+              "i_rated_a",
+              "protected_equipment_rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "熔体额定电流应躲过最大负荷和励磁涌流，并满足下级选择性。",
+            "standard": "GB/T 15166.6-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "FUSE_SENS_001",
+            "name": "熔断器保护灵敏度",
+            "required_equipment_fields": [
+              "time_current_curve_data"
+            ],
+            "required_result_fields": [
+              "min_fault_current_a"
+            ],
+            "criterion": "最小故障电流下应在允许时间内可靠熔断。",
+            "standard": "DL/T 584-2017",
+            "severity": "error"
+          }
+        ],
+        "recloser": [
+          {
+            "rule_id": "REC_BREAK_001",
+            "name": "重合器开断能力",
+            "required_equipment_fields": [
+              "rated_short_circuit_breaking_ka"
+            ],
+            "required_result_fields": [
+              "ikss_ka"
+            ],
+            "criterion": "最大短路电流不得超过重合器额定开断能力。",
+            "standard": "GB/T 25289-2010",
+            "severity": "error"
+          },
+          {
+            "rule_id": "REC_SEQ_001",
+            "name": "重合闸序列",
+            "required_equipment_fields": [
+              "reclose_sequence"
+            ],
+            "required_result_fields": [],
+            "criterion": "架空线路可配置重合闸；纯电缆线路一般不宜投入自动重合。",
+            "standard": "DL/T 584-2017",
+            "severity": "warning"
+          }
+        ],
+        "sectionalizer": [
+          {
+            "rule_id": "SEC_MAKE_001",
+            "name": "分段器关合能力",
+            "required_equipment_fields": [
+              "rated_short_circuit_making_ka"
+            ],
+            "required_result_fields": [
+              "ip_ka"
+            ],
+            "criterion": "短路峰值电流不得超过额定关合能力。",
+            "standard": "GB/T 25289-2010",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SEC_COORD_001",
+            "name": "分段器与上级重合器配合",
+            "required_equipment_fields": [
+              "counting_times"
+            ],
+            "required_result_fields": [],
+            "criterion": "计数次数和动作逻辑应与上级重合器时序配合。",
+            "standard": "DL/T 584-2017",
+            "severity": "error"
+          }
+        ],
+        "circuit_breaker_lv": [
+          {
+            "rule_id": "LVCB_I_001",
+            "name": "低压断路器额定电流",
+            "required_equipment_fields": [
+              "rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流不得超过整定或额定电流。",
+            "standard": "GB/T 14048.2-2020 / GB 50054-2011",
+            "severity": "error"
+          },
+          {
+            "rule_id": "LVCB_BREAK_001",
+            "name": "低压断路器分断能力",
+            "required_equipment_fields": [
+              "breaking_capacity_ka"
+            ],
+            "required_result_fields": [
+              "ikss_ka"
+            ],
+            "criterion": "安装点最大短路电流不得超过分断能力。",
+            "standard": "GB/T 14048.2-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "LVCB_SELECT_001",
+            "name": "低压保护选择性",
+            "required_equipment_fields": [
+              "trip_type",
+              "time_current_curve_data"
+            ],
+            "required_result_fields": [
+              "min_fault_current_a"
+            ],
+            "criterion": "上下级低压保护应具备选择性和灵敏度。",
+            "standard": "GB 50054-2011",
+            "severity": "warning"
+          }
+        ],
+        "ring_main_unit": [
+          {
+            "rule_id": "RMU_I_001",
+            "name": "环网柜额定电流",
+            "required_equipment_fields": [
+              "rated_current_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流不得超过额定电流。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "RMU_SC_001",
+            "name": "环网柜短路耐受/开断",
+            "required_equipment_fields": [
+              "rated_short_circuit_breaking_ka",
+              "rated_short_time_withstand_ka_4s"
+            ],
+            "required_result_fields": [
+              "ikss_ka",
+              "ith_ka"
+            ],
+            "criterion": "环网柜回路开断能力和短时耐受应不低于安装点短路水平。",
+            "standard": "GB/T 3906-2020 / GB/T 11022-2020",
+            "severity": "error"
+          }
+        ],
+        "reactive_compensation": [
+          {
+            "rule_id": "RC_V_001",
+            "name": "无功补偿额定电压",
+            "required_equipment_fields": [
+              "rated_voltage_kv"
+            ],
+            "required_result_fields": [
+              "operating_voltage_kv"
+            ],
+            "criterion": "运行电压不得超过电容器或SVG允许电压。",
+            "standard": "GB/T 11024-2019 / GB/T 12747.1-2004",
+            "severity": "error"
+          },
+          {
+            "rule_id": "RC_Q_001",
+            "name": "无功补偿容量匹配",
+            "required_equipment_fields": [
+              "rated_capacity_kvar"
+            ],
+            "required_result_fields": [
+              "q_mvar"
+            ],
+            "criterion": "投入容量应满足功率因数目标且不得引起电压越上限。",
+            "standard": "GB 50052-2009",
+            "severity": "error"
+          },
+          {
+            "rule_id": "RC_HARM_001",
+            "name": "电容器谐波/串抗匹配",
+            "required_equipment_fields": [
+              "detuning_reactor_percent"
+            ],
+            "required_result_fields": [
+              "harmonic_voltage_distortion_percent"
+            ],
+            "criterion": "存在谐波时应配置合适电抗率或滤波装置。",
+            "standard": "GB/T 14549-1993",
+            "severity": "warning"
+          }
+        ],
+        "metering_ct_pt": [
+          {
+            "rule_id": "CT_I_001",
+            "name": "CT一次额定电流",
+            "required_equipment_fields": [
+              "rated_primary_a"
+            ],
+            "required_result_fields": [
+              "max_current_a"
+            ],
+            "criterion": "最大工作电流应在CT适用量程内。",
+            "standard": "GB/T 20840.2-2014",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CT_THERMAL_001",
+            "name": "CT热稳定",
+            "required_equipment_fields": [
+              "thermal_current_ka_1s"
+            ],
+            "required_result_fields": [
+              "ith_ka"
+            ],
+            "criterion": "安装点短时热电流不得超过CT热稳定能力。",
+            "standard": "GB/T 20840.2-2014",
+            "severity": "error"
+          },
+          {
+            "rule_id": "CT_DYNAMIC_001",
+            "name": "CT动稳定",
+            "required_equipment_fields": [
+              "dynamic_current_ka"
+            ],
+            "required_result_fields": [
+              "ip_ka"
+            ],
+            "criterion": "短路峰值电流不得超过CT动稳定电流。",
+            "standard": "GB/T 20840.2-2014",
+            "severity": "error"
+          },
+          {
+            "rule_id": "PT_BURDEN_001",
+            "name": "PT二次负荷",
+            "required_equipment_fields": [
+              "rated_secondary_burden_va"
+            ],
+            "required_result_fields": [
+              "secondary_burden_va"
+            ],
+            "criterion": "二次负荷不得超过额定二次负荷，精度等级应满足计量/保护用途。",
+            "standard": "GB/T 20840.3-2013",
+            "severity": "error"
+          }
+        ],
+        "surge_arrester": [
+          {
+            "rule_id": "SA_UC_001",
+            "name": "避雷器持续运行电压",
+            "required_equipment_fields": [
+              "continuous_operating_voltage_kv"
+            ],
+            "required_result_fields": [
+              "max_phase_voltage_kv"
+            ],
+            "criterion": "系统最高相电压不得超过避雷器持续运行电压。",
+            "standard": "GB/T 11032-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SA_RES_001",
+            "name": "避雷器残压与绝缘配合",
+            "required_equipment_fields": [
+              "residual_voltage_kv"
+            ],
+            "required_result_fields": [
+              "protected_equipment_bil_kv"
+            ],
+            "criterion": "避雷器残压应低于被保护设备绝缘耐受水平并保留配合裕度。",
+            "standard": "GB/T 11032-2020",
+            "severity": "error"
+          },
+          {
+            "rule_id": "SA_DIS_001",
+            "name": "避雷器标称放电电流",
+            "required_equipment_fields": [
+              "nominal_discharge_current_ka"
+            ],
+            "required_result_fields": [],
+            "criterion": "标称放电电流等级应匹配线路雷电活动和设备重要性。",
+            "standard": "GB/T 11032-2020",
+            "severity": "warning"
+          }
+        ],
+        "load": [
+          {
+            "rule_id": "LOAD_PQ_001",
+            "name": "负荷功率因数",
+            "required_equipment_fields": [
+              "p_mw",
+              "q_mvar"
+            ],
+            "required_result_fields": [],
+            "criterion": "功率因数应满足供配电设计和无功补偿目标。",
+            "standard": "GB 50052-2009",
+            "severity": "warning"
+          },
+          {
+            "rule_id": "LOAD_PROFILE_001",
+            "name": "负荷时序曲线",
+            "required_equipment_fields": [
+              "profile_id"
+            ],
+            "required_result_fields": [],
+            "criterion": "规划年、最大负荷、最小负荷场景应绑定典型负荷曲线。",
+            "standard": "DL/T 5729-2023",
+            "severity": "warning"
+          }
+        ],
+        "pv_inverter": [
+          {
+            "rule_id": "PV_VRISE_001",
+            "name": "光伏接入电压升高",
+            "required_equipment_fields": [
+              "rated_power_kw"
+            ],
+            "required_result_fields": [
+              "voltage_rise_percent"
+            ],
+            "criterion": "PCC电压升高不得超过接入约束。",
+            "standard": "NB/T 10994-2022",
+            "severity": "error"
+          },
+          {
+            "rule_id": "PV_HOST_001",
+            "name": "光伏渗透率",
+            "required_equipment_fields": [
+              "rated_power_kw",
+              "connected_transformer_capacity_kva"
+            ],
+            "required_result_fields": [],
+            "criterion": "光伏容量占变压器/馈线容量比例应满足工程设定限值。",
+            "standard": "NB/T 10994-2022",
+            "severity": "error"
+          },
+          {
+            "rule_id": "PV_Q_001",
+            "name": "逆变器无功能力",
+            "required_equipment_fields": [
+              "sn_mva",
+              "rated_power_kw",
+              "power_factor_range"
+            ],
+            "required_result_fields": [
+              "q_mvar"
+            ],
+            "criterion": "逆变器应具备接入点要求的功率因数或Volt/Var能力。",
+            "standard": "GB/T 19964-2012",
+            "severity": "error"
+          },
+          {
+            "rule_id": "PV_PQ_001",
+            "name": "并网电能质量",
+            "required_equipment_fields": [
+              "harmonic_current_percent",
+              "anti_islanding"
+            ],
+            "required_result_fields": [
+              "thd_percent"
+            ],
+            "criterion": "谐波和孤岛保护应满足并网要求。",
+            "standard": "GB/T 14549-1993",
+            "severity": "error"
+          }
+        ],
+        "wind_turbine": [
+          {
+            "rule_id": "WT_Q_001",
+            "name": "风机无功能力",
+            "required_equipment_fields": [
+              "rated_power_kw",
+              "power_factor_range"
+            ],
+            "required_result_fields": [
+              "q_mvar"
+            ],
+            "criterion": "风机并网点功率因数或无功调节能力应满足要求。",
+            "standard": "NB/T 10994-2022",
+            "severity": "error"
+          },
+          {
+            "rule_id": "WT_PQ_001",
+            "name": "风机电能质量",
+            "required_equipment_fields": [
+              "flicker_limit",
+              "harmonic_current_percent"
+            ],
+            "required_result_fields": [
+              "flicker_plt",
+              "thd_percent"
+            ],
+            "criterion": "闪变、谐波应满足电能质量要求。",
+            "standard": "GB/T 12326-2008 / GB/T 14549-1993",
+            "severity": "error"
+          }
+        ],
+        "storage": [
+          {
+            "rule_id": "ES_P_001",
+            "name": "储能PCS功率",
+            "required_equipment_fields": [
+              "rated_charge_discharge_power_kw"
+            ],
+            "required_result_fields": [
+              "p_mw"
+            ],
+            "criterion": "充放电功率不得超过PCS额定功率。",
+            "standard": "GB/T 34131-2023 / GB/T 36558-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "ES_SOC_001",
+            "name": "储能SOC范围",
+            "required_equipment_fields": [
+              "soc_range_percent"
+            ],
+            "required_result_fields": [
+              "soc_percent"
+            ],
+            "criterion": "SOC应在允许运行范围内并保留备用容量。",
+            "standard": "GB/T 36558-2023 / GB/T 36276-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "ES_Q_001",
+            "name": "储能无功能力",
+            "required_equipment_fields": [
+              "sn_mva",
+              "rated_charge_discharge_power_kw"
+            ],
+            "required_result_fields": [
+              "q_mvar"
+            ],
+            "criterion": "储能PCS视在功率应覆盖有功和无功组合。",
+            "standard": "GB/T 34131-2023 / GB/T 36558-2023",
+            "severity": "error"
+          }
+        ],
+        "ev_charger": [
+          {
+            "rule_id": "EV_LOAD_001",
+            "name": "充电桩容量接入",
+            "required_equipment_fields": [
+              "rated_power_kw",
+              "simultaneity_factor"
+            ],
+            "required_result_fields": [
+              "p_mw"
+            ],
+            "criterion": "充电负荷叠加后线路和变压器不得越限。",
+            "standard": "GB/T 18487.1-2023",
+            "severity": "error"
+          },
+          {
+            "rule_id": "EV_PQ_001",
+            "name": "充电设备电能质量",
+            "required_equipment_fields": [
+              "power_factor",
+              "harmonic_current_percent"
+            ],
+            "required_result_fields": [
+              "thd_percent"
+            ],
+            "criterion": "功率因数和谐波电流应满足电能质量要求。",
+            "standard": "GB/T 14549-1993 / GB/T 18487.1-2023",
+            "severity": "error"
+          }
+        ]
+      },
+      "equipment_library_mapping": {
+        "transformers.oil_immersed": [
+          "transformer_2w",
+          "TR2_LOAD_001",
+          "TR2_SC_PARAM_001",
+          "TR2_INS_001",
+          "TR2_TEMP_001"
+        ],
+        "transformers.dry_type": [
+          "transformer_2w",
+          "TR2_LOAD_001",
+          "TR2_SC_PARAM_001",
+          "TR2_INS_001",
+          "TR2_TEMP_001"
+        ],
+        "transformers.box_substation": [
+          "box_substation",
+          "BOX_LOAD_001",
+          "BOX_SC_001",
+          "BOX_IP_001"
+        ],
+        "transformers.main_transformer_35kv": [
+          "transformer_2w",
+          "TR2_LOAD_001",
+          "TR2_SC_PARAM_001",
+          "TR2_THERMAL_001"
+        ],
+        "transformers.main_transformer_110kv": [
+          "transformer_2w",
+          "TR2_LOAD_001",
+          "TR2_SC_PARAM_001",
+          "TR2_THERMAL_001"
+        ],
+        "transformers.trafo3w_110kv": [
+          "transformer_3w",
+          "TR3_LOAD_001",
+          "TR3_SC_PARAM_001"
+        ],
+        "cables.mv_10kv": [
+          "line_cable",
+          "CAB_LOAD_001",
+          "CAB_THERMAL_001",
+          "CAB_VDROP_001",
+          "CAB_ZERO_001"
+        ],
+        "cables.mv_35kv": [
+          "line_cable",
+          "CAB_LOAD_001",
+          "CAB_THERMAL_001",
+          "CAB_VDROP_001",
+          "CAB_ZERO_001"
+        ],
+        "cables.lv_04kv": [
+          "line_cable",
+          "CAB_LOAD_001",
+          "CAB_THERMAL_001",
+          "CAB_VDROP_001"
+        ],
+        "cables.hv_110kv": [
+          "line_cable",
+          "CAB_LOAD_001",
+          "CAB_THERMAL_001",
+          "CAB_ZERO_001"
+        ],
+        "overhead_lines.mv_10kv_insulated": [
+          "line_overhead",
+          "OHL_LOAD_001",
+          "OHL_THERMAL_001",
+          "OHL_VDROP_001"
+        ],
+        "overhead_lines.lv_04kv_insulated": [
+          "line_overhead",
+          "OHL_LOAD_001",
+          "OHL_THERMAL_001",
+          "OHL_VDROP_001"
+        ],
+        "overhead_lines.bare_conductor": [
+          "line_overhead",
+          "OHL_LOAD_001",
+          "OHL_THERMAL_001",
+          "OHL_VDROP_001",
+          "OHL_MECH_001"
+        ],
+        "switchgear.switchgear_cabinet": [
+          "switchgear_cabinet",
+          "SWG_V_001",
+          "SWG_I_001",
+          "SWG_BREAK_001",
+          "SWG_MAKE_001",
+          "SWG_THERMAL_001"
+        ],
+        "switchgear.circuit_breaker_mv": [
+          "switch_breaker",
+          "CB_I_001",
+          "CB_BREAK_001",
+          "CB_MAKE_001",
+          "CB_THERMAL_001"
+        ],
+        "switchgear.load_switch": [
+          "load_switch",
+          "LS_I_001",
+          "LS_MAKE_001",
+          "LS_THERMAL_001"
+        ],
+        "switchgear.fuse_mv": [
+          "fuse",
+          "FUSE_BREAK_001",
+          "FUSE_SELECT_001",
+          "FUSE_SENS_001"
+        ],
+        "switchgear.circuit_breaker_lv": [
+          "circuit_breaker_lv",
+          "LVCB_I_001",
+          "LVCB_BREAK_001",
+          "LVCB_SELECT_001"
+        ],
+        "switchgear.recloser": [
+          "recloser",
+          "REC_BREAK_001",
+          "REC_SEQ_001"
+        ],
+        "switchgear.sectionalizer": [
+          "sectionalizer",
+          "SEC_MAKE_001",
+          "SEC_COORD_001"
+        ],
+        "reactive_compensation.capacitor_mv": [
+          "reactive_compensation",
+          "RC_V_001",
+          "RC_Q_001",
+          "RC_HARM_001"
+        ],
+        "reactive_compensation.capacitor_lv": [
+          "reactive_compensation",
+          "RC_V_001",
+          "RC_Q_001",
+          "RC_HARM_001"
+        ],
+        "reactive_compensation.svg": [
+          "reactive_compensation",
+          "RC_V_001",
+          "RC_Q_001"
+        ],
+        "instrument_transformers.ct_mv": [
+          "metering_ct_pt",
+          "CT_I_001",
+          "CT_THERMAL_001",
+          "CT_DYNAMIC_001"
+        ],
+        "instrument_transformers.ct_lv": [
+          "metering_ct_pt",
+          "CT_I_001"
+        ],
+        "instrument_transformers.pt_mv": [
+          "metering_ct_pt",
+          "PT_BURDEN_001"
+        ],
+        "surge_arresters.arrester_mv": [
+          "surge_arrester",
+          "SA_UC_001",
+          "SA_RES_001",
+          "SA_DIS_001"
+        ],
+        "surge_arresters.arrester_lv": [
+          "surge_arrester",
+          "SA_UC_001",
+          "SA_RES_001"
+        ],
+        "photovoltaic.string_inverter": [
+          "pv_inverter",
+          "PV_VRISE_001",
+          "PV_HOST_001",
+          "PV_Q_001",
+          "PV_PQ_001"
+        ],
+        "photovoltaic.central_inverter": [
+          "pv_inverter",
+          "PV_VRISE_001",
+          "PV_HOST_001",
+          "PV_Q_001",
+          "PV_PQ_001"
+        ],
+        "wind_turbine.small_wind": [
+          "wind_turbine",
+          "WT_Q_001",
+          "WT_PQ_001"
+        ],
+        "wind_turbine.medium_wind": [
+          "wind_turbine",
+          "WT_Q_001",
+          "WT_PQ_001"
+        ],
+        "energy_storage.lfp_battery": [
+          "storage",
+          "ES_P_001",
+          "ES_SOC_001"
+        ],
+        "energy_storage.lead_carbon_battery": [
+          "storage",
+          "ES_P_001",
+          "ES_SOC_001"
+        ],
+        "energy_storage.pcs": [
+          "storage",
+          "ES_P_001",
+          "ES_Q_001"
+        ],
+        "ev_charger.ac_slow": [
+          "ev_charger",
+          "EV_LOAD_001",
+          "EV_PQ_001"
+        ],
+        "ev_charger.dc_fast": [
+          "ev_charger",
+          "EV_LOAD_001",
+          "EV_PQ_001"
+        ],
+        "ev_charger.dc_superfast": [
+          "ev_charger",
+          "EV_LOAD_001",
+          "EV_PQ_001"
+        ]
+      }
+    },
+    "planning_assumptions": {
+      "metadata": {
+        "name": "中国配网规划参数与方案比较库",
+        "version": "1.0.1",
+        "scope": "10kV-0.4kV配电网规划、改造、新能源接入、可靠性与投资对比。"
+      },
+      "voltage_limits": {
+        "normal_operation": {
+          "10kV": {
+            "min_vm_pu": 0.93,
+            "max_vm_pu": 1.07,
+            "standard": "GB/T 12325"
+          },
+          "0.4kV": {
+            "min_vm_pu": 0.9,
+            "max_vm_pu": 1.07,
+            "standard": "GB/T 12325"
+          }
+        },
+        "planning_target": {
+          "10kV": {
+            "min_vm_pu": 0.95,
+            "max_vm_pu": 1.05
+          },
+          "0.4kV": {
+            "min_vm_pu": 0.92,
+            "max_vm_pu": 1.05
+          }
+        }
+      },
+      "loading_limits": {
+        "transformer": {
+          "normal_percent": {
+            "urban": 80,
+            "rural": 70,
+            "industrial": 85
+          },
+          "short_time_emergency_percent": 120,
+          "n_1_transfer_target_percent": 100
+        },
+        "line": {
+          "normal_percent": 80,
+          "emergency_percent": 100,
+          "planning_margin_percent": 15
+        },
+        "switchgear": {
+          "rated_current_margin_percent": 20,
+          "short_circuit_breaking_margin_percent": 10
+        }
+      },
+      "supply_radius": {
+        "10kV_overhead_km": {
+          "A": 3,
+          "B": 5,
+          "C": 10,
+          "D": 15,
+          "E": 15
+        },
+        "10kV_cable_km": {
+          "A": 2,
+          "B": 4,
+          "C": 5,
+          "D": 8,
+          "E": 8
+        },
+        "0.4kV_m": {
+          "urban": 200,
+          "rural": 250,
+          "strict_voltage_drop": 150
+        }
+      },
+      "load_model": {
+        "cos_phi_default": {
+          "residential": 0.92,
+          "commercial": 0.9,
+          "industrial": 0.88,
+          "agricultural": 0.85,
+          "ev_charging": 0.98
+        },
+        "simultaneity_factor": {
+          "residential_lv": {
+            "households_0_20": 0.85,
+            "households_21_100": 0.65,
+            "households_101_plus": 0.5
+          },
+          "commercial": 0.75,
+          "industrial": 0.85,
+          "ev_public_fast": 0.6
+        },
+        "annual_growth_rate_percent": {
+          "mature_urban": 2.0,
+          "new_urban": 5.0,
+          "industrial_park": 6.0,
+          "rural": 1.5,
+          "ev_charging": 15.0
+        },
+        "typical_profiles": [
+          "summer_peak_day",
+          "winter_peak_day",
+          "spring_light_load",
+          "evening_ev_peak",
+          "low_load_high_pv"
+        ]
+      },
+      "renewable_hosting": {
+        "pv_connection_voltage": {
+          "household_rooftop_kw": {
+            "max": 50,
+            "preferred_voltage_kv": 0.4
+          },
+          "village_or_commercial_kw": {
+            "min": 50,
+            "max": 400,
+            "preferred_voltage_kv": 0.4
+          },
+          "large_distributed_kw": {
+            "min": 400,
+            "preferred_voltage_kv": 10
+          }
+        },
+        "screening_limits": {
+          "pv_capacity_to_transformer_capacity_percent": {
+            "conservative": 30,
+            "detailed_study": 50
+          },
+          "voltage_rise_percent_at_pcc": 5,
+          "reverse_power_flow_flag": "需要按台区、馈线和主变三级记录并可配置是否允许。",
+          "power_factor_range": "0.95 leading to 0.95 lagging, or Volt/Var curve"
+        },
+        "study_cases": [
+          "peak_load_peak_pv",
+          "low_load_peak_pv",
+          "evening_peak_no_pv",
+          "n_1_with_pv_trip"
+        ]
+      },
+      "storage_planning": {
+        "applications": {
+          "peak_shaving": {
+            "duration_h": [
+              2,
+              4
+            ],
+            "dispatch": "daily_peak_valley"
+          },
+          "pv_smoothing": {
+            "duration_h": [
+              1,
+              2
+            ],
+            "dispatch": "ramp_rate_limit"
+          },
+          "backup_supply": {
+            "duration_h": [
+              1,
+              4
+            ],
+            "dispatch": "critical_load_support"
+          },
+          "voltage_support": {
+            "duration_h": [
+              0.5,
+              2
+            ],
+            "dispatch": "volt_var"
+          }
+        },
+        "soc_constraints_percent": {
+          "min": 10,
+          "max": 90,
+          "reserve_for_backup": 20
+        },
+        "round_trip_efficiency_default_percent": 90
+      },
+      "planning_scenarios": {
+        "base_year_peak": {
+          "description": "现状年最大负荷潮流与越限检查。",
+          "required_calculations": [
+            "power_flow",
+            "loading",
+            "voltage"
+          ]
+        },
+        "target_year_peak": {
+          "description": "规划年最大负荷，校核扩容必要性。",
+          "required_calculations": [
+            "power_flow",
+            "n_1",
+            "short_circuit"
+          ]
+        },
+        "low_load_high_pv": {
+          "description": "低负荷高光伏出力，校核电压抬升和反送。",
+          "required_calculations": [
+            "power_flow",
+            "hosting_capacity",
+            "power_quality"
+          ]
+        },
+        "n_1_transfer": {
+          "description": "馈线、主变、开关站N-1转供能力校核。",
+          "required_calculations": [
+            "topology_switching",
+            "power_flow",
+            "loading"
+          ]
+        },
+        "short_circuit_max_min": {
+          "description": "最大/最小短路电流，校核开断能力和保护灵敏度。",
+          "required_calculations": [
+            "short_circuit"
+          ]
+        },
+        "ev_evening_peak": {
+          "description": "充电负荷晚高峰叠加居民负荷。",
+          "required_calculations": [
+            "time_series",
+            "power_flow",
+            "loading"
+          ]
+        }
+      },
+      "comparison_metrics": {
+        "technical": [
+          "voltage_violation_count",
+          "max_loading_percent",
+          "loss_mwh_per_year",
+          "n_1_pass_rate_percent",
+          "short_circuit_margin_percent",
+          "hosting_capacity_kw"
+        ],
+        "economic": [
+          "capex_cny",
+          "opex_cny_per_year",
+          "loss_cost_cny_per_year",
+          "npv_cny",
+          "payback_year",
+          "asset_utilization_percent"
+        ],
+        "reliability": [
+          "saidi_min_per_customer_year",
+          "saifi_times_per_customer_year",
+          "eens_mwh_per_year",
+          "critical_load_restoration_percent"
+        ],
+        "new_energy": [
+          "pv_curtailed_mwh_per_year",
+          "reverse_power_hours",
+          "carbon_reduction_ton_per_year",
+          "storage_cycle_count_per_year"
+        ]
+      },
+      "candidate_generation": {
+        "transformer_upgrade": {
+          "trigger": [
+            "loading_over_limit",
+            "voltage_low",
+            "new_load_access"
+          ],
+          "candidate_actions": [
+            "replace_larger_capacity",
+            "add_parallel_transformer",
+            "split_service_area",
+            "install_voltage_regulation"
+          ]
+        },
+        "feeder_reinforcement": {
+          "trigger": [
+            "line_overload",
+            "voltage_drop",
+            "n_1_transfer_fail"
+          ],
+          "candidate_actions": [
+            "increase_conductor_section",
+            "new_feeder",
+            "add_tie_point",
+            "convert_overhead_to_cable",
+            "install_recloser_or_sectionalizer"
+          ]
+        },
+        "renewable_access": {
+          "trigger": [
+            "pv_connection_request",
+            "voltage_rise",
+            "reverse_power_flow"
+          ],
+          "candidate_actions": [
+            "volt_var_control",
+            "curtailment",
+            "storage",
+            "transformer_tap_adjustment",
+            "feeder_reconfiguration"
+          ]
+        },
+        "ev_charging_access": {
+          "trigger": [
+            "charging_station_request",
+            "evening_peak_overload"
+          ],
+          "candidate_actions": [
+            "managed_charging",
+            "dedicated_transformer",
+            "feeder_upgrade",
+            "storage_buffer"
+          ]
+        }
+      },
+      "cost_model_placeholders": {
+        "note": "以下为规划系统字段结构，不作为招标价格。项目落地时应接入地区造价库。",
+        "required_cost_fields": [
+          "equipment_cost_cny",
+          "installation_cost_cny",
+          "civil_cost_cny",
+          "land_or_corridor_cost_cny",
+          "annual_maintenance_cny",
+          "salvage_value_cny"
+        ],
+        "line_cost_drivers": [
+          "voltage_level",
+          "conductor_type",
+          "cross_section_mm2",
+          "laying_method",
+          "urban_road_excavation",
+          "terrain"
+        ],
+        "station_cost_drivers": [
+          "capacity_kva",
+          "switchgear_scheme",
+          "automation_level",
+          "building_or_box_type",
+          "fire_protection"
+        ]
+      }
+    },
+    "pandapower_bridge": {
+      "metadata": {
+        "name": "pandapower融合适配说明",
+        "validated_with_pandapower": "3.4.0",
+        "target_project": "e2nIEE/pandapower",
+        "target_url": "https://github.com/e2nIEE/pandapower"
+      },
+      "supported_core_functions": {
+        "power_flow": {
+          "api": "pandapower.runpp",
+          "status": "直接支持"
+        },
+        "dc_power_flow": {
+          "api": "pandapower.rundcpp",
+          "status": "可用于高层筛选，配网主计算仍建议AC潮流"
+        },
+        "optimal_power_flow": {
+          "api": "pandapower.runopp",
+          "status": "可用于无功、电压、储能和分布式电源调度的优化雏形"
+        },
+        "short_circuit": {
+          "api": "pandapower.shortcircuit.calc_sc",
+          "status": "直接支持，需要外部电网和设备零序/短路参数完整"
+        },
+        "state_estimation": {
+          "api": "pandapower.estimation.estimate",
+          "status": "支持，需测量点和量测精度库"
+        },
+        "time_series": {
+          "api": "pandapower.timeseries.run_timeseries",
+          "status": "支持，适合负荷、光伏、储能和EV时序仿真"
+        },
+        "control": {
+          "api": "pandapower.control",
+          "status": "支持，适合OLTC、无功、电压控制器"
+        }
+      },
+      "element_mapping": {
+        "source_grid": {
+          "pandapower": "ext_grid",
+          "required": [
+            "bus",
+            "vm_pu"
+          ],
+          "recommended": [
+            "s_sc_max_mva",
+            "rx_max",
+            "s_sc_min_mva",
+            "rx_min"
+          ]
+        },
+        "busbar": {
+          "pandapower": "bus",
+          "required": [
+            "vn_kv"
+          ],
+          "recommended": [
+            "min_vm_pu",
+            "max_vm_pu",
+            "geodata"
+          ]
+        },
+        "line_cable": {
+          "pandapower": "line",
+          "std_type": "chinese_line_std_types",
+          "required": [
+            "from_bus",
+            "to_bus",
+            "length_km",
+            "std_type"
+          ]
+        },
+        "line_overhead": {
+          "pandapower": "line",
+          "std_type": "chinese_line_std_types",
+          "required": [
+            "from_bus",
+            "to_bus",
+            "length_km",
+            "std_type"
+          ]
+        },
+        "transformer_2w": {
+          "pandapower": "trafo",
+          "std_type": "chinese_trafo_std_types",
+          "required": [
+            "hv_bus",
+            "lv_bus",
+            "std_type"
+          ]
+        },
+        "transformer_3w": {
+          "pandapower": "trafo3w",
+          "std_type": "chinese_trafo3w_std_types",
+          "required": [
+            "hv_bus",
+            "mv_bus",
+            "lv_bus",
+            "std_type"
+          ]
+        },
+        "switch_breaker": {
+          "pandapower": "switch",
+          "required": [
+            "bus",
+            "element",
+            "et",
+            "closed"
+          ],
+          "note": "保护开断能力需由工程参数库单独校验"
+        },
+        "load": {
+          "pandapower": "load",
+          "required": [
+            "bus",
+            "p_mw",
+            "q_mvar"
+          ]
+        },
+        "pv_inverter": {
+          "pandapower": "sgen",
+          "required": [
+            "bus",
+            "p_mw",
+            "q_mvar",
+            "sn_mva"
+          ],
+          "note": "光伏组件阵列作为工程对象，电气等值映射到sgen"
+        },
+        "wind_turbine": {
+          "pandapower": "sgen",
+          "required": [
+            "bus",
+            "p_mw",
+            "q_mvar",
+            "sn_mva"
+          ]
+        },
+        "storage": {
+          "pandapower": "storage",
+          "required": [
+            "bus",
+            "p_mw",
+            "max_e_mwh",
+            "soc_percent"
+          ]
+        },
+        "ev_charger": {
+          "pandapower": "load",
+          "required": [
+            "bus",
+            "p_mw",
+            "q_mvar"
+          ],
+          "note": "可通过时序profile表达充电行为"
+        },
+        "reactive_compensation": {
+          "pandapower": "shunt",
+          "required": [
+            "bus",
+            "q_mvar",
+            "p_mw"
+          ]
+        },
+        "metering_ct_pt": {
+          "pandapower": "measurement",
+          "required": [
+            "measurement_type",
+            "element_type",
+            "element",
+            "value",
+            "std_dev"
+          ]
+        }
+      },
+      "data_completeness_requirements": {
+        "power_flow_minimum": [
+          "bus.vn_kv",
+          "line.r/x/c/max_i",
+          "trafo.sn/vn/vk/vkr/pfe/i0",
+          "load.p/q",
+          "source.vm_pu"
+        ],
+        "short_circuit_minimum": [
+          "ext_grid.s_sc_max/min_mva",
+          "ext_grid.rx_max/min",
+          "line.r0/x0/c0",
+          "trafo.vk0/vkr0/mag0",
+          "switchgear.breaking_current"
+        ],
+        "n_1_minimum": [
+          "topology switch status",
+          "tie switch normal open point",
+          "asset loading limit",
+          "transfer target load",
+          "operation constraints"
+        ],
+        "planning_comparison_minimum": [
+          "capex",
+          "opex",
+          "loss cost",
+          "reliability target",
+          "construction feasibility",
+          "new energy hosting capacity"
+        ],
+        "drag_drop_modeling_minimum": [
+          "asset class",
+          "ports",
+          "allowed connections",
+          "default parameter template",
+          "pandapower element mapping",
+          "validation rules"
+        ]
+      },
+      "known_gaps_to_keep_outside_pandapower": [
+        "图元库、端口连接、画布坐标和拓扑编辑属于前端/工程对象层，不是pandapower职责。",
+        "国家/企业标准条文解释、工程选型规则、造价库、施工可行性和可靠性指标需要工程参数库补充。",
+        "保护定值配合、继电保护曲线、电能质量谐波详细计算需外部专业模型或扩展模块。",
+        "配网规划方案生成、排序、投资估算和多目标决策需要在pandapower计算结果之上构建。"
+      ]
+    }
+  }
+}

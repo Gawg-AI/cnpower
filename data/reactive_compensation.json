@@ -1,0 +1,313 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-06-01T23:50:09.553661",
+  "data": {
+    "capacitor_mv": [
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 10,
+        "rated_capacity_kvar": 30,
+        "rated_capacitance_uf": 0.95,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(角型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 10,
+        "rated_capacity_kvar": 50,
+        "rated_capacitance_uf": 1.59,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(角型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 10,
+        "rated_capacity_kvar": 75,
+        "rated_capacitance_uf": 2.39,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(角型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 10,
+        "rated_capacity_kvar": 100,
+        "rated_capacitance_uf": 3.18,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(角型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 150,
+        "rated_capacitance_uf": 11.84,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 200,
+        "rated_capacitance_uf": 15.79,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 250,
+        "rated_capacitance_uf": 19.74,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 300,
+        "rated_capacitance_uf": 23.68,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 400,
+        "rated_capacitance_uf": 31.58,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 500,
+        "rated_capacitance_uf": 39.47,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 6.35,
+        "rated_capacity_kvar": 600,
+        "rated_capacitance_uf": 47.36,
+        "dielectric_loss_percent": 0.05,
+        "phase_count": 3,
+        "connection_type": "star",
+        "standard": "GB/T 11024",
+        "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
+      }
+    ],
+    "capacitor_lv": [
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 5,
+        "rated_capacitance_uf": 78.6,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 10,
+        "rated_capacitance_uf": 157.19,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 15,
+        "rated_capacitance_uf": 235.79,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 20,
+        "rated_capacitance_uf": 314.38,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 25,
+        "rated_capacitance_uf": 392.98,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 30,
+        "rated_capacitance_uf": 471.57,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 40,
+        "rated_capacitance_uf": 628.76,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 50,
+        "rated_capacitance_uf": 785.95,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      },
+      {
+        "model_series": "BSMJ",
+        "rated_voltage_kv": 0.45,
+        "rated_capacity_kvar": 60,
+        "rated_capacitance_uf": 943.14,
+        "dielectric_loss_percent": 0.1,
+        "phase_count": 3,
+        "connection_type": "delta",
+        "standard": "GB/T 12747",
+        "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
+      }
+    ],
+    "svg": [
+      {
+        "rated_capacity_kvar": 50,
+        "rated_voltage_kv": 0.4,
+        "response_time_ms": 5,
+        "efficiency_percent": 97.0,
+        "harmonic_content_percent": 5.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 100,
+        "rated_voltage_kv": 0.4,
+        "response_time_ms": 5,
+        "efficiency_percent": 97.0,
+        "harmonic_content_percent": 5.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 200,
+        "rated_voltage_kv": 0.4,
+        "response_time_ms": 5,
+        "efficiency_percent": 97.5,
+        "harmonic_content_percent": 5.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 300,
+        "rated_voltage_kv": 0.4,
+        "response_time_ms": 5,
+        "efficiency_percent": 97.5,
+        "harmonic_content_percent": 5.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 500,
+        "rated_voltage_kv": 0.4,
+        "response_time_ms": 3,
+        "efficiency_percent": 98.0,
+        "harmonic_content_percent": 3.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 1000,
+        "rated_voltage_kv": 10,
+        "response_time_ms": 3,
+        "efficiency_percent": 98.0,
+        "harmonic_content_percent": 3.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 2000,
+        "rated_voltage_kv": 10,
+        "response_time_ms": 3,
+        "efficiency_percent": 98.5,
+        "harmonic_content_percent": 3.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 5000,
+        "rated_voltage_kv": 10,
+        "response_time_ms": 2,
+        "efficiency_percent": 99.0,
+        "harmonic_content_percent": 3.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      },
+      {
+        "rated_capacity_kvar": 10000,
+        "rated_voltage_kv": 10,
+        "response_time_ms": 2,
+        "efficiency_percent": 99.0,
+        "harmonic_content_percent": 3.0,
+        "standard": "GB/T 36287",
+        "source_note": "SVG静止无功发生器典型参数"
+      }
+    ]
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-06-01T23:50:09.553661",
+  "data": {
+    "ct_mv": [
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 30,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 10,
+        "dynamic_current_ka": 7.5,
+        "thermal_current_ka_1s": 3.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 50,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 10,
+        "dynamic_current_ka": 12.5,
+        "thermal_current_ka_1s": 5.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 75,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 10,
+        "dynamic_current_ka": 18.75,
+        "thermal_current_ka_1s": 7.5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 100,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "dynamic_current_ka": 25.0,
+        "thermal_current_ka_1s": 10.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 150,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 15,
+        "dynamic_current_ka": 22.5,
+        "thermal_current_ka_1s": 9.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 200,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 15,
+        "dynamic_current_ka": 30.0,
+        "thermal_current_ka_1s": 12.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 300,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 15,
+        "dynamic_current_ka": 45.0,
+        "thermal_current_ka_1s": 18.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 400,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 20,
+        "dynamic_current_ka": 60.0,
+        "thermal_current_ka_1s": 24.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 500,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 20,
+        "dynamic_current_ka": 75.0,
+        "thermal_current_ka_1s": 30.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 600,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 20,
+        "dynamic_current_ka": 75.0,
+        "thermal_current_ka_1s": 30.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 800,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 30,
+        "dynamic_current_ka": 80.0,
+        "thermal_current_ka_1s": 40.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 1000,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 30,
+        "dynamic_current_ka": 80.0,
+        "thermal_current_ka_1s": 40.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 1200,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 30,
+        "dynamic_current_ka": 80.0,
+        "thermal_current_ka_1s": 40.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 1500,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 40,
+        "dynamic_current_ka": 80.0,
+        "thermal_current_ka_1s": 40.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      },
+      {
+        "model_series": "LZZBJ9-10",
+        "rated_voltage_kv": 10,
+        "rated_primary_a": 2000,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 40,
+        "dynamic_current_ka": 100.0,
+        "thermal_current_ka_1s": 50.0,
+        "standard": "GB/T 1208-2006",
+        "source_note": "LZZBJ9-10系列10kV电流互感器典型参数"
+      }
+    ],
+    "ct_lv": [
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 50,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 75,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 100,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 150,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 200,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 250,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 5,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 300,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 400,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 500,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 600,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 800,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 1000,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      },
+      {
+        "model_series": "BH/LMZ",
+        "rated_voltage_kv": 0.4,
+        "rated_primary_a": 1500,
+        "rated_secondary_a": 5,
+        "accuracy_class": "0.5S",
+        "rated_secondary_burden_va": 10,
+        "standard": "GB/T 1208-2006",
+        "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+      }
+    ],
+    "pt_mv": [
+      {
+        "model_series": "JDZ-10",
+        "rated_voltage_ratio": "10/0.1",
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 80,
+        "standard": "GB/T 1207-2006",
+        "source_note": "JDZ-10型10kV双绕组电压互感器(全绝缘,V/V接线)"
+      },
+      {
+        "model_series": "JDZ-10",
+        "rated_voltage_ratio": "10/0.1",
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 50,
+        "standard": "GB/T 1207-2006",
+        "source_note": "JDZ-10型10kV双绕组电压互感器(全绝缘,V/V接线)"
+      },
+      {
+        "model_series": "JDZJ-10",
+        "rated_voltage_ratio": "10/√3:0.1/√3",
+        "accuracy_class": "0.5",
+        "rated_secondary_burden_va": 60,
+        "standard": "GB/T 1207-2006",
+        "source_note": "JDZJ-10型10kV电压互感器(半绝缘,Y/Y接线)"
+      },
+      {
+        "model_series": "JDZJ-10",
+        "rated_voltage_ratio": "10/√3:0.1/√3",
+        "accuracy_class": "0.2",
+        "rated_secondary_burden_va": 40,
+        "standard": "GB/T 1207-2006",
+        "source_note": "JDZJ-10型10kV电压互感器(半绝缘,Y/Y接线)"
+      }
+    ]
+  }
+}
