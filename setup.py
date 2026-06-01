@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="cn-dist-grid-lib",
+    name="cnpower",
     version="1.0.0",
     author="Gawg-AI",
     author_email="fejj258@outlook.com",
     description="中国10kV/0.4kV配电网工程参数库 - Chinese 10kV/0.4kV Distribution Grid Engineering Parameter Library",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/Gawg-AI/cn-dist-grid-lib",
+    url="https://github.com/Gawg-AI/cnpower",
     license="MIT",
     packages=find_packages(),
     python_requires=">=3.8",
@@ -35,8 +35,8 @@ setup(
     ],
     keywords="distribution-grid pandapower power-system chinese-standards gb-t electrical-engineering",
     project_urls={
-        "Bug Tracker": "https://github.com/Gawg-AI/cn-dist-grid-lib/issues",
-        "Documentation": "https://github.com/Gawg-AI/cn-dist-grid-lib#readme",
-        "Source Code": "https://github.com/Gawg-AI/cn-dist-grid-lib",
+        "Bug Tracker": "https://github.com/Gawg-AI/cnpower/issues",
+        "Documentation": "https://github.com/Gawg-AI/cnpower#readme",
+        "Source Code": "https://github.com/Gawg-AI/cnpower",
     },
 )

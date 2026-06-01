@@ -1,4 +1,4 @@
-<h1 align="center">🔌 cn-dist-grid-lib</h1>
+<h1 align="center">🔌 cnpower</h1>
 
 <p align="center">
 <strong>中国 10kV/0.4kV 配电网工程参数库</strong><br>
@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/Gawg-AI/cn-dist-grid-lib/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+<a href="https://github.com/Gawg-AI/cnpower/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8+-green.svg" alt="Python 3.8+"></a>
 <img src="https://img.shields.io/badge/Standards-GB%2FT%202023-orange.svg" alt="GB/T 2023">
 <img src="https://img.shields.io/badge/Models-526+-brightgreen.svg" alt="526+ Models">
@@ -261,11 +261,23 @@ All equipment parameter libraries use `dict[str, dict]` format (model name as ke
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License with Attribution Requirement — 使用本库需注明来源：https://github.com/Gawg-AI/cnpower
+
+详见 [LICENSE](LICENSE) 文件。
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📣 Attribution / 引用声明
+
+If you use this library in your project, paper, or any derivative work, please include the following attribution:
+
+如在项目、论文或衍生作品中使用本库，请注明以下归属：
+
+```
+数据来源 / Data Source: cnpower - https://github.com/Gawg-AI/cnpower
+```
 
 ## ⚠️ Disclaimer
 

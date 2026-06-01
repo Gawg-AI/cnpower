@@ -12,6 +12,17 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
+Attribution Requirement:
+Any use of this Software, in whole or in part, must include clear attribution
+to the original repository: https://github.com/Gawg-AI/cnpower
+
+This includes but is not limited to:
+- Academic papers, reports, or publications using data from this library must
+  cite this repository.
+- Derivative works or projects incorporating this library must reference the
+  original source.
+- Redistributions must retain the repository URL in documentation or about pages.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
