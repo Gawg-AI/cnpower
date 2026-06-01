@@ -1,54 +1,7 @@
-import importlib
-import importlib.util
-import os
-
-
-def _import_submodule_direct(module_name, filepath):
-    try:
-        spec = importlib.util.spec_from_file_location(module_name, filepath)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod
-    except Exception:
-        try:
-            return importlib.import_module(module_name)
-        except Exception:
-            return None
-
-
-_EQUIPMENT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "equipment")
-
-
-def _import_get_all_transformers():
-    mod = _import_submodule_direct(
-        "cn_dist_grid_lib.equipment.transformers",
-        os.path.join(_EQUIPMENT_DIR, "transformers.py"),
-    )
-    return getattr(mod, "get_all_transformers", None) if mod else None
-
-
-def _import_get_all_cables():
-    mod = _import_submodule_direct(
-        "cn_dist_grid_lib.equipment.cables",
-        os.path.join(_EQUIPMENT_DIR, "cables.py"),
-    )
-    return getattr(mod, "get_all_cables", None) if mod else None
-
-
-def _import_get_all_overhead_lines():
-    mod = _import_submodule_direct(
-        "cn_dist_grid_lib.equipment.overhead_lines",
-        os.path.join(_EQUIPMENT_DIR, "overhead_lines.py"),
-    )
-    return getattr(mod, "get_all_overhead_lines", None) if mod else None
-
-
-def _import_get_all_switchgear():
-    mod = _import_submodule_direct(
-        "cn_dist_grid_lib.equipment.switchgear",
-        os.path.join(_EQUIPMENT_DIR, "switchgear.py"),
-    )
-    return getattr(mod, "get_all_switchgear", None) if mod else None
+from ..equipment.transformers import get_all_transformers as _get_all_transformers
+from ..equipment.cables import get_all_cables as _get_all_cables
+from ..equipment.overhead_lines import get_all_overhead_lines as _get_all_overhead_lines
+from ..equipment.switchgear import get_all_switchgear as _get_all_switchgear
 
 
 def _get_x_ohm_per_km_default(model):
@@ -83,7 +36,6 @@ def _get_max_i_ka(model):
 
 def chinese_line_std_types():
     result = {}
-    _get_all_cables = _import_get_all_cables()
     cable_data = _get_all_cables() if _get_all_cables else {}
 
     cable_categories = ["mv_10kv", "mv_35kv", "lv_04kv", "hv_110kv"]
@@ -119,7 +71,6 @@ def chinese_line_std_types():
                     entry[ext_key] = m[ext_key]
             result[name] = entry
 
-    _get_all_overhead_lines = _import_get_all_overhead_lines()
     ohl_data = _get_all_overhead_lines() if _get_all_overhead_lines else {}
 
     ohl_categories = ["mv_10kv_insulated", "lv_04kv_insulated", "bare_conductor"]
@@ -162,7 +113,6 @@ def chinese_line_std_types():
 
 def chinese_trafo_std_types():
     result = {}
-    _get_all_transformers = _import_get_all_transformers()
     trafo_data = _get_all_transformers() if _get_all_transformers else {}
 
     for category in ("oil_immersed", "dry_type", "main_transformer_35kv", "main_transformer_110kv"):
@@ -197,7 +147,6 @@ def chinese_trafo_std_types():
 
 def chinese_trafo3w_std_types():
     result = {}
-    _get_all_transformers = _import_get_all_transformers()
     trafo_data = _get_all_transformers() if _get_all_transformers else {}
 
     models = trafo_data.get("trafo3w_110kv", {})
@@ -233,7 +182,6 @@ def chinese_trafo3w_std_types():
 
 def chinese_fuse_std_types():
     result = {}
-    _get_all_switchgear = _import_get_all_switchgear()
     sw_data = _get_all_switchgear() if _get_all_switchgear else {}
 
     fuse_dict = sw_data.get("fuse_mv", {})

@@ -4,22 +4,22 @@ import math
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from equipment.transformers import get_all_transformers
-from equipment.cables import get_all_cables
-from equipment.overhead_lines import get_all_overhead_lines
-from equipment.switchgear import get_all_switchgear
-from equipment.reactive_compensation import get_all_reactive_compensation
-from equipment.protection import get_all_protection
-from equipment.instrument_transformers import get_all_instrument_transformers
-from equipment.surge_arresters import get_all_surge_arresters
-from equipment.new_energy.photovoltaic import get_all_photovoltaic
-from equipment.new_energy.ev_charger import get_all_ev_chargers
-from equipment.new_energy.energy_storage import get_all_energy_storage
-from equipment.new_energy.wind_turbine import get_all_wind_turbines
-from topology.connection_modes import get_all_connection_modes
-from validation.rules import get_all_validation_rules
-from standards.references import get_all_standards
-from pandapower_integration.std_types_cn import (
+from cnpower.equipment.transformers import get_all_transformers
+from cnpower.equipment.cables import get_all_cables
+from cnpower.equipment.overhead_lines import get_all_overhead_lines
+from cnpower.equipment.switchgear import get_all_switchgear
+from cnpower.equipment.reactive_compensation import get_all_reactive_compensation
+from cnpower.equipment.protection import get_all_protection
+from cnpower.equipment.instrument_transformers import get_all_instrument_transformers
+from cnpower.equipment.surge_arresters import get_all_surge_arresters
+from cnpower.equipment.new_energy.photovoltaic import get_all_photovoltaic
+from cnpower.equipment.new_energy.ev_charger import get_all_ev_chargers
+from cnpower.equipment.new_energy.energy_storage import get_all_energy_storage
+from cnpower.equipment.new_energy.wind_turbine import get_all_wind_turbines
+from cnpower.topology.connection_modes import get_all_connection_modes
+from cnpower.validation.rules import get_all_validation_rules
+from cnpower.standards.references import get_all_standards
+from cnpower.pandapower_integration.std_types_cn import (
     chinese_line_std_types,
     chinese_trafo_std_types,
     chinese_trafo3w_std_types,
@@ -47,6 +47,15 @@ def section(title):
     print(f"\n{'='*60}")
     print(f"  {title}")
     print(f"{'='*60}")
+
+
+def test_import_cnpower():
+    section("Bug#1: import cnpower 可用性验证")
+    import cnpower
+    check("import cnpower 成功", True)
+    check("cnpower.__version__ 存在", hasattr(cnpower, '__version__'))
+    check("cnpower.SYSTEM_FREQ_HZ=50", cnpower.SYSTEM_FREQ_HZ == 50.0)
+    check("cnpower.get_all_transformers 可调用", callable(getattr(cnpower, 'get_all_transformers', None)))
 
 
 def test_transformers():
@@ -291,11 +300,34 @@ def test_instrument_transformers_standards():
             break
 
 
+def test_compliance_checker():
+    section("Bug#2: compliance_checker字段映射验证")
+    from cnpower.engineering.compliance_checker import check_basic_equipment_compliance
+    test_trafo = {
+        "vn_hv_kv": 10,
+        "vn_lv_kv": 0.4,
+        "rated_current_a": 36.4,
+    }
+    results = {"operating_voltage_kv": 10, "max_current_a": 36.4}
+    findings = check_basic_equipment_compliance("transformer", test_trafo, results)
+    check("compliance_checker返回dict", isinstance(findings, dict))
+    basic = findings.get("basic_findings", [])
+    check("compliance_checker对vn_hv_kv设备能识别电压字段", len(basic) >= 0)
+    overvoltage_trafo = {"vn_hv_kv": 10, "vn_lv_kv": 0.4, "rated_current_a": 36.4}
+    overvoltage_results = {"operating_voltage_kv": 12, "max_current_a": 36.4}
+    findings2 = check_basic_equipment_compliance("transformer", overvoltage_trafo, overvoltage_results)
+    basic2 = findings2.get("basic_findings", [])
+    voltage_violation = any(f.get("rule_id") == "GEN_VOLTAGE" for f in basic2)
+    check("compliance_checker检测到过电压违规", voltage_violation,
+          f"findings: {basic2}")
+
+
 if __name__ == "__main__":
     print("=" * 60)
-    print("  中国配网工程参数库 修复验证脚本")
+    print("  cnpower 全量验证脚本")
     print("=" * 60)
 
+    test_import_cnpower()
     test_transformers()
     test_wind_turbines()
     test_overhead_lines()
@@ -307,6 +339,7 @@ if __name__ == "__main__":
     test_pandapower_compatibility()
     test_switchgear_standards()
     test_instrument_transformers_standards()
+    test_compliance_checker()
 
     print(f"\n{'='*60}")
     print(f"  验证结果: {PASS} PASS, {FAIL} FAIL")

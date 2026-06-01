@@ -36,13 +36,15 @@ def check_basic_equipment_compliance(equipment_type, equipment, results=None):
             "message": message,
         })
 
-    rated_voltage = _get(equipment, "rated_voltage_kv", "vn_kv")
+    rated_voltage = _get(equipment, "rated_voltage_kv", "vn_hv_kv", "vn_kv", "voltage_rating")
     operating_voltage = _get(results, "operating_voltage_kv", "vn_kv")
     if rated_voltage is not None and operating_voltage is not None:
         add("GEN_VOLTAGE", _pass_le(operating_voltage, rated_voltage), "运行电压不得超过设备额定电压。")
 
-    rated_current = _get(equipment, "rated_current_a", "frame_current_a")
+    rated_current = _get(equipment, "rated_current_a", "frame_current_a", "max_i_ka")
     rated_current = _first_number(rated_current)
+    if rated_current is not None and isinstance(rated_current, (int, float)) and rated_current < 1:
+        rated_current = rated_current * 1000
     max_current = _get(results, "max_current_a")
     if max_current is None and _get(results, "i_ka") is not None:
         max_current = float(results["i_ka"]) * 1000

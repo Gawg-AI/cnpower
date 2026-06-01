@@ -9,7 +9,7 @@
 <a href="https://github.com/Gawg-AI/cnpower/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8+-green.svg" alt="Python 3.8+"></a>
 <img src="https://img.shields.io/badge/Standards-GB%2FT%202023-orange.svg" alt="GB/T 2023">
-<img src="https://img.shields.io/badge/Models-526+-brightgreen.svg" alt="526+ Models">
+<img src="https://img.shields.io/badge/Models-662-brightgreen.svg" alt="662 Models">
 </p>
 
 ---
@@ -18,7 +18,7 @@
 
 ### 概述
 
-`cn-dist-grid-lib` 是一套面向中国 10kV/0.4kV 配电网规划的工程参数库，涵盖 **526+** 种设备型号参数、典型接线模式、国标合规校验规则，并提供与 [pandapower](https://github.com/e2nIEE/pandapower) 的零侵入集成接口。
+`cnpower` 是一套面向中国 10kV/0.4kV 配电网规划的工程参数库，涵盖 **662** 种设备型号参数、典型接线模式、国标合规校验规则，并提供与 [pandapower](https://github.com/e2nIEE/pandapower) 的零侵入集成接口。
 
 ### 核心特性
 
@@ -56,7 +56,7 @@
 
 ```python
 # 导入设备参数
-from cn_dist_grid_lib.equipment import (
+from cnpower.equipment import (
     get_all_transformers,
     get_all_cables,
     get_all_overhead_lines,
@@ -77,7 +77,7 @@ print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I={yJV_70['max_i_ka']*1000}
 
 ```python
 import pandapower as pp
-from cn_dist_grid_lib.pandapower_integration import add_chinese_std_types
+from cnpower.pandapower_integration import add_chinese_std_types
 
 net = pp.create_empty_network()
 add_chinese_std_types(net)  # 一行注入全部中国标准类型
@@ -91,7 +91,7 @@ pp.runpp(net)
 ### 项目结构
 
 ```
-cn_dist_grid_lib/
+cnpower/
 ├── __init__.py                          # 版本与全局常量
 ├── equipment/                           # 设备参数库
 │   ├── transformers.py                  # 变压器 (212型号)
@@ -121,7 +121,6 @@ cn_dist_grid_lib/
 │   └── planning_library.py              # 规划库
 ├── pandapower_integration/
 │   └── std_types_cn.py                  # Pandapower标准类型注入
-├── data/                                # JSON数据导出
 └── verify_fixes.py                      # 修复验证脚本
 ```
 
@@ -152,7 +151,7 @@ cn_dist_grid_lib/
 
 ### Overview
 
-`cn-dist-grid-lib` is an engineering parameter library for Chinese 10kV/0.4kV distribution grid planning, covering **526+** equipment models, typical connection modes, GB/T compliance validation rules, and a zero-invasion integration interface with [pandapower](https://github.com/e2nIEE/pandapower).
+`cnpower` is an engineering parameter library for Chinese 10kV/0.4kV distribution grid planning, covering **662+** equipment models, typical connection modes, GB/T compliance validation rules, and a zero-invasion integration interface with [pandapower](https://github.com/e2nIEE/pandapower).
 
 ### Key Features
 
@@ -187,7 +186,7 @@ cn_dist_grid_lib/
 ### Quick Start
 
 ```python
-from cn_dist_grid_lib.equipment import (
+from cnpower.equipment import (
     get_all_transformers,
     get_all_cables,
     get_all_overhead_lines,
@@ -208,7 +207,7 @@ print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I={yJV_70['max_i_ka']*1000}
 
 ```python
 import pandapower as pp
-from cn_dist_grid_lib.pandapower_integration import add_chinese_std_types
+from cnpower.pandapower_integration import add_chinese_std_types
 
 net = pp.create_empty_network()
 add_chinese_std_types(net)  # One-line injection of all Chinese standard types
