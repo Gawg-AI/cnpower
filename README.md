@@ -284,3 +284,7 @@ If you use this library in your project, paper, or any derivative work, please i
 本库中的设备参数基于公开国标和典型工程值整理，仅供参考。实际工程设计请以设备厂家最新产品手册和现行国标为准。
 
 The equipment parameters in this library are compiled from published national standards and typical engineering values for reference only. Actual engineering design should be based on the latest manufacturer product manuals and current national standards.
+
+## 📧 Contact / 联系方式
+
+Email: ahx@qq.com

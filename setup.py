@@ -4,7 +4,7 @@ setup(
     name="cnpower",
     version="1.0.0",
     author="Gawg-AI",
-    author_email="fejj258@outlook.com",
+    author_email="ahx@qq.com",
     description="中国10kV/0.4kV配电网工程参数库 - Chinese 10kV/0.4kV Distribution Grid Engineering Parameter Library",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
