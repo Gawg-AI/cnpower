@@ -147,7 +147,7 @@ cnpower/
 
 ---
 
-## 🇬🇧 English Documentation
+## English Documentation
 
 ### Overview
 
