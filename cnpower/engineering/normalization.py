@@ -12,7 +12,9 @@ ALIASES = {
     "line": "line_cable",
     "cable": "line_cable",
     "overhead_line": "line_overhead",
+    "switch": "switch_breaker",
     "breaker": "switch_breaker",
+    "disconnector": "switch_disconnector",
     "switchgear": "switchgear_cabinet",
     "capacitor": "reactive_compensation",
     "sgen": "pv_inverter",
@@ -143,7 +145,16 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
     normalized = dict(data)
     normalized["equipment_type"] = canonical
 
-    for key in ("rated_voltage_kv", "vn_kv", "vn_hv_kv", "vn_mv_kv", "vn_lv_kv"):
+    for key in (
+        "rated_voltage_kv",
+        "rated_voltage_hv_kv",
+        "rated_voltage_mv_kv",
+        "rated_voltage_lv_kv",
+        "vn_kv",
+        "vn_hv_kv",
+        "vn_mv_kv",
+        "vn_lv_kv",
+    ):
         if key in normalized:
             value = parse_voltage_kv(normalized[key], source_unit="kv")
             if value is not None:

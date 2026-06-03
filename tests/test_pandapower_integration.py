@@ -106,6 +106,95 @@ def test_engineering_builder_supports_parameterized_lines_and_voltage_aliases():
     assert net.line.at[0, "max_i_ka"] == 0.21
 
 
+def test_engineering_builder_resolves_switch_element_references_by_asset_id():
+    net = build_pandapower_net(
+        {
+            "buses": [
+                {"id": "slack", "vn_kv": 10.0},
+                {"id": "feeder", "vn_kv": 10.0},
+            ],
+            "ext_grids": [{"bus": "slack", "vm_pu": 1.0}],
+            "lines": [
+                {
+                    "id": "line-1",
+                    "from_bus": "slack",
+                    "to_bus": "feeder",
+                    "length_km": 1.0,
+                    "std_type": "YJV22-3x70-10kV",
+                },
+            ],
+            "switches": [
+                {
+                    "id": "sw-line-1",
+                    "bus": "slack",
+                    "element": "line-1",
+                    "element_type": "line",
+                    "switch_type": "CB",
+                    "closed": True,
+                    "in_ka": 25,
+                },
+            ],
+            "loads": [{"bus": "feeder", "p_mw": 0.05, "q_mvar": 0.01}],
+        },
+        run_powerflow=True,
+    )
+
+    assert net.converged
+    assert net.switch.at[0, "et"] == "l"
+    assert net.switch.at[0, "element"] == 0
+    assert net.switch.at[0, "in_ka"] == 25
+    assert net["cnpower_element_lookup"]["line"]["line-1"] == 0
+    assert net["cnpower_element_lookup"]["switch"]["sw-line-1"] == 0
+
+
+def test_engineering_builder_routes_flat_assets_with_class_aliases():
+    net = build_pandapower_net(
+        {
+            "assets": [
+                {"id": "grid", "class": "busbar", "vn_kv": 10.0},
+                {"id": "feeder", "class": "busbar", "vn_kv": 10.0},
+                {"id": "source", "class": "source_grid", "bus": "grid", "vm_pu": 1.0},
+                {
+                    "id": "line-a",
+                    "class": "line",
+                    "from_bus": "grid",
+                    "to_bus": "feeder",
+                    "length_km": 1.0,
+                    "std_type": "YJV22-3x70-10kV",
+                },
+                {
+                    "id": "disc-a",
+                    "class": "disconnector",
+                    "bus": "grid",
+                    "element": "line-a",
+                    "element_type": "line",
+                    "closed": True,
+                },
+                {"id": "load-a", "class": "load", "bus": "feeder", "p_mw": 0.05, "q_mvar": 0.01},
+            ],
+        },
+        run_powerflow=True,
+    )
+
+    assert net.converged
+    assert len(net.line) == 1
+    assert len(net.switch) == 1
+    assert net.switch.at[0, "type"] == "LS"
+    assert net["cnpower_element_lookup"]["line"]["line-a"] == 0
+
+
+def test_engineering_builder_rejects_duplicate_asset_references():
+    with pytest.raises(ValueError, match="Duplicate bus reference"):
+        build_pandapower_net(
+            {
+                "buses": [
+                    {"id": "dup", "vn_kv": 10.0},
+                    {"id": "dup", "vn_kv": 10.0},
+                ],
+            }
+        )
+
+
 def test_engineering_builder_supports_parameterized_transformers():
     net = build_pandapower_net(
         {
@@ -119,8 +208,8 @@ def test_engineering_builder_supports_parameterized_transformers():
                     "hv_bus": "grid",
                     "lv_bus": "load_bus",
                     "sn_kva": 630,
-                    "vn_hv_kv": "10kV",
-                    "vn_lv_kv": "400V",
+                    "vn_hv_v": 10000,
+                    "rated_voltage_lv_v": 400,
                     "vk_percent": 4.5,
                     "vkr_percent": 0.98,
                     "pfe_kw": 1.2,
