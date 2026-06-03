@@ -58,12 +58,14 @@ def test_voltage_fields_are_normalized_when_present():
         "transformer",
         {
             "rated_voltage_kv": "6/10kV",
+            "rated_voltage_hv_kv": 110,
             "vn_hv_kv": 110,
             "vn_lv_kv": "400V",
         },
     )
 
     assert normalized["rated_voltage_kv"] == 10
+    assert normalized["rated_voltage_hv_kv"] == 110
     assert normalized["vn_hv_kv"] == 110
     assert normalized["vn_lv_kv"] == 0.4
 
