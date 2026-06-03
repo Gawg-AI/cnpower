@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="cnpower",
@@ -11,13 +11,14 @@ setup(
     url="https://github.com/Gawg-AI/cnpower",
     license="MIT",
     packages=find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=[
-        "pandas>=1.3.0",
+        "pandas>=2.0",
     ],
     extras_require={
-        "pandapower": ["pandapower>=2.10.0"],
-        "dev": ["pytest>=7.0"],
+        "pandapower": ["pandapower>=3.4,<4"],
+        "test": ["pytest>=8", "pandapower>=3.4,<4"],
+        "dev": ["pytest>=8", "pandapower>=3.4,<4"],
     },
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -25,11 +26,10 @@ setup(
         "Intended Audience :: Engineering",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Power Engineering",
     ],
