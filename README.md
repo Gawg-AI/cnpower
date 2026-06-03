@@ -14,20 +14,6 @@
 
 ---
 
-## 功能升级版本说明 / Upgrade Notes
-
-> 主页维护规则：以后每次功能升级、重要修复或文档增强合并到 `main` 时，都要在本区块顶部追加一条版本说明，写清楚升级范围、影响和验证结果，方便从仓库主页直接看到最新变化。
-
-| README 功能版本 | 日期 | 对应提交 / PR | 升级说明 |
-|----------------|------|---------------|----------|
-| v2026.06.03-docs | 2026-06-03 | 本次 README 更新 | 在主页新增功能升级版本说明，并补录此前几次功能升级，后续每次更新都从这里追加说明。 |
-| v2026.06.03-builder-followups | 2026-06-03 | [`7602010`](https://github.com/Gawg-AI/cnpower/commit/7602010a604ccb26fe26896427f47218438748c1), [PR #3](https://github.com/Gawg-AI/cnpower/pull/3) | 强化 `build_pandapower_net`：支持用工程资产 `id/name` 解析开关目标元素，支持 `assets` 扁平输入和 `line`、`disconnector` 等 class alias，增加 transformer 电压别名，保留 `cnpower_element_lookup`，并新增可运行示例 `examples/pandapower_network_builder.py`。GitHub Actions `tests` 已通过。 |
-| v2026.06.03-parameterized-assets | 2026-06-03 | [`c24cbd0`](https://github.com/Gawg-AI/cnpower/commit/c24cbd0625b4ed12882ea61354bf63094478e559) | 补齐工程资产到 pandapower 的参数化建模能力：支持参数化线路、两绕组变压器、三绕组变压器、电压/电流别名归一化，以及短路计算入口测试。 |
-| v2026.06.03-engineering-core | 2026-06-03 | [`4661d23`](https://github.com/Gawg-AI/cnpower/commit/4661d23) | 新增工程归一化、合规约束/检查、pandapower 中国标准类型注入和工程网络构建入口，使设备参数库可以进入潮流计算和合规校验工作流。 |
-| v2026.06.03-stability | 2026-06-03 | [`fbc605a`](https://github.com/Gawg-AI/cnpower/commit/fbc605a) | 修复包结构、合规检查器、过期数据清理等稳定性问题，补充验证脚本，降低导入和检查流程失败风险。 |
-| v2026.06.03-branding | 2026-06-03 | [`ac5fbc7`](https://github.com/Gawg-AI/cnpower/commit/ac5fbc7), [`26d9a97`](https://github.com/Gawg-AI/cnpower/commit/26d9a97), [`b459263`](https://github.com/Gawg-AI/cnpower/commit/b459263), [`6fd038e`](https://github.com/Gawg-AI/cnpower/commit/6fd038e) | 项目更名为 `cnpower`，补充来源署名要求、联系方式，并整理 README 标题展示。 |
-| v1.0.0-initial | 2026-06-03 | [`a42dd17`](https://github.com/Gawg-AI/cnpower/commit/a42dd17), [`5ced9e9`](https://github.com/Gawg-AI/cnpower/commit/5ced9e9) | 初始化中国 10kV/0.4kV 配电网工程参数库，提供 662 类设备型号参数、典型接线模式、国标索引、README、LICENSE 和贡献说明。 |
-
 ## 中文说明
 
 ### 概述
@@ -301,3 +287,19 @@ The equipment parameters in this library are compiled from published national st
 ## 📧 Contact / 联系方式
 
 Email: ahx@qq.com
+
+---
+
+## 功能升级版本说明 / Upgrade Notes
+
+维护规则：以后每次功能升级、重要修复或文档增强合并到 `main` 后，只在下表顶部新增一行说明。
+
+| 日期 | 功能版本 | 一行升级说明 |
+|------|----------|--------------|
+| 2026-06-03 | v2026.06.03-docs | 将升级说明移到 README 最下方，并改为每次升级只追加一行的简洁记录格式。 |
+| 2026-06-03 | v2026.06.03-builder-followups | [PR #3](https://github.com/Gawg-AI/cnpower/pull/3) 强化 `build_pandapower_net`，支持工程资产 `id/name` 解析开关目标、扁平 `assets` 输入、class alias、transformer 电压别名、`cnpower_element_lookup` 和示例脚本。 |
+| 2026-06-03 | v2026.06.03-parameterized-assets | [`c24cbd0`](https://github.com/Gawg-AI/cnpower/commit/c24cbd0625b4ed12882ea61354bf63094478e559) 补齐工程资产到 pandapower 的参数化建模能力，覆盖线路、两绕组变压器、三绕组变压器、电压/电流别名和短路计算测试。 |
+| 2026-06-03 | v2026.06.03-engineering-core | [`4661d23`](https://github.com/Gawg-AI/cnpower/commit/4661d23) 新增工程归一化、合规约束/检查、pandapower 中国标准类型注入和工程网络构建入口。 |
+| 2026-06-03 | v2026.06.03-stability | [`fbc605a`](https://github.com/Gawg-AI/cnpower/commit/fbc605a) 修复包结构、合规检查器、过期数据清理等稳定性问题，并补充验证脚本。 |
+| 2026-06-03 | v2026.06.03-branding | [`ac5fbc7`](https://github.com/Gawg-AI/cnpower/commit/ac5fbc7) 项目更名为 `cnpower`，补充来源署名要求、联系方式，并整理 README 标题展示。 |
+| 2026-06-03 | v1.0.0-initial | [`a42dd17`](https://github.com/Gawg-AI/cnpower/commit/a42dd17) 初始化中国 10kV/0.4kV 配电网工程参数库，提供 662 类设备型号参数、典型接线模式、国标索引、README、LICENSE 和贡献说明。 |
