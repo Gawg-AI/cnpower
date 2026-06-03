@@ -66,10 +66,10 @@ def parse_voltage_kv(value, *, source_unit=None, default=None):
     if number is None:
         return default
     text = str(value).lower() if isinstance(value, str) else ""
-    if source_unit == "v" or text.endswith("v") or "dc" in text:
-        return number / 1000.0 if number > 2 else number
     if "kv" in text:
         return number
+    if source_unit == "v" or text.endswith("v") or "dc" in text:
+        return number / 1000.0 if number > 2 else number
     if number > 100:
         return number / 1000.0
     return number
