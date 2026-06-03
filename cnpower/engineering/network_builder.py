@@ -212,7 +212,7 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
             name=data.get("name"),
         )
 
-    net.cnpower_bus_lookup = bus_lookup
+    net["cnpower_bus_lookup"] = bus_lookup
     if run_powerflow:
         pp.runpp(net)
     return net
