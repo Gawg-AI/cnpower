@@ -53,6 +53,21 @@ def test_ev_charger_normalization_derives_pq():
     assert normalized["q_mvar"] > 0
 
 
+def test_voltage_fields_are_normalized_when_present():
+    normalized = normalize_equipment(
+        "transformer",
+        {
+            "rated_voltage_kv": "6/10kV",
+            "vn_hv_kv": 110,
+            "vn_lv_kv": "400V",
+        },
+    )
+
+    assert normalized["rated_voltage_kv"] == 10
+    assert normalized["vn_hv_kv"] == 110
+    assert normalized["vn_lv_kv"] == 0.4
+
+
 def test_compliance_executor_detects_violation_and_maps_type_alias():
     result = check_equipment_compliance(
         "transformer",

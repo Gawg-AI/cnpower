@@ -66,10 +66,13 @@ def parse_voltage_kv(value, *, source_unit=None, default=None):
     if number is None:
         return default
     text = str(value).lower() if isinstance(value, str) else ""
+    source_unit = str(source_unit).lower() if source_unit is not None else None
     if "kv" in text:
         return number
     if source_unit == "v" or text.endswith("v") or "dc" in text:
         return number / 1000.0 if number > 2 else number
+    if source_unit == "kv":
+        return number
     if number > 100:
         return number / 1000.0
     return number
@@ -139,6 +142,12 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
     canonical = canonical_equipment_type(equipment_type)
     normalized = dict(data)
     normalized["equipment_type"] = canonical
+
+    for key in ("rated_voltage_kv", "vn_kv", "vn_hv_kv", "vn_mv_kv", "vn_lv_kv"):
+        if key in normalized:
+            value = parse_voltage_kv(normalized[key], source_unit="kv")
+            if value is not None:
+                normalized[key] = value
 
     _copy_alias(normalized, data, "sn_kva", "sn_mva", lambda value: first_number(value) / 1000.0)
     _copy_alias(normalized, data, "rated_capacity_kva", "sn_mva", lambda value: first_number(value) / 1000.0)
