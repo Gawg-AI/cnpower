@@ -194,7 +194,7 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
             if key in normalized:
                 value = first_number(normalized[key])
                 if value is not None:
-                    normalized["rated_current_a"] = value * 1000.0 if key == "max_i_ka" or value < 1 else value
+                    normalized["rated_current_a"] = value * 1000.0 if key == "max_i_ka" else value
                     break
 
     _copy_alias(normalized, normalized, "rated_short_circuit_breaking_ka", "rated_short_circuit_breaking_current_ka", first_number)
