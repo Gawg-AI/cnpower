@@ -52,7 +52,7 @@ def chinese_line_std_types():
             entry = {
                 "c_nf_per_km": float(m.get("c_nf_per_km", 0.0)),
                 "r_ohm_per_km": float(m.get("r_ohm_per_km", 0.0)),
-                "x_ohm_per_km": float(m.get("x_ohm_per_km", 0.0)),
+                "x_ohm_per_km": float(_get_x_ohm_per_km_default(m)),
                 "max_i_ka": float(_get_max_i_ka(m)),
             }
             for ext_key in ("r0_ohm_per_km", "x0_ohm_per_km", "c0_nf_per_km"):
