@@ -49,6 +49,8 @@ def _has_field(data, field):
     if field in data and data[field] is not None:
         return True
     alias = FIELD_ALIASES.get(field)
+    if alias is None:
+        return False
     return alias in data and data[alias] is not None
 
 
@@ -57,7 +59,7 @@ def _get(data, *names):
         if name in data and data[name] is not None:
             return data[name]
         alias = FIELD_ALIASES.get(name)
-        if alias in data and data[alias] is not None:
+        if alias is not None and alias in data and data[alias] is not None:
             return data[alias]
     return None
 
@@ -151,7 +153,12 @@ def _evaluate_rule(rule, equipment, results):
     if rule_id.endswith("_V_001") or "VOLTAGE" in rule_id or rule_id.startswith("RC_V") or rule_id.startswith("SWG_V"):
         checks.append(("operating voltage", _get(results, "operating_voltage_kv"), _get(equipment, "rated_voltage_kv")))
     if "_I_" in rule_id or rule_id.endswith("LOAD_001") or rule_id.endswith("CAB_LOAD_001") or rule_id.endswith("OHL_LOAD_001"):
-        checks.append(("operating current", _get(results, "max_current_a", "i_ka"), _get(equipment, "rated_current_a")))
+        current_val = _get(results, "max_current_a", "i_ka")
+        if "max_current_a" not in results and "i_ka" in results:
+            cv = first_number(current_val)
+            if cv is not None:
+                current_val = cv * 1000.0
+        checks.append(("operating current", current_val, _get(equipment, "rated_current_a")))
     if "BREAK" in rule_id:
         checks.append(("short-circuit breaking", _get(results, "ikss_ka"), _get(equipment, "rated_short_circuit_breaking_current_ka")))
     if "MAKE" in rule_id or "PEAK" in rule_id or "DYNAMIC" in rule_id:
