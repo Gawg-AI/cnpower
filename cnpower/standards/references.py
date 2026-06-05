@@ -180,7 +180,7 @@ def get_all_standards():
             "code": "GB/T 45418-2025",
             "canonical_name": "配电网通用技术导则",
             "canonical_scope": "配电网规划、建设、运行、改造和设备选型的通用技术要求",
-            "name": "配电网规划设计规范",
+            "name": "配电网通用技术导则",
             "year": 2025,
             "scope": "配电网规划设计的总体规范要求",
             "related_equipment": ["变压器", "导体", "开关"],
