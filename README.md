@@ -70,7 +70,7 @@ print(f"S13-630/10: {s13_630['sn_kva']}kVA, Vk={s13_630['vk_percent']}%")
 # 获取10kV电缆参数
 cables = get_all_cables()
 yJV_70 = cables["mv_10kv"]["YJV22-3x70-10kV"]
-print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I={yJV_70['max_i_ka']*1000}A")
+print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I_ground={yJV_70['max_i_ka_ground']*1000}A")
 ```
 
 ### Pandapower 集成
@@ -200,7 +200,7 @@ print(f"S13-630/10: {s13_630['sn_kva']}kVA, Vk={s13_630['vk_percent']}%")
 # Get 10kV cable parameters
 cables = get_all_cables()
 yJV_70 = cables["mv_10kv"]["YJV22-3x70-10kV"]
-print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I={yJV_70['max_i_ka']*1000}A")
+print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I_ground={yJV_70['max_i_ka_ground']*1000}A")
 ```
 
 ### Pandapower Integration
@@ -254,7 +254,7 @@ All equipment parameter libraries use `dict[str, dict]` format (model name as ke
 | Resistance | `r_ohm_per_km` | Ω/km | |
 | Reactance | `x_ohm_per_km` | Ω/km | |
 | Capacitance | `c_nf_per_km` | nF/km | |
-| Max current | `max_i_ka` | kA | |
+| Max current | `max_i_ka` | kA | 电缆默认取 `max_i_ka_ground` |
 
 ---
 

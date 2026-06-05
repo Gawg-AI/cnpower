@@ -185,9 +185,9 @@ def get_all_standards():
             "related_rules": ["pv_penetration_limit", "voltage_rise_check"]
         },
         {
-            "code": "GB/T 18487-2017",
+            "code": "GB/T 18487.1-2023",
             "name": "电动车导电充电系统 通用要求",
-            "year": 2017,
+            "year": 2023,
             "scope": "电动车导电充电系统的通用技术要求",
             "related_equipment": ["充电桩"],
             "related_rules": ["pv_penetration_limit"]
@@ -207,6 +207,38 @@ def get_all_standards():
             "scope": "交流高压熔断器的技术要求",
             "related_equipment": ["熔断器"],
             "related_rules": ["breaker_rating"]
+        },
+        {
+            "code": "GB/T 12527-2008",
+            "name": "额定电压1kV及以下架空绝缘电缆",
+            "year": 2008,
+            "scope": "额定电压1kV及以下架空聚乙烯绝缘电缆",
+            "related_equipment": ["架空绝缘电缆"],
+            "related_rules": ["conductor_economy", "conductor_ampacity"]
+        },
+        {
+            "code": "GB 20052-2020",
+            "name": "电力变压器能效限定值及能效等级",
+            "year": 2020,
+            "scope": "电力变压器能效限定值及能效等级",
+            "related_equipment": ["变压器"],
+            "related_rules": ["transformer_loading"]
+        },
+        {
+            "code": "GB/T 19068-2017",
+            "name": "离网型风力发电机组",
+            "year": 2017,
+            "scope": "离网型风力发电机组的技术要求",
+            "related_equipment": ["风机"],
+            "related_rules": []
+        },
+        {
+            "code": "GB/T 25383-2017",
+            "name": "风力发电机组",
+            "year": 2017,
+            "scope": "风力发电机组的技术要求",
+            "related_equipment": ["风机"],
+            "related_rules": []
         },
         {
             "code": "GB/T 1984-2024",
@@ -265,9 +297,9 @@ def get_all_standards():
             "related_rules": ["transformer_loading"]
         },
         {
-            "code": "GB/T 17467-2010",
+            "code": "GB/T 17467-2020",
             "name": "高压/低压预装式变电站",
-            "year": 2010,
+            "year": 2020,
             "scope": "高压/低压预装式变电站的技术要求",
             "related_equipment": ["箱式变电站"],
             "related_rules": ["transformer_loading"]
