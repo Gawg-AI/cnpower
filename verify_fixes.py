@@ -136,8 +136,8 @@ def test_references():
     section("S7: references.py GB/T 36558名称验证")
     data = get_all_standards()
     found = False
-    for std in data:
-        if std.get("code") == "GB/T 36558-2018":
+    for code, std in data.items():
+        if code == "GB/T 36558-2018":
             found = True
             name = std.get("name", "")
             check("GB/T 36558名称正确", "电化学储能" in name, f"got '{name}'")
@@ -154,7 +154,7 @@ def test_references():
         "GB/T 1207-2006": "GB/T 20840.3-2013",
         "GB/T 1208-2006": "GB/T 20840.2-2014",
     }
-    codes_in_refs = [s.get("code", "") for s in data]
+    codes_in_refs = list(data.keys())
     for old_code, new_code in outdated.items():
         check(f"references中不含{old_code}", old_code not in codes_in_refs,
               f"应更新为{new_code}")

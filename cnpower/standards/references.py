@@ -1,5 +1,5 @@
 def get_all_standards():
-    return [
+    _standards_list = [
         {
             "code": "GB/T 6451-2023",
             "name": "油浸式电力变压器技术参数和要求",
@@ -361,3 +361,4 @@ def get_all_standards():
             "related_rules": ["voltage_deviation", "harmonic"]
         }
     ]
+    return {s["code"]: s for s in _standards_list}
