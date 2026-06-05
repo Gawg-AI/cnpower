@@ -12,9 +12,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     python_requires=">=3.10",
-    install_requires=[
-        "pandas>=2.0",
-    ],
+    install_requires=[],
     extras_require={
         "pandapower": ["pandapower>=3.4,<4"],
         "test": ["pytest>=8", "pandapower>=3.4,<4"],
