@@ -1,101 +1,139 @@
-<h1 align="center">🔌 cnpower</h1>
+# cnpower
 
-<p align="center">
-<strong>中国 10kV/0.4kV 配电网工程参数库</strong><br>
-<strong>Chinese 10kV/0.4kV Distribution Grid Engineering Parameter Library</strong>
-</p>
+Chinese 10kV/0.4kV distribution-grid engineering parameter library.
 
-<p align="center">
-<a href="https://github.com/Gawg-AI/cnpower/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10+-green.svg" alt="Python 3.10+"></a>
-<img src="https://img.shields.io/badge/Standards-GB%2FT%202023-orange.svg" alt="GB/T 2023">
-<img src="https://img.shields.io/badge/Models-662-brightgreen.svg" alt="662 Models">
-</p>
+`cnpower` 是面向中国配电网规划、潮流计算、设备选型和工程校验的
+10kV/0.4kV 工程参数库。当前版本在静态设备参数基础上，补充了变压器
+额定电流派生、线路/电缆载流工况、开关设备短时耐受、保护配合、寿命与
+运行策略等动态工程参量。
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.10%2B-green.svg)
+![Models](https://img.shields.io/badge/Models-662-brightgreen.svg)
+![Standards](https://img.shields.io/badge/Standards-GB%2FGB--T%202025-orange.svg)
 
-## 中文说明
+## Overview
 
-### 概述
+`cnpower` provides Chinese distribution-grid equipment parameters, typical
+connection modes, standards references, compliance checks, and pandapower
+integration for planning and simulation workflows.
 
-`cnpower` 是一套面向中国 10kV/0.4kV 配电网规划的工程参数库，涵盖 **662** 种设备型号参数、典型接线模式、国标合规校验规则，并提供与 [pandapower](https://github.com/e2nIEE/pandapower) 的零侵入集成接口。
+The current library contains 662 equipment models across transformers, cables,
+overhead lines, switchgear, compensation devices, protection schemes,
+instrument transformers, surge arresters, photovoltaics, EV chargers, energy
+storage, and wind turbines.
 
-### 核心特性
+The project now includes additive operating and planning metadata beyond static
+nameplate data:
 
-| 模块 | 内容 | 型号数 |
-|------|------|--------|
-| 🔌 变压器 | 油浸(S11/S13/S15/SH15)、干式(SCB10-13/SCBH15)、箱变、35kV/110kV主变、三绕组 | 212 |
-| 🔗 电缆 | 10kV/35kV/0.4kV/110kV 交联聚乙烯电缆(YJV/YJV22) | 178 |
-| 📡 架空线 | 10kV绝缘线、0.4kV绝缘线、裸导线(LJ/LGJ) | 82 |
-| ⚡ 开关柜 | KYN28A/XGN66、VS1/VD4断路器、FN7负荷开关、XRNT熔断器、低压断路器 | 61 |
-| 🔋 无功补偿 | MV/LV电容器、SVG | 29 |
-| 🛡️ 保护 | 线路保护、变压器保护 | 10 |
-| 📊 互感器 | CT(LZZBJ9/BH-LMZ)、PT(JDZ/JDZJ) | 32 |
-| ⚡ 避雷器 | HY5WZ/HY10WZ/HY1.5W | 4 |
-| ☀️ 光伏 | 组件(单晶/多晶/薄膜)、组串式/集中式逆变器 | 17 |
-| 🚗 充电桩 | AC慢充/DC快充/DC超充 | 9 |
-| 🔋 储能 | LFP/铅碳电池、PCS | 19 |
-| 💨 风机 | 小型/中型风力发电机 | 9 |
+- transformer side-current derivation, loading limits, thermal/loading-guide
+  metadata, design life, and `GB 20052-2024` energy-efficiency references;
+- cable and overhead-line ampacity reference conditions, derating metadata,
+  thermal limits, short-circuit `I^2t`, dynamic rating metadata, and life-cycle
+  fields;
+- switchgear, circuit-breaker, fuse, and protection operating limits,
+  short-time withstand duration, endurance metadata, internal-arc placeholders,
+  time-current curve metadata, and coordination metadata.
 
-### 国标依据（最新版本）
+For a machine-readable summary of the current library, see
+[`cnpower_project_profile.json`](cnpower_project_profile.json).
 
-- **GB/T 6451-2023** 油浸式电力变压器技术参数和要求
-- **GB/T 10228-2023** 干式电力变压器技术参数和要求
-- **GB/T 12706-2020** 额定电压1kV到35kV挤包绝缘电力电缆
-- **GB/T 1179-2017** 圆线同心绞架空导线
-- **GB/T 12527-2008** 额定电压1kV及以下架空绝缘电缆
-- **GB/T 14049-2008** 额定电压10kV架空绝缘电缆
-- **GB/T 1984-2024** 高压交流断路器
-- **GB/T 17467-2020** 高压/低压预装式变电站
-- **GB 20052-2024** 电力变压器能效限定值及能效等级
-- **GB/T 19068-2017** 离网型风力发电机组
-- **GB/T 25383-2017** 风力发电机组
-- 更多见 `standards/references.py`（41+项标准索引）
+## Model Coverage
 
-### 快速开始
+| Module | Count | Contents |
+|---|---:|---|
+| Transformers | 212 | Oil-immersed, dry-type, box substations, 35kV/110kV main transformers, three-winding transformers |
+| Cables | 178 | 10kV, 35kV, 0.4kV, and 110kV power cables |
+| Overhead lines | 82 | 10kV insulated lines, 0.4kV insulated lines, bare conductors |
+| Switchgear | 61 | Switchgear cabinets, MV/LV breakers, load switches, MV fuses, reclosers, sectionalizers |
+| Reactive compensation | 29 | MV/LV capacitors and SVG devices |
+| Protection | 10 | Line and transformer protection schemes |
+| Instrument transformers | 32 | MV/LV CTs and MV PTs |
+| Surge arresters | 4 | MV and LV arresters |
+| Photovoltaic | 17 | PV modules, string inverters, central inverters |
+| EV chargers | 9 | AC slow chargers, DC fast chargers, DC super-fast chargers |
+| Energy storage | 19 | LFP batteries, lead-carbon batteries, PCS |
+| Wind turbines | 9 | Small and medium distributed wind turbines |
+
+Total: 662 models.
+
+## Standards
+
+The standards index currently exposes 49 standards and planning references.
+Key references include:
+
+| Standard | Use |
+|---|---|
+| `GB/T 6451-2023` | Oil-immersed transformer technical parameters |
+| `GB/T 10228-2023` | Dry-type transformer technical parameters |
+| `GB/T 1094.7-2024` | Oil-immersed transformer loading and aging guide |
+| `GB/T 1094.11-2022` | Dry-type transformer requirements |
+| `GB/T 1094.12-2013` | Dry-type transformer loading guide |
+| `GB/T 17468-2019` | Transformer selection guide |
+| `GB 20052-2024` | Power transformer energy-efficiency limits and grades |
+| `GB/T 12706.1~3-2020` | 1kV to 35kV extruded-insulation power cables |
+| `GB/T 1179-2017` | Round-wire concentric-lay overhead conductors |
+| `GB/T 14049-2008` | 10kV aerial insulated cables |
+| `GB/T 12527-2008` | Aerial insulated cables up to and including 1kV |
+| `GB/T 1984-2024` | High-voltage AC circuit breakers |
+| `GB/T 11022-2020` | Common specifications for HV switchgear and controlgear |
+| `GB/T 3906-2020` | 3.6kV to 40.5kV metal-enclosed switchgear |
+| `GB/T 15166.2-2023` | HV current-limiting fuses |
+| `GB/T 15166.6-2023` | Fuse-link selection for transformer circuits |
+| `GB/T 45418-2025` | Distribution network general technical guide |
+
+Use `cnpower.standards.get_all_standards()` for the full index.
+
+## Installation
 
 ```bash
-# 安装（基础版，无 pandapower 依赖）
 pip install cnpower
+```
 
-# 或安装含 pandapower 集成的完整版
-pip install cnpower[pandapower]
+Install with pandapower integration:
 
-# 或从源码安装开发版
+```bash
+pip install "cnpower[pandapower]"
+```
+
+Install from source:
+
+```bash
 git clone https://github.com/Gawg-AI/cnpower.git
 cd cnpower
 pip install -e ".[pandapower]"
 ```
 
-```python
-# 导入设备参数
-from cnpower.equipment import (
-    get_all_transformers,
-    get_all_cables,
-    get_all_overhead_lines,
-)
+## Quick Start
 
-# 获取10kV油浸式变压器参数
+```python
+from cnpower.equipment import get_all_transformers, get_all_cables
+
 transformers = get_all_transformers()
 s13_630 = transformers["oil_immersed"]["S13-630/10"]
-print(f"S13-630/10: {s13_630['sn_kva']}kVA, Vk={s13_630['vk_percent']}%")
 
-# 获取10kV电缆参数
+print(s13_630["sn_kva"])                 # 630
+print(s13_630["rated_current_hv_a"])     # 36.4
+print(s13_630["rated_current_lv_a"])     # 909.3
+print(s13_630["thermal_model"]["standard"])
+
 cables = get_all_cables()
-yJV_70 = cables["mv_10kv"]["YJV22-3x70-10kV"]
-print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I_ground={yJV_70['max_i_ka_ground']*1000}A")
+yjv_70 = cables["mv_10kv"]["YJV22-3x70-10kV"]
+
+print(yjv_70["r_ohm_per_km"])
+print(yjv_70["max_i_ka_ground"] * 1000)
+print(yjv_70["ampacity_reference"]["laying_methods"])
 ```
 
-### Pandapower 集成
+## Pandapower Integration
 
 ```python
 import pandapower as pp
 from cnpower.pandapower_integration import add_chinese_std_types
 
 net = pp.create_empty_network()
-add_chinese_std_types(net)  # 一行注入全部中国标准类型
+add_chinese_std_types(net)
 
-# 使用中国标准变压器创建网络
 hv_bus = pp.create_bus(net, vn_kv=10, name="HV Bus")
 lv_bus = pp.create_bus(net, vn_kv=0.4, name="LV Bus")
 from_bus = pp.create_bus(net, vn_kv=10, name="Line From")
@@ -106,45 +144,66 @@ pp.create_line(net, from_bus, to_bus, length_km=2.0, std_type="YJV22-3x70-10kV")
 pp.runpp(net)
 ```
 
-### 项目结构
+## Engineering Normalization And Checks
 
+`cnpower.engineering.normalize_equipment()` derives common fields from existing
+equipment records. For transformers, it derives side-specific rated current from
+capacity and voltage:
+
+```python
+from cnpower.engineering import normalize_equipment
+
+trafo = normalize_equipment(
+    "transformer",
+    {"sn_kva": 630, "vn_hv_kv": 10, "vn_lv_kv": 0.4},
+    context={"current_side": "lv"},
+)
+
+print(trafo["rated_current_a"])  # 909.3
 ```
+
+`cnpower.engineering.check_equipment_compliance()` can then compare equipment
+limits with power-flow, short-circuit, or planning results.
+
+## Operating Parameter Guide
+
+Detailed field definitions and maintenance rules are in
+[`docs/OPERATING_PARAMETERS.md`](docs/OPERATING_PARAMETERS.md).
+
+Important source-type rules:
+
+- `standard_table`: direct standard table value.
+- `derived_formula`: calculated from nameplate parameters.
+- `standard_reference`: standard-backed method or requirement.
+- `standard_reference_and_engineering_default`: standard-backed check with a
+  conservative default.
+- `engineering_policy`: planning or utility-policy default.
+- `manufacturer_typical_or_engineering_default`: manufacturer catalogue or
+  typical placeholder.
+- `project_specific_required`: must be filled by the project or site.
+
+Planning defaults should not be treated as mandatory GB/GB/T limits.
+
+## Project Structure
+
+```text
 cnpower/
-├── __init__.py                          # 版本与全局常量
-├── equipment/                           # 设备参数库
-│   ├── transformers.py                  # 变压器 (212型号)
-│   ├── cables.py                        # 电缆 (178型号)
-│   ├── overhead_lines.py                # 架空线 (82型号)
-│   ├── switchgear.py                    # 开关柜/断路器 (61型号)
-│   ├── reactive_compensation.py         # 无功补偿 (29型号)
-│   ├── protection.py                    # 继电保护 (10型号)
-│   ├── instrument_transformers.py       # 互感器 (32型号)
-│   ├── surge_arresters.py               # 避雷器 (4型号)
-│   └── new_energy/                      # 新能源
-│       ├── photovoltaic.py              # 光伏 (17型号)
-│       ├── ev_charger.py                # 充电桩 (9型号)
-│       ├── energy_storage.py            # 储能 (19型号)
-│       └── wind_turbine.py              # 风机 (9型号)
-├── topology/
-│   └── connection_modes.py              # 13种典型接线模式
-├── validation/
-│   └── rules.py                         # 国标合规校验规则
-├── standards/
-│   └── references.py                    # 41+项国标/行标索引
-├── engineering/                         # 工程计算模块
-│   ├── compliance_constraints.py        # 合规约束定义
-│   ├── compliance_checker.py            # 合规检查器
-│   ├── pandapower_bridge.py             # Pandapower桥接
-│   ├── asset_schema.py                  # 资产数据模式
-│   └── planning_library.py              # 规划库
-├── pandapower_integration/
-│   └── std_types_cn.py                  # Pandapower标准类型注入
-└── verify_fixes.py                      # 修复验证脚本
+  equipment/                 Equipment parameter libraries
+  equipment/new_energy/      PV, EV charging, storage, wind
+  engineering/               Normalization, compliance, network building
+  pandapower_integration/    Chinese pandapower standard types
+  standards/                 GB/GB-T/DL/T/NB/T/Q/GDW reference index
+  topology/                  Typical connection modes
+  validation/                Power-quality and planning validation rules
+docs/
+  OPERATING_PARAMETERS.md    Operating-parameter maintainer guide
+tests/
+  test_*.py                  Regression and integration tests
 ```
 
-### 数据格式约定
+## Data Format
 
-所有设备参数库统一使用 `dict[str, dict]` 格式（型号名为 key）：
+Equipment libraries use `dict[str, dict]`, with model names as keys:
 
 ```python
 {
@@ -154,189 +213,72 @@ cnpower/
         "vn_lv_kv": 0.4,
         "vk_percent": 4.5,
         "vkr_percent": 0.98,
-        "pfe_kw": 0.81,
+        "pfe_kw": 0.65,
         "i0_percent": 0.6,
-        "vector_group": "Dyn11",
-        "shift_degree": 30,
-        ...
+        "rated_current_hv_a": 36.4,
+        "rated_current_lv_a": 909.3,
+        "loading_limits": {...},
+        "thermal_model": {...},
+        "energy_efficiency": {...},
     }
 }
 ```
 
----
+## Validation
 
-## English Documentation
-
-### Overview
-
-`cnpower` is an engineering parameter library for Chinese 10kV/0.4kV distribution grid planning, covering **662+** equipment models, typical connection modes, GB/T compliance validation rules, and a zero-invasion integration interface with [pandapower](https://github.com/e2nIEE/pandapower).
-
-### Key Features
-
-| Module | Content | Models |
-|--------|---------|--------|
-| 🔌 Transformers | Oil-immersed (S11/S13/S15/SH15), Dry-type (SCB10-13/SCBH15), Box substation, 35kV/110kV main, Three-winding | 212 |
-| 🔗 Cables | 10kV/35kV/0.4kV/110kV XLPE cables (YJV/YJV22) | 178 |
-| 📡 Overhead Lines | 10kV insulated, 0.4kV insulated, Bare conductors (LJ/LGJ) | 82 |
-| ⚡ Switchgear | KYN28A/XGN66, VS1/VD4 breakers, FN7 load switches, XRNT fuses, LV breakers | 61 |
-| 🔋 Reactive Compensation | MV/LV capacitors, SVG | 29 |
-| 🛡️ Protection | Line protection, Transformer protection | 10 |
-| 📊 Instrument Transformers | CT (LZZBJ9/BH-LMZ), PT (JDZ/JDZJ) | 32 |
-| ⚡ Surge Arresters | HY5WZ/HY10WZ/HY1.5W | 4 |
-| ☀️ Photovoltaic | Modules (mono-Si/poly-Si/thin-film), String/central inverters | 17 |
-| 🚗 EV Chargers | AC slow / DC fast / DC super-fast | 9 |
-| 🔋 Energy Storage | LFP/Lead-carbon batteries, PCS | 19 |
-| 💨 Wind Turbines | Small/Medium wind generators | 9 |
-
-### Chinese National Standards (Latest Versions)
-
-- **GB/T 6451-2023** Technical parameters and requirements for oil-immersed power transformers
-- **GB/T 10228-2023** Technical parameters and requirements for dry-type power transformers
-- **GB/T 12706-2020** Extruded insulation power cables rated 1kV to 35kV
-- **GB/T 1179-2017** Round wire concentric lay overhead electrical stranded conductors
-- **GB/T 12527-2008** Aerial insulated cables for rated voltages up to and including 1kV
-- **GB/T 14049-2008** Aerial insulated cables for rated voltage 10kV
-- **GB/T 1984-2024** High-voltage alternating-current circuit-breakers
-- **GB/T 17467-2020** High-voltage/low-voltage prefabricated substation
-- **GB 20052-2024** Minimum allowable values of energy efficiency for power transformers
-- See `standards/references.py` for 41+ standards index
-
-### Quick Start
+Run the regression tests:
 
 ```bash
-# Install (base, without pandapower dependency)
-pip install cnpower
-
-# Or install with pandapower integration
-pip install cnpower[pandapower]
-
-# Or install from source (development mode)
-git clone https://github.com/Gawg-AI/cnpower.git
-cd cnpower
-pip install -e ".[pandapower]"
+python -m pytest
 ```
 
-```python
-from cnpower.equipment import (
-    get_all_transformers,
-    get_all_cables,
-    get_all_overhead_lines,
-)
+Run the project validation script:
 
-# Get 10kV oil-immersed transformer parameters
-transformers = get_all_transformers()
-s13_630 = transformers["oil_immersed"]["S13-630/10"]
-print(f"S13-630/10: {s13_630['sn_kva']}kVA, Vk={s13_630['vk_percent']}%")
-
-# Get 10kV cable parameters
-cables = get_all_cables()
-yJV_70 = cables["mv_10kv"]["YJV22-3x70-10kV"]
-print(f"YJV22-3x70: R={yJV_70['r_ohm_per_km']}Ω/km, I_ground={yJV_70['max_i_ka_ground']*1000}A")
+```bash
+python verify_fixes.py
 ```
 
-### Pandapower Integration
+Current expected local result:
 
-```python
-import pandapower as pp
-from cnpower.pandapower_integration import add_chinese_std_types
+- `python -m pytest`: 21 passed
+- `python verify_fixes.py`: 756 PASS, 0 FAIL
 
-net = pp.create_empty_network()
-add_chinese_std_types(net)  # One-line injection of all Chinese standard types
+GitHub Actions also run pytest on Python 3.10 and 3.12.
 
-# Use Chinese standard types to build the network
-hv_bus = pp.create_bus(net, vn_kv=10, name="HV Bus")
-lv_bus = pp.create_bus(net, vn_kv=0.4, name="LV Bus")
-from_bus = pp.create_bus(net, vn_kv=10, name="Line From")
-to_bus = pp.create_bus(net, vn_kv=10, name="Line To")
+## Contributing
 
-pp.create_transformer(net, hv_bus, lv_bus, std_type="S13-630/10")
-pp.create_line(net, from_bus, to_bus, length_km=2.0, std_type="YJV22-3x70-10kV")
-pp.runpp(net)
+See [CONTRIBUTING.md](CONTRIBUTING.md). New operating, planning, dynamic-limit,
+and life-cycle fields must include `source_type` or `field_source_types`
+metadata so users can distinguish standard values, derived values, engineering
+policy defaults, manufacturer values, and project-specific placeholders.
+
+## License And Attribution
+
+MIT License with attribution requirement. See [LICENSE](LICENSE).
+
+If you use this library in a project, paper, or derivative work, include:
+
+```text
+Data Source: cnpower - https://github.com/Gawg-AI/cnpower
 ```
 
-### Data Format Convention
+## Disclaimer
 
-All equipment parameter libraries use `dict[str, dict]` format (model name as key):
+The equipment parameters in this library are compiled from published standards
+and typical engineering values for reference. Actual engineering design should
+use current standards, local utility requirements, manufacturer test reports,
+and project-specific design conditions.
 
-```python
-{
-    "S13-630/10": {
-        "sn_kva": 630,
-        "vn_hv_kv": 10,
-        "vn_lv_kv": 0.4,
-        "vk_percent": 4.5,
-        "vkr_percent": 0.98,
-        "pfe_kw": 0.81,
-        "i0_percent": 0.6,
-        "vector_group": "Dyn11",
-        "shift_degree": 30,
-        ...
-    }
-}
-```
+## Upgrade Notes
 
-### Pandapower Compatibility
-
-| Parameter | pandapower field | Unit | Notes |
-|-----------|-----------------|------|-------|
-| Rated power | `sn_mva` | MVA | Converted from kVA |
-| HV voltage | `vn_hv_kv` | kV | |
-| LV voltage | `vn_lv_kv` | kV | |
-| Short-circuit voltage | `vk_percent` | % | |
-| Resistive component | `vkr_percent` | % | |
-| No-load loss | `pfe_kw` | kW | |
-| No-load current | `i0_percent` | % | |
-| Phase shift | `shift_degree` | ° | Dyn11→30° |
-| Resistance | `r_ohm_per_km` | Ω/km | |
-| Reactance | `x_ohm_per_km` | Ω/km | |
-| Capacitance | `c_nf_per_km` | nF/km | |
-| Max current | `max_i_ka` | kA | 电缆默认取 `max_i_ka_ground` |
-
----
-
-## 📜 License
-
-MIT License with Attribution Requirement — 使用本库需注明来源：https://github.com/Gawg-AI/cnpower
-
-详见 [LICENSE](LICENSE) 文件。
-
-## 🤝 Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📣 Attribution / 引用声明
-
-If you use this library in your project, paper, or any derivative work, please include the following attribution:
-
-如在项目、论文或衍生作品中使用本库，请注明以下归属：
-
-```
-数据来源 / Data Source: cnpower - https://github.com/Gawg-AI/cnpower
-```
-
-## ⚠️ Disclaimer
-
-本库中的设备参数基于公开国标和典型工程值整理，仅供参考。实际工程设计请以设备厂家最新产品手册和现行国标为准。
-
-The equipment parameters in this library are compiled from published national standards and typical engineering values for reference only. Actual engineering design should be based on the latest manufacturer product manuals and current national standards.
-
-## 📧 Contact / 联系方式
-
-Email: ahx@qq.com
-
----
-
-## 功能升级版本说明 / Upgrade Notes
-
-维护规则：以后每次功能升级、重要修复或文档增强合并到 `main` 后，只在下表顶部新增一行说明。
-
-| 日期 | 功能版本 | 一行升级说明 |
-|------|----------|--------------|
-| 2026-06-05 | v2026.06.05-operating-parameters | Added transformer rated-current derivation, dynamic loading metadata, GB 20052-2024 references, cable/overhead ampacity context, switchgear/fuse operating limits, tests, and docs. See [docs/OPERATING_PARAMETERS.md](docs/OPERATING_PARAMETERS.md). |
-| 2026-06-03 | v2026.06.03-docs | 将升级说明移到 README 最下方，并改为每次升级只追加一行的简洁记录格式。 |
-| 2026-06-03 | v2026.06.03-builder-followups | [PR #3](https://github.com/Gawg-AI/cnpower/pull/3) 强化 `build_pandapower_net`，支持工程资产 `id/name` 解析开关目标、扁平 `assets` 输入、class alias、transformer 电压别名、`cnpower_element_lookup` 和示例脚本。 |
-| 2026-06-03 | v2026.06.03-parameterized-assets | [`c24cbd0`](https://github.com/Gawg-AI/cnpower/commit/c24cbd0625b4ed12882ea61354bf63094478e559) 补齐工程资产到 pandapower 的参数化建模能力，覆盖线路、两绕组变压器、三绕组变压器、电压/电流别名和短路计算测试。 |
-| 2026-06-03 | v2026.06.03-engineering-core | [`4661d23`](https://github.com/Gawg-AI/cnpower/commit/4661d23) 新增工程归一化、合规约束/检查、pandapower 中国标准类型注入和工程网络构建入口。 |
-| 2026-06-03 | v2026.06.03-stability | [`fbc605a`](https://github.com/Gawg-AI/cnpower/commit/fbc605a) 修复包结构、合规检查器、过期数据清理等稳定性问题，并补充验证脚本。 |
-| 2026-06-03 | v2026.06.03-branding | [`ac5fbc7`](https://github.com/Gawg-AI/cnpower/commit/ac5fbc7) 项目更名为 `cnpower`，补充来源署名要求、联系方式，并整理 README 标题展示。 |
-| 2026-06-03 | v1.0.0-initial | [`a42dd17`](https://github.com/Gawg-AI/cnpower/commit/a42dd17) 初始化中国 10kV/0.4kV 配电网工程参数库，提供 662 类设备型号参数、典型接线模式、国标索引、README、LICENSE 和贡献说明。 |
+| Date | Version | Summary |
+|---|---|---|
+| 2026-06-05 | v2026.06.05-readme-json-refresh | Rewrote README for the operating-parameter release and added a machine-readable project profile JSON. |
+| 2026-06-05 | v2026.06.05-operating-parameters | Added transformer rated-current derivation, dynamic loading metadata, GB 20052-2024 references, cable/overhead ampacity context, switchgear/fuse operating limits, tests, and docs. |
+| 2026-06-03 | v2026.06.03-docs | Moved upgrade notes to the bottom of README and switched to one-line append-only records. |
+| 2026-06-03 | v2026.06.03-builder-followups | Strengthened `build_pandapower_net` asset mapping and examples. |
+| 2026-06-03 | v2026.06.03-parameterized-assets | Added parameterized engineering asset to pandapower modeling support. |
+| 2026-06-03 | v2026.06.03-engineering-core | Added engineering normalization, compliance constraints, checker, pandapower bridge, and network builder. |
+| 2026-06-03 | v2026.06.03-stability | Fixed package structure, compliance checker, stale data, and verification scripts. |
+| 2026-06-03 | v2026.06.03-branding | Renamed project to `cnpower`, attribution wording, and README branding. |
+| 2026-06-03 | v1.0.0-initial | Initial Chinese distribution-grid engineering parameter library. |
