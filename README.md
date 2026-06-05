@@ -7,7 +7,7 @@
 
 <p align="center">
 <a href="https://github.com/Gawg-AI/cnpower/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8+-green.svg" alt="Python 3.8+"></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10+-green.svg" alt="Python 3.10+"></a>
 <img src="https://img.shields.io/badge/Standards-GB%2FT%202023-orange.svg" alt="GB/T 2023">
 <img src="https://img.shields.io/badge/Models-662-brightgreen.svg" alt="662 Models">
 </p>
@@ -54,6 +54,19 @@
 
 ### 快速开始
 
+```bash
+# 安装（基础版，无 pandapower 依赖）
+pip install cnpower
+
+# 或安装含 pandapower 集成的完整版
+pip install cnpower[pandapower]
+
+# 或从源码安装开发版
+git clone https://github.com/Gawg-AI/cnpower.git
+cd cnpower
+pip install -e ".[pandapower]"
+```
+
 ```python
 # 导入设备参数
 from cnpower.equipment import (
@@ -83,6 +96,11 @@ net = pp.create_empty_network()
 add_chinese_std_types(net)  # 一行注入全部中国标准类型
 
 # 使用中国标准变压器创建网络
+hv_bus = pp.create_bus(net, vn_kv=10, name="HV Bus")
+lv_bus = pp.create_bus(net, vn_kv=0.4, name="LV Bus")
+from_bus = pp.create_bus(net, vn_kv=10, name="Line From")
+to_bus = pp.create_bus(net, vn_kv=10, name="Line To")
+
 pp.create_transformer(net, hv_bus, lv_bus, std_type="S13-630/10")
 pp.create_line(net, from_bus, to_bus, length_km=2.0, std_type="YJV22-3x70-10kV")
 pp.runpp(net)
@@ -185,6 +203,19 @@ cnpower/
 
 ### Quick Start
 
+```bash
+# Install (base, without pandapower dependency)
+pip install cnpower
+
+# Or install with pandapower integration
+pip install cnpower[pandapower]
+
+# Or install from source (development mode)
+git clone https://github.com/Gawg-AI/cnpower.git
+cd cnpower
+pip install -e ".[pandapower]"
+```
+
 ```python
 from cnpower.equipment import (
     get_all_transformers,
@@ -213,6 +244,11 @@ net = pp.create_empty_network()
 add_chinese_std_types(net)  # One-line injection of all Chinese standard types
 
 # Use Chinese standard types to build the network
+hv_bus = pp.create_bus(net, vn_kv=10, name="HV Bus")
+lv_bus = pp.create_bus(net, vn_kv=0.4, name="LV Bus")
+from_bus = pp.create_bus(net, vn_kv=10, name="Line From")
+to_bus = pp.create_bus(net, vn_kv=10, name="Line To")
+
 pp.create_transformer(net, hv_bus, lv_bus, std_type="S13-630/10")
 pp.create_line(net, from_bus, to_bus, length_km=2.0, std_type="YJV22-3x70-10kV")
 pp.runpp(net)
