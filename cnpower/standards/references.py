@@ -203,7 +203,7 @@ def get_all_standards():
         {
             "code": "GB/T 15166.2-2023",
             "name": "交流高压熔断器",
-            "year": 2008,
+            "year": 2023,
             "scope": "交流高压熔断器的技术要求",
             "related_equipment": ["熔断器"],
             "related_rules": ["breaker_rating"]
@@ -235,7 +235,7 @@ def get_all_standards():
         {
             "code": "GB/T 20840.3-2013",
             "name": "电磁式电压互感器",
-            "year": 2006,
+            "year": 2013,
             "scope": "电磁式电压互感器的技术要求",
             "related_equipment": ["电压互感器"],
             "related_rules": ["voltage_deviation"]
@@ -243,7 +243,7 @@ def get_all_standards():
         {
             "code": "GB/T 20840.2-2014",
             "name": "电磁式电流互感器",
-            "year": 2006,
+            "year": 2014,
             "scope": "电磁式电流互感器的技术要求",
             "related_equipment": ["电流互感器"],
             "related_rules": ["transformer_loading"]
@@ -299,7 +299,7 @@ def get_all_standards():
         {
             "code": "DL/T 584-2021",
             "name": "3kV~110kV电网继电保护装置运行管理规程",
-            "year": 2017,
+            "year": 2021,
             "scope": "3kV~110kV电网继电保护装置的运行管理",
             "related_equipment": ["继电保护装置"],
             "related_rules": ["single_phase_min"]

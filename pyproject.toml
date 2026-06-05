@@ -31,9 +31,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
 ]
-dependencies = [
-    "pandas>=2.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 pandapower = ["pandapower>=3.4,<4"]

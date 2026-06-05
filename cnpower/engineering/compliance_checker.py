@@ -4,7 +4,6 @@ from .normalization import (
     first_number,
     normalize_equipment,
     normalize_results,
-    parse_percent_range_midpoint,
 )
 
 
