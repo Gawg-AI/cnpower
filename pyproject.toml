@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cnpower"
 version = "1.0.0"
-description = "Chinese 10kV/0.4kV distribution grid engineering parameter library"
+description = "????10kV/0.4kV?????????"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
