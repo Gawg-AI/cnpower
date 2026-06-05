@@ -1,0 +1,229 @@
+{
+  "manifest_type": "cnpower_engineering_library_manifest",
+  "manifest_version": "2026.06.05",
+  "primary_description_file": "README.md",
+  "note_zh": "本文件是机器可读的工程库清单，用于程序读取模型覆盖、标准索引、运行字段和验证入口；项目介绍和展示说明以 README.md 为准。",
+  "project": {
+    "name": "cnpower",
+    "version": "1.0.0",
+    "repository": "https://github.com/Gawg-AI/cnpower",
+    "primary_language": "zh-CN",
+    "secondary_language": "en",
+    "python_requires": ">=3.10"
+  },
+  "model_counts": {
+    "total": 662,
+    "by_module": {
+      "transformers": {
+        "name_zh": "变压器",
+        "total": 212,
+        "categories": {
+          "oil_immersed": {"name_zh": "油浸式变压器", "count": 72},
+          "dry_type": {"name_zh": "干式变压器", "count": 90},
+          "box_substation": {"name_zh": "箱式变电站", "count": 20},
+          "main_transformer_35kv": {"name_zh": "35kV 主变压器", "count": 13},
+          "main_transformer_110kv": {"name_zh": "110kV 主变压器", "count": 9},
+          "trafo3w_110kv": {"name_zh": "110kV 三绕组变压器", "count": 8}
+        }
+      },
+      "cables": {
+        "name_zh": "电缆",
+        "total": 178,
+        "categories": {
+          "mv_10kv": {"name_zh": "10kV 中压电缆", "count": 44},
+          "mv_35kv": {"name_zh": "35kV 中压电缆", "count": 36},
+          "lv_04kv": {"name_zh": "0.4kV 低压电缆", "count": 84},
+          "hv_110kv": {"name_zh": "110kV 高压电缆", "count": 14}
+        }
+      },
+      "overhead_lines": {
+        "name_zh": "架空线路",
+        "total": 82,
+        "categories": {
+          "mv_10kv_insulated": {"name_zh": "10kV 架空绝缘线", "count": 16},
+          "lv_04kv_insulated": {"name_zh": "0.4kV 架空绝缘线", "count": 30},
+          "bare_conductor": {"name_zh": "裸导线", "count": 36}
+        }
+      },
+      "switchgear": {
+        "name_zh": "开关设备",
+        "total": 61,
+        "categories": {
+          "switchgear_cabinet": {"name_zh": "开关柜", "count": 4},
+          "circuit_breaker_mv": {"name_zh": "中压断路器", "count": 21},
+          "load_switch": {"name_zh": "负荷开关", "count": 3},
+          "fuse_mv": {"name_zh": "中压熔断器", "count": 3},
+          "circuit_breaker_lv": {"name_zh": "低压断路器", "count": 25},
+          "recloser": {"name_zh": "重合器", "count": 2},
+          "sectionalizer": {"name_zh": "分段器", "count": 3}
+        }
+      },
+      "reactive_compensation": {
+        "name_zh": "无功补偿",
+        "total": 29,
+        "categories": {
+          "capacitor_mv": {"name_zh": "中压电容器组", "count": 11},
+          "capacitor_lv": {"name_zh": "低压电容器组", "count": 9},
+          "svg": {"name_zh": "SVG 无功补偿装置", "count": 9}
+        }
+      },
+      "protection": {
+        "name_zh": "保护配置",
+        "total": 10,
+        "categories": {
+          "line_protection_mv": {"name_zh": "中压线路保护", "count": 6},
+          "transformer_protection": {"name_zh": "变压器保护", "count": 4}
+        }
+      },
+      "instrument_transformers": {
+        "name_zh": "互感器",
+        "total": 32,
+        "categories": {
+          "ct_mv": {"name_zh": "中压电流互感器", "count": 15},
+          "ct_lv": {"name_zh": "低压电流互感器", "count": 13},
+          "pt_mv": {"name_zh": "中压电压互感器", "count": 4}
+        }
+      },
+      "surge_arresters": {
+        "name_zh": "避雷器",
+        "total": 4,
+        "categories": {
+          "arrester_mv": {"name_zh": "中压避雷器", "count": 3},
+          "arrester_lv": {"name_zh": "低压避雷器", "count": 1}
+        }
+      },
+      "photovoltaic": {
+        "name_zh": "光伏",
+        "total": 17,
+        "categories": {
+          "pv_module": {"name_zh": "光伏组件", "count": 3},
+          "string_inverter": {"name_zh": "组串式逆变器", "count": 10},
+          "central_inverter": {"name_zh": "集中式逆变器", "count": 4}
+        }
+      },
+      "ev_charger": {
+        "name_zh": "充电桩",
+        "total": 9,
+        "categories": {
+          "ac_slow": {"name_zh": "交流慢充", "count": 3},
+          "dc_fast": {"name_zh": "直流快充", "count": 4},
+          "dc_superfast": {"name_zh": "直流超充", "count": 2}
+        }
+      },
+      "energy_storage": {
+        "name_zh": "储能",
+        "total": 19,
+        "categories": {
+          "lfp_battery": {"name_zh": "磷酸铁锂电池", "count": 8},
+          "lead_carbon_battery": {"name_zh": "铅碳电池", "count": 5},
+          "pcs": {"name_zh": "储能变流器 PCS", "count": 6}
+        }
+      },
+      "wind_turbine": {
+        "name_zh": "风机",
+        "total": 9,
+        "categories": {
+          "small_wind": {"name_zh": "小型分布式风机", "count": 5},
+          "medium_wind": {"name_zh": "中型分布式风机", "count": 4}
+        }
+      }
+    }
+  },
+  "standards_index": {
+    "indexed_count": 49,
+    "entrypoint": "cnpower.standards.get_all_standards",
+    "key_references": [
+      {"code": "GB/T 6451-2023", "use_zh": "油浸式电力变压器技术参数"},
+      {"code": "GB/T 10228-2023", "use_zh": "干式电力变压器技术参数"},
+      {"code": "GB/T 1094.7-2024", "use_zh": "油浸式变压器负载导则与老化计算参考"},
+      {"code": "GB/T 1094.11-2022", "use_zh": "干式变压器技术要求"},
+      {"code": "GB/T 1094.12-2013", "use_zh": "干式变压器负载导则"},
+      {"code": "GB/T 17468-2019", "use_zh": "电力变压器选用导则"},
+      {"code": "GB 20052-2024", "use_zh": "电力变压器能效限定值及能效等级"},
+      {"code": "GB/T 12706.1~3-2020", "use_zh": "1kV 到 35kV 挤包绝缘电力电缆"},
+      {"code": "GB/T 1179-2017", "use_zh": "圆线同心绞架空导线"},
+      {"code": "GB/T 14049-2008", "use_zh": "10kV 架空绝缘电缆"},
+      {"code": "GB/T 12527-2008", "use_zh": "额定电压 1kV 及以下架空绝缘电缆"},
+      {"code": "GB/T 1984-2024", "use_zh": "高压交流断路器"},
+      {"code": "GB/T 11022-2020", "use_zh": "高压开关设备和控制设备标准的共用技术要求"},
+      {"code": "GB/T 3906-2020", "use_zh": "3.6kV 到 40.5kV 金属封闭开关设备"},
+      {"code": "GB/T 15166.2-2023", "use_zh": "高压交流熔断器限流熔断器"},
+      {"code": "GB/T 15166.6-2023", "use_zh": "变压器回路熔断件选用导则"},
+      {"code": "GB/T 45418-2025", "use_zh": "配电网通用技术导则"}
+    ]
+  },
+  "operating_fields": {
+    "transformers": [
+      "rated_current_hv_a",
+      "rated_current_mv_a",
+      "rated_current_lv_a",
+      "loading_limits",
+      "thermal_model",
+      "energy_efficiency",
+      "design_life_years"
+    ],
+    "cables": [
+      "ampacity_reference",
+      "derating_factors",
+      "thermal_limits",
+      "short_circuit_i2t_ka2s",
+      "short_circuit_rating",
+      "lifecycle"
+    ],
+    "overhead_lines": [
+      "rated_current_a",
+      "ampacity_reference",
+      "dynamic_line_rating",
+      "mechanical_limits",
+      "lifecycle"
+    ],
+    "switchgear_and_fuses": [
+      "rated_short_time_duration_s",
+      "short_time_withstand",
+      "internal_arc_class",
+      "endurance",
+      "time_current_curve",
+      "selection_guide"
+    ],
+    "protection": [
+      "setting_metadata",
+      "fuse_coordination",
+      "thermal_trip_model"
+    ]
+  },
+  "source_types": {
+    "standard_table": "标准表格直接数值",
+    "derived_formula": "由铭牌参数或标准公式派生",
+    "standard_reference": "有标准依据的方法、要求或引用",
+    "standard_reference_and_engineering_default": "有标准依据，但当前库采用保守工程默认值",
+    "engineering_policy": "规划口径或工程策略默认值",
+    "manufacturer_typical_or_engineering_default": "厂家样本典型值或工程占位值",
+    "project_specific_required": "必须由具体项目、厂家资料或现场条件补充"
+  },
+  "entrypoints": {
+    "equipment": [
+      "cnpower.equipment.get_all_transformers",
+      "cnpower.equipment.get_all_cables",
+      "cnpower.equipment.get_all_overhead_lines"
+    ],
+    "engineering": [
+      "cnpower.engineering.normalize_equipment",
+      "cnpower.engineering.check_equipment_compliance",
+      "cnpower.engineering.build_pandapower_net"
+    ],
+    "pandapower": [
+      "cnpower.pandapower_integration.add_chinese_std_types"
+    ]
+  },
+  "validation": {
+    "local_commands": [
+      "python -m pytest",
+      "python verify_fixes.py"
+    ],
+    "expected_results": {
+      "pytest": "21 passed",
+      "verify_fixes": "756 PASS, 0 FAIL"
+    },
+    "ci": "GitHub Actions 在 Python 3.10 和 3.12 上运行 pytest"
+  }
+}
