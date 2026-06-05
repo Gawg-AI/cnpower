@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cnpower"
 version = "1.0.0"
-description = "????10kV/0.4kV?????????"
+description = "面向中国10kV/0.4kV配电网的工程参数库"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
