@@ -189,6 +189,28 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
         if x_value is not None:
             normalized["x_ohm_per_km"] = x_value
 
+    if canonical in ("transformer_2w", "transformer_3w"):
+        sn_mva = first_number(normalized.get("sn_mva"))
+        if sn_mva is not None:
+            for side in ("hv", "mv", "lv"):
+                voltage = first_number(normalized.get(f"vn_{side}_kv"))
+                if voltage:
+                    normalized.setdefault(
+                        f"rated_current_{side}_a",
+                        round(sn_mva * 1000.0 / (math.sqrt(3) * voltage), 1),
+                    )
+        rated_current = {"method": "S/(sqrt(3)*U)", "source_type": "derived_formula"}
+        for side in ("hv", "mv", "lv"):
+            value = normalized.get(f"rated_current_{side}_a")
+            if value is not None:
+                rated_current[f"{side}_a"] = value
+        if len(rated_current) > 2:
+            normalized.setdefault("rated_current", rated_current)
+        current_side = str(context.get("current_side", "hv")).lower()
+        side_current = normalized.get(f"rated_current_{current_side}_a")
+        if side_current is not None:
+            normalized.setdefault("rated_current_a", side_current)
+
     if "rated_current_a" not in normalized:
         for key in ("frame_current_a", "max_i_ka", "rated_primary_a"):
             if key in normalized:

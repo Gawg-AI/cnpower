@@ -1,5 +1,49 @@
+def _enhance_protection_entry(name, entry):
+    if not isinstance(entry, dict):
+        return entry
+    entry.setdefault("field_source_types", {
+        "setting_parameter": "engineering_policy",
+        "coordination_notes": "engineering_practice",
+        "standard": "standard_reference",
+    })
+    if "setting_parameter" in entry:
+        entry.setdefault("setting_metadata", {
+            "requires_fault_study": True,
+            "requires_load_current": True,
+            "requires_downstream_coordination": True,
+            "coordination_margin_s": 0.3,
+        })
+    if "fuse" in name or "熔断" in str(entry.get("protection_scheme", "")):
+        values = entry.get("setting_formulas_or_values", {})
+        entry.setdefault("standard", "DL/T 584-2021 / GB/T 15166.6-2023")
+        entry.setdefault("fuse_coordination", {
+            "standard": "GB/T 15166.6-2023",
+            "rated_current_formula": values.get("rated_current_formula", "In = Sn/(sqrt(3)*Un)"),
+            "fuse_element_current_formula": values.get("fuse_element_current_formula", "1.5~2.0 * In"),
+            "coordination_margin_s": 0.3,
+            "maximum_clearing_time_s_at_short_circuit": 0.1,
+            "source_type": "standard_reference_and_engineering_default",
+        })
+    if "temperature" in name or "温度" in str(entry.get("protection_scheme", "")):
+        entry.setdefault("standard", "GB/T 6451-2023 / GB/T 1094.7-2024 / GB/T 1094.12-2013")
+        entry.setdefault("thermal_trip_model", {
+            "oil_loading_guide": "GB/T 1094.7-2024",
+            "dry_loading_guide": "GB/T 1094.12-2013",
+            "requires_hot_spot_or_winding_temperature": True,
+            "source_type": "standard_reference",
+        })
+    return entry
+
+
+def _enhance_all_protection(data):
+    for group in data.values():
+        for name, entry in group.items():
+            _enhance_protection_entry(name, entry)
+    return data
+
+
 def get_all_protection():
-    return {
+    return _enhance_all_protection({
         "line_protection_mv": {
             "overcurrent_protection": {
                 "protection_type": "定时限过电流保护",
@@ -190,4 +234,4 @@ def get_all_protection():
                 "source_note": "GB/T 6451-2023《油浸式电力变压器技术参数和要求》及GB/T 50062-2008《电力装置的继电保护和自动装置设计规范》",
             },
         },
-    }
+    })

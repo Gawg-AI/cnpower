@@ -2,11 +2,62 @@ import math
 
 
 def get_all_overhead_lines():
-    return {
+    return _enhance_all_overhead_lines({
         "mv_10kv_insulated": _build_mv_10kv_insulated(),
         "lv_04kv_insulated": _build_lv_04kv_insulated(),
         "bare_conductor": _build_bare_conductor(),
-    }
+    })
+
+
+def _enhance_overhead_entry(entry, category):
+    insulated = entry.get("insulation_type") is not None
+    normal_temp = 90 if entry.get("insulation_type") == "XLPE" else 70 if insulated else 70
+    emergency_temp = 105 if entry.get("insulation_type") == "XLPE" else 90 if insulated else 90
+    entry.setdefault("rated_current_a", round(entry.get("max_i_ka", 0) * 1000, 1))
+    entry.setdefault("max_conductor_temp_normal_c", normal_temp)
+    entry.setdefault("max_conductor_temp_emergency_c", emergency_temp)
+    entry.setdefault("ampacity_reference", {
+        "ambient_air_c": 40,
+        "wind_speed_m_s": 0.5,
+        "solar_radiation_w_m2": 1000,
+        "emissivity": 0.5,
+        "absorptivity": 0.5,
+        "source_type": "standard_reference_and_engineering_default",
+    })
+    entry.setdefault("dynamic_line_rating", {
+        "model": "heat_balance",
+        "inputs": ["ambient_air_c", "wind_speed_m_s", "solar_radiation_w_m2", "max_conductor_temp_c"],
+        "standard": entry.get("standard"),
+        "source_type": "engineering_model",
+    })
+    entry.setdefault("mechanical_limits", {
+        "span_m": None,
+        "ice_thickness_mm": None,
+        "wind_pressure_pa": None,
+        "minimum_clearance_m": None,
+        "sag_limit_note": "Fill from line design and local meteorological conditions.",
+    })
+    entry.setdefault("lifecycle", {
+        "design_life_years": 30,
+        "inspection_interval_years": 1,
+        "failure_rate_per_100km_year": None,
+        "repair_time_h": None,
+        "source_type": "engineering_policy",
+    })
+    entry.setdefault("field_source_types", {
+        "rated_current_a": "derived_formula",
+        "ampacity_reference": "engineering_default",
+        "dynamic_line_rating": "engineering_model",
+        "mechanical_limits": "project_specific",
+    })
+    return entry
+
+
+def _enhance_all_overhead_lines(data):
+    for category, models in data.items():
+        for entry in models.values():
+            _enhance_overhead_entry(entry, category)
+    return data
 
 
 def _calc_reactance_bare(cross_section, dm_m):

@@ -1,3 +1,128 @@
+import math
+
+
+def _calc_three_phase_current_a(power_kva, voltage_kv):
+    if not power_kva or not voltage_kv:
+        return None
+    return round(float(power_kva) / (math.sqrt(3) * float(voltage_kv)), 1)
+
+
+def _loading_limits(kind):
+    base = {
+        "normal_percent": 80,
+        "economic_range_percent": [40, 75],
+        "n1_short_time_percent": 120,
+        "n1_short_time_duration_h": 2,
+        "emergency_percent": 130,
+        "emergency_duration_h": 0.5,
+        "source_type": "engineering_policy",
+        "note": "Planning defaults. Override with local utility rules, manufacturer loading guide, or project policy.",
+    }
+    if kind == "main":
+        base.update({
+            "normal_percent": 75,
+            "economic_range_percent": [45, 70],
+            "n1_short_time_percent": 110,
+            "emergency_percent": 120,
+        })
+    return base
+
+
+def _thermal_model(kind, cooling_type, insulation_class):
+    if kind == "dry":
+        return {
+            "standard": "GB/T 1094.11-2022",
+            "loading_guide": "GB/T 1094.12-2013",
+            "ambient_reference_c": 40,
+            "insulation_class": insulation_class,
+            "winding_temperature_alarm_c": 100,
+            "winding_temperature_trip_c": 130,
+            "hot_spot_temperature_limit_c": 155 if insulation_class == "F" else None,
+            "thermal_time_constant_h": None,
+            "relative_aging_model": "GB/T 1094.12 dry-type transformer loading guide",
+            "source_type": "standard_reference_and_engineering_default",
+        }
+    return {
+        "standard": "GB/T 1094.7-2024",
+        "ambient_reference_c": 20,
+        "cooling_type": cooling_type,
+        "top_oil_temperature_alarm_c": 80,
+        "top_oil_temperature_trip_c": 95,
+        "top_oil_temperature_limit_c": 105,
+        "hot_spot_temperature_limit_c": 120,
+        "thermal_time_constant_h": None,
+        "relative_aging_model": "GB/T 1094.7 relative thermal aging",
+        "source_type": "standard_reference_and_engineering_default",
+    }
+
+
+def _enhance_transformer_entry(entry, kind="distribution"):
+    if "sn_kva" in entry and "vn_hv_kv" in entry:
+        hv_current = _calc_three_phase_current_a(entry["sn_kva"], entry["vn_hv_kv"])
+        if hv_current is not None:
+            entry.setdefault("rated_current_hv_a", hv_current)
+    if "sn_kva" in entry and "vn_lv_kv" in entry:
+        lv_current = _calc_three_phase_current_a(entry["sn_kva"], entry["vn_lv_kv"])
+        if lv_current is not None:
+            entry.setdefault("rated_current_lv_a", lv_current)
+    if "sn_hv_mva" in entry and "vn_hv_kv" in entry:
+        entry.setdefault("rated_current_hv_a", _calc_three_phase_current_a(entry["sn_hv_mva"] * 1000, entry["vn_hv_kv"]))
+    if "sn_mv_mva" in entry and "vn_mv_kv" in entry:
+        entry.setdefault("rated_current_mv_a", _calc_three_phase_current_a(entry["sn_mv_mva"] * 1000, entry["vn_mv_kv"]))
+    if "sn_lv_mva" in entry and "vn_lv_kv" in entry:
+        entry.setdefault("rated_current_lv_a", _calc_three_phase_current_a(entry["sn_lv_mva"] * 1000, entry["vn_lv_kv"]))
+
+    rated_current = {"method": "S/(sqrt(3)*U)", "source_type": "derived_formula"}
+    for side in ("hv", "mv", "lv"):
+        value = entry.get(f"rated_current_{side}_a")
+        if value is not None:
+            rated_current[f"{side}_a"] = value
+    if len(rated_current) > 2:
+        entry.setdefault("rated_current", rated_current)
+
+    loading = _loading_limits("main" if kind == "main" else "distribution")
+    entry.setdefault("normal_loading_limit_percent", loading["normal_percent"])
+    entry.setdefault("economic_loading_range_percent", loading["economic_range_percent"])
+    entry.setdefault("n1_loading_limit_percent", loading["n1_short_time_percent"])
+    entry.setdefault("emergency_loading_limit_percent", loading["emergency_percent"])
+    entry.setdefault("loading_limits", loading)
+    entry.setdefault("design_life_years", 30)
+    entry.setdefault("maintenance_interval_years", 3 if kind == "main" else 5)
+
+    cooling_type = entry.get("cooling_type")
+    insulation_class = entry.get("insulation_class")
+    dry = kind == "dry" or insulation_class in ("F", "H") or entry.get("winding_type") == "cast_resin"
+    entry.setdefault("thermal_model", _thermal_model("dry" if dry else "oil", cooling_type, insulation_class))
+    entry.setdefault("energy_efficiency", {
+        "standard": "GB 20052-2024",
+        "grade": None,
+        "source_type": "standard_reference",
+        "note": "Grade-specific no-load and load-loss limits should be filled from GB 20052-2024 tables or manufacturer test reports.",
+    })
+    entry.setdefault("field_source_types", {
+        "rated_current": "derived_formula",
+        "loading_limits": "engineering_policy",
+        "thermal_model": "standard_reference_and_engineering_default",
+        "energy_efficiency": "standard_reference",
+    })
+    return entry
+
+
+def _enhance_all_transformers(data):
+    for category, models in data.items():
+        if category == "dry_type":
+            kind = "dry"
+        elif category in ("main_transformer_35kv", "main_transformer_110kv", "trafo3w_110kv"):
+            kind = "main"
+        elif category == "box_substation":
+            kind = "box"
+        else:
+            kind = "distribution"
+        for entry in models.values():
+            _enhance_transformer_entry(entry, kind=kind)
+    return data
+
+
 def get_all_transformers():
     def _oil_10(sn, vk, vkr, pfe, i0, cooling, install, tw, ow, dl, dw, dh):
         return {
@@ -62,7 +187,7 @@ def get_all_transformers():
     for d in s11_data:
         entry = _oil_10(*d)
         entry["deprecated"] = True
-        entry["deprecation_note"] = "S11不满足GB 20052-2020能效限定值,已淘汰,仅供存量设备参考"
+        entry["deprecation_note"] = "S11不满足GB 20052-2024能效限定值,已淘汰,仅供存量设备参考"
         oil_immersed[f"S11-{d[0]}/10"] = entry
 
     s13_data = [
@@ -474,11 +599,11 @@ def get_all_transformers():
         sn_int = int(d[0]) if d[0] == int(d[0]) else d[0]
         trafo3w_110kv[f"SFSL-{sn_int}/110"] = _trafo3w(*d)
 
-    return {
+    return _enhance_all_transformers({
         "oil_immersed": oil_immersed,
         "dry_type": dry_type,
         "box_substation": box_substation,
         "main_transformer_35kv": main_transformer_35kv,
         "main_transformer_110kv": main_transformer_110kv,
         "trafo3w_110kv": trafo3w_110kv,
-    }
+    })

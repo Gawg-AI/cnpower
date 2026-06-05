@@ -59,6 +59,13 @@ chore: 构建/工具变更
 - Model name as key, parameters as value
 - Must reference correct national/industry standard numbers (latest version)
 - New equipment must include `standard` and `source_note` fields
+- Operating, planning, life-cycle, and dynamic-limit fields must include a
+  `source_type` or `field_source_types` marker. Use `derived_formula` for
+  calculated values, `standard_reference` for standards-backed methods, and
+  `engineering_policy` for planning defaults.
+- See [docs/OPERATING_PARAMETERS.md](docs/OPERATING_PARAMETERS.md) before
+  adding transformer loading, ampacity, endurance, protection-curve, or
+  life-cycle data.
 - Run `python verify_fixes.py` to ensure all validations pass
 
 ### Commit Message Convention
@@ -80,6 +87,9 @@ New equipment parameters must reference the latest version of national standards
 |----------|---------------|
 | GB/T 6451 | 2023 |
 | GB/T 10228 | 2023 |
+| GB/T 1094.7 | 2024 |
+| GB/T 1094.11 | 2022 |
 | GB/T 12706 | 2020 |
 | GB/T 1984 | 2024 |
 | GB/T 17467 | 2020 |
+| GB 20052 | 2024 |

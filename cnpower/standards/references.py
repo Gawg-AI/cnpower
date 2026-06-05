@@ -17,6 +17,38 @@ def get_all_standards():
             "related_rules": ["transformer_loading"]
         },
         {
+            "code": "GB/T 1094.7-2024",
+            "name": "电力变压器 第7部分：油浸式电力变压器负载导则",
+            "year": 2024,
+            "scope": "油浸式电力变压器超铭牌负载、温度、相对老化率和寿命损失计算",
+            "related_equipment": ["transformer"],
+            "related_rules": ["transformer_dynamic_loading", "transformer_life_loss"]
+        },
+        {
+            "code": "GB/T 1094.11-2022",
+            "name": "电力变压器 第11部分：干式变压器",
+            "year": 2022,
+            "scope": "干式变压器铭牌、温升、冷却方式和运行环境要求",
+            "related_equipment": ["transformer"],
+            "related_rules": ["transformer_temperature"]
+        },
+        {
+            "code": "GB/T 1094.12-2013",
+            "name": "电力变压器 第12部分：干式电力变压器负载导则",
+            "year": 2013,
+            "scope": "干式电力变压器负载能力、温度和寿命影响",
+            "related_equipment": ["transformer"],
+            "related_rules": ["transformer_dynamic_loading", "transformer_life_loss"]
+        },
+        {
+            "code": "GB/T 17468-2019",
+            "name": "电力变压器选用导则",
+            "year": 2019,
+            "scope": "电力变压器选型、容量、运行方式和经济性评价",
+            "related_equipment": ["transformer"],
+            "related_rules": ["transformer_selection", "transformer_economy"]
+        },
+        {
             "code": "GB/T 12706-2020",
             "name": "额定电压1kV到35kV挤包绝缘电力电缆及其附件",
             "year": 2020,
@@ -146,6 +178,8 @@ def get_all_standards():
         },
         {
             "code": "GB/T 45418-2025",
+            "canonical_name": "配电网通用技术导则",
+            "canonical_scope": "配电网规划、建设、运行、改造和设备选型的通用技术要求",
             "name": "配电网规划设计规范",
             "year": 2025,
             "scope": "配电网规划设计的总体规范要求",
@@ -217,9 +251,9 @@ def get_all_standards():
             "related_rules": ["conductor_economy", "conductor_ampacity"]
         },
         {
-            "code": "GB 20052-2020",
+            "code": "GB 20052-2024",
             "name": "电力变压器能效限定值及能效等级",
-            "year": 2020,
+            "year": 2024,
             "scope": "电力变压器能效限定值及能效等级",
             "related_equipment": ["变压器"],
             "related_rules": ["transformer_loading"]
