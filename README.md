@@ -47,7 +47,7 @@
 - **GB/T 14049-2008** 额定电压10kV架空绝缘电缆
 - **GB/T 1984-2024** 高压交流断路器
 - **GB/T 17467-2020** 高压/低压预装式变电站
-- **GB 20052-2020** 电力变压器能效限定值及能效等级
+- **GB 20052-2024** 电力变压器能效限定值及能效等级
 - **GB/T 19068-2017** 离网型风力发电机组
 - **GB/T 25383-2017** 风力发电机组
 - 更多见 `standards/references.py`（41+项标准索引）
@@ -198,7 +198,7 @@ cnpower/
 - **GB/T 14049-2008** Aerial insulated cables for rated voltage 10kV
 - **GB/T 1984-2024** High-voltage alternating-current circuit-breakers
 - **GB/T 17467-2020** High-voltage/low-voltage prefabricated substation
-- **GB 20052-2020** Minimum allowable values of energy efficiency for power transformers
+- **GB 20052-2024** Minimum allowable values of energy efficiency for power transformers
 - See `standards/references.py` for 41+ standards index
 
 ### Quick Start
@@ -332,6 +332,7 @@ Email: ahx@qq.com
 
 | 日期 | 功能版本 | 一行升级说明 |
 |------|----------|--------------|
+| 2026-06-05 | v2026.06.05-operating-parameters | Added transformer rated-current derivation, dynamic loading metadata, GB 20052-2024 references, cable/overhead ampacity context, switchgear/fuse operating limits, tests, and docs. See [docs/OPERATING_PARAMETERS.md](docs/OPERATING_PARAMETERS.md). |
 | 2026-06-03 | v2026.06.03-docs | 将升级说明移到 README 最下方，并改为每次升级只追加一行的简洁记录格式。 |
 | 2026-06-03 | v2026.06.03-builder-followups | [PR #3](https://github.com/Gawg-AI/cnpower/pull/3) 强化 `build_pandapower_net`，支持工程资产 `id/name` 解析开关目标、扁平 `assets` 输入、class alias、transformer 电压别名、`cnpower_element_lookup` 和示例脚本。 |
 | 2026-06-03 | v2026.06.03-parameterized-assets | [`c24cbd0`](https://github.com/Gawg-AI/cnpower/commit/c24cbd0625b4ed12882ea61354bf63094478e559) 补齐工程资产到 pandapower 的参数化建模能力，覆盖线路、两绕组变压器、三绕组变压器、电压/电流别名和短路计算测试。 |

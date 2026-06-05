@@ -1,5 +1,97 @@
+def _max_number(value, default=None):
+    if isinstance(value, (list, tuple)):
+        numbers = [_max_number(item, None) for item in value]
+        numbers = [item for item in numbers if item is not None]
+        return max(numbers) if numbers else default
+    if isinstance(value, (int, float)):
+        return value
+    return default
+
+
+def _enhance_switchgear_entry(entry, category):
+    rated_current = _max_number(entry.get("rated_current_a"), entry.get("frame_current_a"))
+    if rated_current is None:
+        rated_current = _max_number(entry.get("frame_current_a"), None)
+    if rated_current is not None:
+        entry.setdefault("rated_current_max_a", rated_current)
+    if "frame_current_a" in entry and "rated_current_a" not in entry:
+        entry.setdefault("rated_current_a", entry["frame_current_a"])
+    if "breaking_capacity_ka" in entry:
+        entry.setdefault("rated_short_circuit_breaking_ka", entry["breaking_capacity_ka"])
+
+    if "rated_short_time_withstand_ka_4s" in entry:
+        entry.setdefault("rated_short_time_duration_s", 4)
+        entry.setdefault("short_time_withstand", {
+            "current_ka": entry["rated_short_time_withstand_ka_4s"],
+            "duration_s": 4,
+            "i2t_ka2s": round(entry["rated_short_time_withstand_ka_4s"] ** 2 * 4, 3),
+            "source_type": "standard_table_or_manufacturer_typical",
+        })
+    elif category in ("circuit_breaker_lv", "recloser"):
+        breaking = _max_number(entry.get("rated_short_circuit_breaking_ka"), _max_number(entry.get("breaking_capacity_ka"), None))
+        if breaking is not None:
+            entry.setdefault("rated_short_time_duration_s", 1)
+            entry.setdefault("short_time_withstand", {
+                "current_ka": breaking,
+                "duration_s": 1,
+                "i2t_ka2s": round(breaking ** 2, 3),
+                "source_type": "engineering_default",
+            })
+
+    if category == "switchgear_cabinet":
+        entry.setdefault("internal_arc_class", {
+            "iac_class": None,
+            "iac_current_ka": entry.get("rated_short_circuit_breaking_ka"),
+            "iac_duration_s": 1,
+            "standard": "GB/T 3906-2020",
+            "source_type": "project_specific_required",
+        })
+        entry.setdefault("loss_of_service_continuity_class", None)
+        entry.setdefault("partition_class", None)
+    if category in ("circuit_breaker_mv", "circuit_breaker_lv", "load_switch", "recloser", "sectionalizer"):
+        entry.setdefault("endurance", {
+            "mechanical_life_cycles": entry.get("mechanical_life_cycles"),
+            "electrical_life_cycles": None,
+            "maintenance_interval_years": 3,
+            "operation_count_limit": entry.get("mechanical_life_cycles"),
+            "source_type": "manufacturer_typical_or_engineering_default",
+        })
+        entry.setdefault("temperature_rise_limit_c", None)
+        entry.setdefault("operating_sequence", entry.get("reclose_sequence"))
+    if category == "fuse_mv":
+        curve = entry.get("time_current_curve_data", [])
+        entry.setdefault("time_current_curve", {
+            "x_axis": "multiple_of_rated_current",
+            "y_axis": "clearing_time_s",
+            "points": curve,
+            "curve_type": "typical_minimum_melting_or_total_clearing",
+            "standard": "GB/T 15166.2-2023",
+        })
+        entry.setdefault("selection_guide", {
+            "standard": "GB/T 15166.6-2023",
+            "protected_equipment": entry.get("type"),
+            "coordination_margin_s": 0.3,
+            "source_type": "standard_reference_and_engineering_default",
+        })
+        if entry.get("rated_current_a"):
+            entry.setdefault("minimum_melting_current_a", round(entry["rated_current_a"] * 2, 2))
+    entry.setdefault("field_source_types", {
+        "short_time_withstand": "standard_table_or_engineering_default",
+        "endurance": "manufacturer_typical_or_engineering_default",
+        "internal_arc_class": "project_specific_required",
+    })
+    return entry
+
+
+def _enhance_all_switchgear(data):
+    for category, models in data.items():
+        for entry in models.values():
+            _enhance_switchgear_entry(entry, category)
+    return data
+
+
 def get_all_switchgear():
-    return {
+    return _enhance_all_switchgear({
         "switchgear_cabinet": {
             "KYN28A-12": {
                 "type": "metal_clad_withdrawable",
@@ -744,4 +836,4 @@ def get_all_switchgear():
                 "source_note": "参数依据GB/T 25289-2010及主流厂家产品手册"
             }
         }
-    }
+    })

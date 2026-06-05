@@ -1,9 +1,52 @@
+def _cable_operating_metadata(insulation_type, laying_methods, short_circuit_1s):
+    is_pvc = insulation_type == "PVC"
+    normal_temp = 70 if is_pvc else 90
+    emergency_temp = 90 if is_pvc else 105
+    short_temp = 160 if is_pvc else 250
+    return {
+        "ampacity_reference": {
+            "ambient_air_c": 40,
+            "soil_temperature_c": 25,
+            "soil_thermal_resistivity_k_m_per_w": 1.2,
+            "burial_depth_m": 0.7,
+            "laying_spacing_m": 0.1,
+            "laying_methods": laying_methods,
+            "source_type": "standard_reference_and_engineering_default",
+        },
+        "derating_factors": {
+            "temperature": "apply by ambient and conductor temperature",
+            "grouping": "apply by number of circuits and spacing",
+            "soil": "apply by soil thermal resistivity",
+            "depth": "apply by burial depth",
+            "harmonic": "apply when neutral or sheath harmonic heating is material",
+        },
+        "thermal_limits": {
+            "max_conductor_temp_normal_c": normal_temp,
+            "max_conductor_temp_emergency_c": emergency_temp,
+            "max_conductor_temp_short_circuit_c": short_temp,
+        },
+        "short_circuit_rating": {
+            "current_1s_ka": short_circuit_1s,
+            "i2t_ka2s": round(short_circuit_1s ** 2, 3),
+            "reference_duration_s": 1,
+            "duration_range_s": [0.1, 5],
+        },
+        "lifecycle": {
+            "design_life_years": 30,
+            "emergency_overload_hours_per_year_limit": 100,
+            "thermal_aging_model": "Arrhenius-style cable insulation aging; project-specific constants required",
+            "source_type": "engineering_policy",
+        },
+    }
+
+
 def _make_cable(conductor_material, cross_section_mm2, voltage_rating,
                 insulation_type, armor_type, r, x, c,
                 max_i_air, max_i_ground, max_i_duct,
                 short_circuit_1s, outer_diameter, weight,
                 voltage_rating_category, standard, source_note):
     alpha = 3.93e-3 if conductor_material == "Cu" else 4.03e-3
+    metadata = _cable_operating_metadata(insulation_type, ["air", "ground", "duct"], short_circuit_1s)
     return {
         "conductor_material": conductor_material,
         "cross_section_mm2": cross_section_mm2,
@@ -21,6 +64,16 @@ def _make_cable(conductor_material, cross_section_mm2, voltage_rating,
         "max_i_ka_duct": max_i_duct,
         "max_i_ka": max_i_ground,
         "short_circuit_current_1s_ka": short_circuit_1s,
+        "short_circuit_i2t_ka2s": metadata["short_circuit_rating"]["i2t_ka2s"],
+        "max_conductor_temp_normal_c": metadata["thermal_limits"]["max_conductor_temp_normal_c"],
+        "max_conductor_temp_emergency_c": metadata["thermal_limits"]["max_conductor_temp_emergency_c"],
+        "max_conductor_temp_short_circuit_c": metadata["thermal_limits"]["max_conductor_temp_short_circuit_c"],
+        "ampacity_reference": metadata["ampacity_reference"],
+        "derating_factors": metadata["derating_factors"],
+        "thermal_limits": metadata["thermal_limits"],
+        "short_circuit_rating": metadata["short_circuit_rating"],
+        "lifecycle": metadata["lifecycle"],
+        "design_life_years": metadata["lifecycle"]["design_life_years"],
         "outer_diameter_mm": outer_diameter,
         "weight_kg_per_km": weight,
         "alpha": alpha,

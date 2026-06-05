@@ -35,7 +35,24 @@ def test_transformer_normalization_converts_capacity():
     assert normalized["equipment_type"] == "transformer_2w"
     assert normalized["sn_mva"] == 0.63
     assert normalized["rated_voltage_kv"] == 10
+    assert normalized["rated_current_hv_a"] == 36.4
+    assert normalized["rated_current_lv_a"] == 909.3
+    assert normalized["rated_current_a"] == 36.4
     assert normalized["rated_short_circuit_breaking_current_ka"] == 25
+
+
+def test_transformer_normalization_can_select_lv_current_side():
+    normalized = normalize_equipment(
+        "transformer",
+        {
+            "sn_kva": 630,
+            "vn_hv_kv": 10,
+            "vn_lv_kv": 0.4,
+        },
+        context={"current_side": "lv"},
+    )
+
+    assert normalized["rated_current_a"] == 909.3
 
 
 def test_ev_charger_normalization_derives_pq():
