@@ -59,7 +59,12 @@ def _as_list(value):
         return []
     if isinstance(value, dict):
         return [dict(item, id=key) if isinstance(item, dict) and "id" not in item else item for key, item in value.items()]
-    return list(value)
+    if isinstance(value, (str, bytes)):
+        raise TypeError("asset collections must be lists or dictionaries, not strings")
+    try:
+        return list(value)
+    except TypeError as exc:
+        raise TypeError(f"asset collections must be iterable, got {type(value).__name__}") from exc
 
 
 def _first_present(data, *keys):
@@ -97,6 +102,8 @@ def _bus_id(bus):
 
 
 def _resolve_bus(bus_lookup, value):
+    if value is None:
+        raise ValueError("missing bus reference")
     if value in bus_lookup:
         return bus_lookup[value]
     if isinstance(value, int):
@@ -145,6 +152,8 @@ def _resolve_element(element_lookup, et, value):
     lookup_key = {"b": "bus", "l": "line", "t": "trafo", "t3": "trafo3w"}.get(et)
     if lookup_key is None:
         raise ValueError(f"Unsupported switch element type: {et!r}")
+    if value is None:
+        raise ValueError(f"missing switch element reference for element type {et!r}")
     if isinstance(value, int):
         return value
     table_lookup = element_lookup.get(lookup_key, {})
@@ -210,8 +219,8 @@ def _create_line(pp, net, item, data):
         "length_km": float(_required_number(data, "length_km", "Line")),
         "name": data.get("name"),
         "in_service": data.get("in_service", True),
-        "df": float(data.get("df", 1.0)),
-        "parallel": int(data.get("parallel", 1)),
+        "df": _number(data, "df", 1.0),
+        "parallel": int(_number(data, "parallel", 1)),
     }
     if data.get("std_type"):
         return pp.create_line(net, std_type=data["std_type"], **common)
@@ -321,7 +330,7 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
     if not isinstance(model, dict):
         raise TypeError("model must be a dict of engineering assets")
     pp = _require_pandapower()
-    net = pp.create_empty_network(sn_mva=model.get("sn_mva", 100.0))
+    net = pp.create_empty_network(sn_mva=first_number(model.get("sn_mva"), 100.0))
     if add_std_types:
         add_chinese_std_types(net)
 
@@ -367,8 +376,8 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
         idx = pp.create_ext_grid(
             net,
             bus=_resolve_bus(bus_lookup, item.get("bus")),
-            vm_pu=float(data.get("vm_pu", 1.0)),
-            va_degree=float(data.get("va_degree", 0.0)),
+            vm_pu=_number(data, "vm_pu", 1.0),
+            va_degree=_number(data, "va_degree", 0.0),
             name=data.get("name"),
             in_service=data.get("in_service", True),
         )
@@ -396,37 +405,38 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
         idx = pp.create_load(
             net,
             bus=_resolve_bus(bus_lookup, item.get("bus")),
-            p_mw=float(data.get("p_mw", 0.0)),
-            q_mvar=float(data.get("q_mvar", 0.0)),
+            p_mw=_number(data, "p_mw", 0.0),
+            q_mvar=_number(data, "q_mvar", 0.0),
             name=data.get("name"),
             in_service=data.get("in_service", True),
         )
         _register_lookup(element_lookup["load"], item, idx, "load")
 
-    for item in grouped["sgens"] + grouped["wind_turbines"]:
-        data = normalize_equipment(item.get("equipment_type") or item.get("class") or "pv_inverter", item)
-        idx = pp.create_sgen(
-            net,
-            bus=_resolve_bus(bus_lookup, item.get("bus")),
-            p_mw=float(data.get("p_mw", 0.0)),
-            q_mvar=float(data.get("q_mvar", 0.0)),
-            sn_mva=data.get("sn_mva"),
-            name=data.get("name"),
-            in_service=data.get("in_service", True),
-        )
-        _register_lookup(element_lookup["sgen"], item, idx, "sgen")
+    for group_name, default_equipment_type in (("sgens", "pv_inverter"), ("wind_turbines", "wind_turbine")):
+        for item in grouped[group_name]:
+            data = normalize_equipment(item.get("equipment_type") or item.get("class") or default_equipment_type, item)
+            idx = pp.create_sgen(
+                net,
+                bus=_resolve_bus(bus_lookup, item.get("bus")),
+                p_mw=_number(data, "p_mw", 0.0),
+                q_mvar=_number(data, "q_mvar", 0.0),
+                sn_mva=data.get("sn_mva"),
+                name=data.get("name"),
+                in_service=data.get("in_service", True),
+            )
+            _register_lookup(element_lookup["sgen"], item, idx, "sgen")
 
     for item in grouped["storages"]:
         data = normalize_equipment("storage", item)
         idx = pp.create_storage(
             net,
             bus=_resolve_bus(bus_lookup, item.get("bus")),
-            p_mw=float(data.get("p_mw", 0.0)),
-            max_e_mwh=float(data.get("max_e_mwh", 0.0)),
-            q_mvar=float(data.get("q_mvar", 0.0)),
+            p_mw=_number(data, "p_mw", 0.0),
+            max_e_mwh=_number(data, "max_e_mwh", 0.0),
+            q_mvar=_number(data, "q_mvar", 0.0),
             sn_mva=data.get("sn_mva"),
-            soc_percent=float(data.get("soc_percent", 50.0)),
-            min_e_mwh=float(data.get("min_e_mwh", 0.0)),
+            soc_percent=_number(data, "soc_percent", 50.0),
+            min_e_mwh=_number(data, "min_e_mwh", 0.0),
             name=data.get("name"),
             in_service=data.get("in_service", True),
         )
@@ -437,8 +447,8 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
         idx = pp.create_shunt(
             net,
             bus=_resolve_bus(bus_lookup, item.get("bus")),
-            q_mvar=float(data.get("q_mvar", 0.0)),
-            p_mw=float(data.get("p_mw", 0.0)),
+            q_mvar=_number(data, "q_mvar", 0.0),
+            p_mw=_number(data, "p_mw", 0.0),
             name=data.get("name"),
             in_service=data.get("in_service", True),
         )

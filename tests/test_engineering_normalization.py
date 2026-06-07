@@ -70,6 +70,21 @@ def test_ev_charger_normalization_derives_pq():
     assert normalized["q_mvar"] > 0
 
 
+def test_power_factor_zero_does_not_fall_back_when_deriving_apparent_power():
+    normalized = normalize_equipment(
+        "pv_inverter",
+        {
+            "rated_power_kw": 100,
+            "power_factor": 0,
+            "power_factor_range": "0.8leading~0.8lagging",
+        },
+        context={"power_factor": 0.95},
+    )
+
+    assert normalized["p_mw"] == 0.1
+    assert "sn_mva" not in normalized
+
+
 def test_voltage_fields_are_normalized_when_present():
     normalized = normalize_equipment(
         "transformer",

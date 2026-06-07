@@ -1,9 +1,10 @@
 __version__ = "1.0.0"
-__version_date__ = "2026-05-31"
+__version_date__ = "2026-06-07"
 __standard_year__ = "2025"
 
 SYSTEM_FREQ_HZ = 50.0
-BASE_SNR_MVA = 100.0
+BASE_MVA = 100.0
+BASE_SNR_MVA = BASE_MVA
 VOLTAGE_LEVELS_KV = [0.4, 10, 35, 110, 220]
 
 __all__ = [
@@ -23,6 +24,10 @@ __all__ = [
     "get_all_validation_rules",
     "get_all_standards",
     "get_all_engineering_parameters",
+    "SYSTEM_FREQ_HZ",
+    "BASE_MVA",
+    "BASE_SNR_MVA",
+    "VOLTAGE_LEVELS_KV",
 ]
 
 from .equipment import (

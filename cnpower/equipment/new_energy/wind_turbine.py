@@ -64,7 +64,7 @@ def get_all_wind_turbines():
                 "rotor_diameter_m": 21,
                 "generator_type": "PMSG",
                 "standard": "GB/T 19068-2017",
-                "source_note": "参数依据GB/T 19069-2003及主流厂家产品手册"
+                "source_note": "参数依据GB/T 19068-2017及主流厂家产品手册"
             }
         },
         "medium_wind": {

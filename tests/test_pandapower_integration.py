@@ -3,6 +3,7 @@ import pytest
 pp = pytest.importorskip("pandapower")
 
 from cnpower.engineering import build_pandapower_net
+import cnpower.engineering.network_builder as network_builder
 from cnpower.pandapower_integration import add_chinese_std_types, list_chinese_std_types
 
 
@@ -71,6 +72,31 @@ def test_engineering_builder_supports_lines_and_sgens():
 
     assert net.converged
     assert len(net.line) == 1
+    assert len(net.sgen) == 1
+
+
+def test_engineering_builder_defaults_wind_turbines_to_wind_type(monkeypatch):
+    seen_equipment_types = []
+    real_normalize_equipment = network_builder.normalize_equipment
+
+    def spy_normalize_equipment(equipment_type, equipment, **kwargs):
+        if equipment.get("id") == "wind-a":
+            seen_equipment_types.append(equipment_type)
+        return real_normalize_equipment(equipment_type, equipment, **kwargs)
+
+    monkeypatch.setattr(network_builder, "normalize_equipment", spy_normalize_equipment)
+
+    net = network_builder.build_pandapower_net(
+        {
+            "buses": [{"id": "feeder", "vn_kv": 10.0}],
+            "wind_turbines": [
+                {"id": "wind-a", "bus": "feeder", "rated_power_kw": 50, "power_factor": 0.95},
+            ],
+        },
+        add_std_types=False,
+    )
+
+    assert seen_equipment_types == ["wind_turbine"]
     assert len(net.sgen) == 1
 
 

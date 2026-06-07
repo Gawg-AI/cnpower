@@ -1,4 +1,4 @@
-def _cable_operating_metadata(insulation_type, laying_methods, short_circuit_1s):
+﻿def _cable_operating_metadata(insulation_type, laying_methods, short_circuit_1s):
     is_pvc = insulation_type == "PVC"
     normal_temp = 70 if is_pvc else 90
     emergency_temp = 90 if is_pvc else 105
@@ -151,21 +151,21 @@ def _build_mv_10kv():
             "Cu", s, "6/10kV", "XLPE", "steel_tape",
             r_cu, xi, ci, air, gnd, dct,
             sc_cu, od, wt,
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJV-3x{s}-10kV"] = _make_cable(
             "Cu", s, "6/10kV", "XLPE", "none",
             r_cu, xi, ci,
             round(air * 1.05, 3), round(gnd * 1.05, 3), round(dct * 1.05, 3),
             sc_cu, od - 3, round(wt * 0.90),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJLV22-3x{s}-10kV"] = _make_cable(
             "Al", s, "6/10kV", "XLPE", "steel_tape",
             r_al, xi, ci,
             round(air * 0.78, 3), round(gnd * 0.78, 3), round(dct * 0.78, 3),
             round(sc_cu * 0.61, 2), od - 1, round(wt * 0.75),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJLV-3x{s}-10kV"] = _make_cable(
             "Al", s, "6/10kV", "XLPE", "none",
@@ -173,7 +173,7 @@ def _build_mv_10kv():
             round(air * 0.78 * 1.05, 3), round(gnd * 0.78 * 1.05, 3),
             round(dct * 0.78 * 1.05, 3),
             round(sc_cu * 0.61, 2), od - 4, round(wt * 0.90 * 0.75),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
     return d
 
@@ -245,21 +245,21 @@ def _build_mv_35kv():
             "Cu", s, "21/35kV", "XLPE", "steel_tape",
             r_cu, xi, ci, air, gnd, dct,
             sc_cu, od, wt,
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJV-3x{s}-35kV"] = _make_cable(
             "Cu", s, "21/35kV", "XLPE", "none",
             r_cu, xi, ci,
             round(air * 1.05, 3), round(gnd * 1.05, 3), round(dct * 1.05, 3),
             sc_cu, od - 3, round(wt * 0.90),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJLV22-3x{s}-35kV"] = _make_cable(
             "Al", s, "21/35kV", "XLPE", "steel_tape",
             r_al, xi, ci,
             round(air * 0.78, 3), round(gnd * 0.78, 3), round(dct * 0.78, 3),
             round(sc_cu * 0.61, 2), od - 1, round(wt * 0.75),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJLV-3x{s}-35kV"] = _make_cable(
             "Al", s, "21/35kV", "XLPE", "none",
@@ -267,7 +267,7 @@ def _build_mv_35kv():
             round(air * 0.78 * 1.05, 3), round(gnd * 0.78 * 1.05, 3),
             round(dct * 0.78 * 1.05, 3),
             round(sc_cu * 0.61, 2), od - 4, round(wt * 0.90 * 0.75),
-            "MV", "GB/T 12706-2020", "国标表值",
+            "MV", "GB/T 12706.1~3-2020", "国标表值",
         )
     return d
 
@@ -347,7 +347,7 @@ def _build_lv_04kv():
             "Cu", s, "0.6/1kV", "XLPE", "steel_tape",
             r_cu, xi, ci, air, gnd, dct,
             sc_cu_xlpe, od_yjv22, wt_yjv22,
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"YJV-3x{s}-0.4kV"] = _make_cable(
             "Cu", s, "0.6/1kV", "XLPE", "none",
@@ -355,7 +355,7 @@ def _build_lv_04kv():
             round(air * UNARMOR_BOOST, 3), round(gnd * UNARMOR_BOOST, 3),
             round(dct * UNARMOR_BOOST, 3),
             sc_cu_xlpe, od_yjv22 - 3, round(wt_yjv22 * 0.90),
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"VV22-3x{s}-0.4kV"] = _make_cable(
             "Cu", s, "0.6/1kV", "PVC", "steel_tape",
@@ -363,7 +363,7 @@ def _build_lv_04kv():
             round(air * PVC_DERATE, 3), round(gnd * PVC_DERATE, 3),
             round(dct * PVC_DERATE, 3),
             sc_cu_pvc, od_vv22, wt_vv22,
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"VV-3x{s}-0.4kV"] = _make_cable(
             "Cu", s, "0.6/1kV", "PVC", "none",
@@ -372,7 +372,7 @@ def _build_lv_04kv():
             round(gnd * PVC_DERATE * UNARMOR_BOOST, 3),
             round(dct * PVC_DERATE * UNARMOR_BOOST, 3),
             sc_cu_pvc, od_vv22 - 3, round(wt_vv22 * 0.90),
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"VLV22-3x{s}-0.4kV"] = _make_cable(
             "Al", s, "0.6/1kV", "PVC", "steel_tape",
@@ -381,7 +381,7 @@ def _build_lv_04kv():
             round(gnd * PVC_DERATE * AL_DERATE, 3),
             round(dct * PVC_DERATE * AL_DERATE, 3),
             sc_al_pvc, od_vv22 - 1, round(wt_vv22 * 0.75),
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"VLV-3x{s}-0.4kV"] = _make_cable(
             "Al", s, "0.6/1kV", "PVC", "none",
@@ -390,7 +390,7 @@ def _build_lv_04kv():
             round(gnd * PVC_DERATE * UNARMOR_BOOST * AL_DERATE, 3),
             round(dct * PVC_DERATE * UNARMOR_BOOST * AL_DERATE, 3),
             sc_al_pvc, od_vv22 - 4, round(wt_vv22 * 0.90 * 0.75),
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
     unequal_specs = [
         (70, 35), (95, 50), (120, 70), (150, 70), (185, 95), (240, 120),
@@ -415,7 +415,7 @@ def _build_lv_04kv():
             round(air * UNARMOR_BOOST, 3), round(gnd * UNARMOR_BOOST, 3),
             round(dct * UNARMOR_BOOST, 3),
             sc_cu_xlpe, od_yjv, wt_yjv,
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
         d[f"VV-{name}-0.4kV"] = _make_cable(
             "Cu", main_s, "0.6/1kV", "PVC", "none",
@@ -424,7 +424,7 @@ def _build_lv_04kv():
             round(gnd * PVC_DERATE * UNARMOR_BOOST, 3),
             round(dct * PVC_DERATE * UNARMOR_BOOST, 3),
             sc_cu_pvc, od_vv, wt_vv,
-            "LV", "GB/T 12706-2020", "国标表值",
+            "LV", "GB/T 12706.1~3-2020", "国标表值",
         )
     return d
 

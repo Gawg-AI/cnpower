@@ -2,7 +2,7 @@ import math
 import re
 
 
-_VOLTAGE_RE = re.compile(r"[-+]?\d+(?:\.\d+)?")
+_VOLTAGE_RE = re.compile(r"[-+]?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?")
 
 
 ALIASES = {
@@ -48,7 +48,8 @@ def first_number(value, default=None, prefer="max"):
     if isinstance(value, bool):
         return float(value)
     if isinstance(value, (int, float)):
-        return float(value)
+        number = float(value)
+        return number if math.isfinite(number) else default
     if isinstance(value, (list, tuple)):
         nums = [first_number(v, None, prefer=prefer) for v in value]
         nums = [v for v in nums if v is not None]
@@ -75,7 +76,7 @@ def parse_voltage_kv(value, *, source_unit=None, default=None):
         return number / 1000.0 if number > 2 else number
     if source_unit == "kv":
         return number
-    if number > 100:
+    if number > 1000:
         return number / 1000.0
     return number
 
@@ -91,13 +92,37 @@ def parse_percent_range_midpoint(value, default=None):
     return sum(nums) / len(nums)
 
 
+def _first_not_none(*values):
+    for value in values:
+        if value is not None:
+            return value
+    return None
+
+
 def calc_q_mvar_from_power_factor(p_mw, power_factor, sign=1):
     if p_mw is None or power_factor in (None, 0):
         return 0.0
-    pf = max(min(float(power_factor), 1.0), -1.0)
+    pf = first_number(power_factor)
+    p = first_number(p_mw)
+    if pf is None or p is None:
+        return 0.0
+    pf = max(min(pf, 1.0), -1.0)
     if abs(pf) == 1.0:
         return 0.0
-    return sign * abs(float(p_mw)) * math.tan(math.acos(abs(pf)))
+    return sign * abs(p) * math.tan(math.acos(abs(pf)))
+
+
+def apparent_power_mva_from_kw(power_kw, power_factor=None):
+    power = first_number(power_kw)
+    if power is None:
+        return None
+    pf = first_number(power_factor, 0.95, prefer="min")
+    if pf is None:
+        pf = 0.95
+    pf = abs(pf)
+    if pf <= 0 or not math.isfinite(pf):
+        return None
+    return power / (min(pf, 1.0) * 1000.0)
 
 
 def select_line_current_ka(data, laying_method=None):
@@ -123,10 +148,16 @@ def select_reactance_ohm_per_km(data, spacing_m=1.5):
     spacing_key = str(spacing_m)
     if spacing_key in table:
         return first_number(table[spacing_key])
-    ordered = sorted(table.items(), key=lambda item: first_number(item[0], 0.0))
+    ordered = [
+        (first_number(key), value)
+        for key, value in table.items()
+        if first_number(key) is not None
+    ]
+    if not ordered:
+        return None
+    ordered = sorted(ordered, key=lambda item: item[0])
     for key, value in ordered:
-        numeric_key = first_number(key, 0.0)
-        if numeric_key >= spacing_m:
+        if key >= spacing_m:
             return first_number(value)
     return first_number(ordered[-1][1])
 
@@ -163,9 +194,27 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
     _copy_alias(normalized, data, "sn_kva", "sn_mva", lambda value: first_number(value) / 1000.0)
     _copy_alias(normalized, data, "rated_capacity_kva", "sn_mva", lambda value: first_number(value) / 1000.0)
     _copy_alias(normalized, data, "rated_power_kw", "p_mw", lambda value: first_number(value) / 1000.0)
-    _copy_alias(normalized, data, "rated_power_kw", "sn_mva", lambda value: first_number(value) / 1000.0)
+    _copy_alias(
+        normalized,
+        data,
+        "rated_power_kw",
+        "sn_mva",
+        lambda value: apparent_power_mva_from_kw(
+            value,
+            _first_not_none(data.get("power_factor"), data.get("power_factor_range"), context.get("power_factor")),
+        ),
+    )
     _copy_alias(normalized, data, "rated_charge_discharge_power_kw", "p_mw", lambda value: first_number(value) / 1000.0)
-    _copy_alias(normalized, data, "rated_charge_discharge_power_kw", "sn_mva", lambda value: first_number(value) / 1000.0)
+    _copy_alias(
+        normalized,
+        data,
+        "rated_charge_discharge_power_kw",
+        "sn_mva",
+        lambda value: apparent_power_mva_from_kw(
+            value,
+            _first_not_none(data.get("power_factor"), data.get("power_factor_range"), context.get("power_factor")),
+        ),
+    )
     _copy_alias(normalized, data, "rated_capacity_kwh", "max_e_mwh", lambda value: first_number(value) / 1000.0)
 
     if "rated_voltage_kv" not in normalized:
@@ -194,7 +243,7 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
         if sn_mva is not None:
             for side in ("hv", "mv", "lv"):
                 voltage = first_number(normalized.get(f"vn_{side}_kv"))
-                if voltage:
+                if voltage and voltage > 0 and voltage >= 1e-6 and math.isfinite(voltage):
                     normalized.setdefault(
                         f"rated_current_{side}_a",
                         round(sn_mva * 1000.0 / (math.sqrt(3) * voltage), 1),

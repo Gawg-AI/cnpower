@@ -1,6 +1,6 @@
 {
   "manifest_type": "cnpower_engineering_library_manifest",
-  "manifest_version": "2026.06.05",
+  "manifest_version": "2026.06.07",
   "primary_description_file": "README.md",
   "note_zh": "本文件是机器可读的工程库清单，用于程序读取模型覆盖、标准索引、运行字段和验证入口；项目介绍和展示说明以 README.md 为准。",
   "project": {
@@ -220,10 +220,10 @@
       "python -m pytest",
       "python verify_fixes.py"
     ],
-    "expected_results": {
-      "pytest": "21 passed",
-      "verify_fixes": "756 PASS, 0 FAIL"
+    "success_criteria": {
+      "pytest": "exit_code == 0",
+      "verify_fixes": "exit_code == 0"
     },
-    "ci": "GitHub Actions 在 Python 3.10 和 3.12 上运行 pytest"
+    "ci": "GitHub Actions 在 Python 3.10、3.11、3.12 和 3.13 上运行 pytest 与 verify_fixes.py"
   }
 }

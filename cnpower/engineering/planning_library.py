@@ -2,13 +2,14 @@ def get_planning_assumption_library():
     return {
         "metadata": {
             "name": "中国配网规划参数与方案比较库",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "scope": "10kV-0.4kV配电网规划、改造、新能源接入、可靠性与投资对比。",
         },
         "voltage_limits": {
             "normal_operation": {
                 "10kV": {"min_vm_pu": 0.93, "max_vm_pu": 1.07, "standard": "GB/T 12325"},
-                "0.4kV": {"min_vm_pu": 0.90, "max_vm_pu": 1.07, "standard": "GB/T 12325"},
+                "0.4kV_3phase": {"min_vm_pu": 0.93, "max_vm_pu": 1.07, "standard": "GB/T 12325"},
+                "0.4kV_1phase": {"min_vm_pu": 0.90, "max_vm_pu": 1.07, "standard": "GB/T 12325"},
             },
             "planning_target": {
                 "10kV": {"min_vm_pu": 0.95, "max_vm_pu": 1.05},
@@ -122,4 +123,3 @@ def get_planning_assumption_library():
             "station_cost_drivers": ["capacity_kva", "switchgear_scheme", "automation_level", "building_or_box_type", "fire_protection"],
         },
     }
-

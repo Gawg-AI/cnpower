@@ -13,7 +13,23 @@ def _enhance_overhead_entry(entry, category):
     insulated = entry.get("insulation_type") is not None
     normal_temp = 90 if entry.get("insulation_type") == "XLPE" else 70 if insulated else 70
     emergency_temp = 105 if entry.get("insulation_type") == "XLPE" else 90 if insulated else 90
-    entry.setdefault("rated_current_a", round(entry.get("max_i_ka", 0) * 1000, 1))
+    if "x_ohm_per_km" not in entry:
+        x_value = _default_reactance_from_table(entry.get("x_ohm_per_km_table"))
+        if x_value is not None:
+            entry["x_ohm_per_km"] = x_value
+    if category == "bare_conductor":
+        r_value = entry.get("r_ohm_per_km")
+        x_value = entry.get("x_ohm_per_km")
+        c_value = entry.get("c_nf_per_km")
+        if r_value is not None:
+            entry.setdefault("r0_ohm_per_km", round(3.0 * r_value, 4))
+        if x_value is not None:
+            entry.setdefault("x0_ohm_per_km", round(2.0 * x_value, 4))
+        if c_value is not None:
+            entry.setdefault("c0_nf_per_km", round(0.6 * c_value, 2))
+    max_i_ka = entry.get("max_i_ka")
+    if max_i_ka is not None:
+        entry.setdefault("rated_current_a", round(max_i_ka * 1000, 1))
     entry.setdefault("max_conductor_temp_normal_c", normal_temp)
     entry.setdefault("max_conductor_temp_emergency_c", emergency_temp)
     entry.setdefault("ampacity_reference", {
@@ -60,7 +76,31 @@ def _enhance_all_overhead_lines(data):
     return data
 
 
+def _default_reactance_from_table(table, default_spacing_m=1.5):
+    if not isinstance(table, dict):
+        return None
+    if str(default_spacing_m) in table:
+        return table[str(default_spacing_m)]
+    if default_spacing_m in table:
+        return table[default_spacing_m]
+    keyed_values = []
+    for key, value in table.items():
+        try:
+            keyed_values.append((float(key), value))
+        except (TypeError, ValueError):
+            continue
+    if not keyed_values:
+        return None
+    keyed_values.sort(key=lambda item: item[0])
+    for spacing, value in keyed_values:
+        if spacing >= default_spacing_m:
+            return value
+    return keyed_values[-1][1]
+
+
 def _calc_reactance_bare(cross_section, dm_m):
+    if cross_section <= 0 or dm_m <= 0:
+        raise ValueError("cross_section and dm_m must be positive")
     r_eq = math.sqrt(cross_section / math.pi)
     return round(0.1445 * math.log10(dm_m * 1000 / r_eq) + 0.0157, 4)
 
@@ -71,8 +111,14 @@ def _calc_reactance_table(cross_section):
 
 
 def _calc_capacitance_nf(cross_section, dm_m=1.5):
+    if cross_section <= 0 or dm_m <= 0:
+        raise ValueError("cross_section and dm_m must be positive")
     r_eq = math.sqrt(cross_section / math.pi)
-    return round(55.63 / math.log(dm_m * 1000 / r_eq), 2)
+    log_argument = dm_m * 1000 / r_eq
+    denominator = math.log(log_argument)
+    if denominator <= 0:
+        raise ValueError("geometric mean distance must be greater than equivalent conductor radius")
+    return round(55.63 / denominator, 2)
 
 
 def _build_mv_10kv_insulated():
@@ -260,11 +306,13 @@ def _build_bare_conductor():
     models = {}
     for s in sections:
         x_table = _calc_reactance_table(s)
+        x_default = x_table["1.5"]
         c_val = _calc_capacitance_nf(s, 1.5)
         models[f"LJ-{s}"] = {
             "conductor_material": "Al",
             "cross_section_mm2": s,
             "r_ohm_per_km": lj_r[s],
+            "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
             "c_nf_per_km": c_val,
             "max_i_ka": lj_i[s],
@@ -280,6 +328,7 @@ def _build_bare_conductor():
             "conductor_material": "Al/Steel",
             "cross_section_mm2": s,
             "r_ohm_per_km": lgj_r[s],
+            "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
             "c_nf_per_km": c_val,
             "max_i_ka": lj_i[s],
@@ -295,6 +344,7 @@ def _build_bare_conductor():
             "conductor_material": "Cu",
             "cross_section_mm2": s,
             "r_ohm_per_km": tj_r[s],
+            "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
             "c_nf_per_km": c_val,
             "max_i_ka": round(1.3 * lj_i[s], 4),

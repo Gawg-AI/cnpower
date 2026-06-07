@@ -6,6 +6,8 @@ def get_all_validation_rules():
                 "standard": "GB/T 12325-2008",
                 "description": "用电单位端电压偏离额定电压的百分数不得超过规定限值",
                 "limits": {
+                    "110kV": "±5%",
+                    "35kV": "±5%",
                     "10kV": "±7%",
                     "0.4kV_3phase": "±7%",
                     "0.4kV_1phase": "+7%/-10%"
@@ -21,11 +23,13 @@ def get_all_validation_rules():
                 "limits": {
                     "voltage_fluctuation": {
                         "LV": "≤4%",
-                        "MV": "≤3%"
+                        "MV": "≤3%",
+                        "HV": "≤2%"
                     },
                     "flicker_plt": {
                         "LV": "≤1.0",
-                        "MV": "≤1.0"
+                        "MV": "≤1.0",
+                        "HV": "≤0.8"
                     }
                 },
                 "check_formula": "dU/U * 100, Plt = sqrt(sum(Pst_i^3) / N)^(1/3)",
@@ -83,10 +87,18 @@ def get_all_validation_rules():
                 "A": {"n1_pass_rate": "100%", "description": "A类供电区，任一元件故障时不允许中断供电"},
                 "B": {"n1_pass_rate": "100%", "description": "B类供电区，任一元件故障时不允许中断供电"},
                 "C": {"n1_pass_rate": "≥90%", "description": "C类供电区，N-1通过率不低于90%"},
-                "D": {"n1_pass_rate": "计划检修可行", "description": "D类供电区，计划检修时不中断供电即可"}
+                "D": {"n1_pass_rate": "计划检修可行", "description": "D类供电区，计划检修时不中断供电即可"},
+                "E": {"n1_pass_rate": "不强制", "description": "E类供电区以辐射接线和快速抢修为主，N-1不作强制要求"}
             },
             "check_method": "逐一断开网络中每个元件（线路、变压器、开关等），检验剩余网络是否能通过联络开关转移全部负荷",
             "pass_criteria": "断开任一元件后，剩余网络能转移全部负荷，不出现过载或电压越限"
+        },
+        "connection_modes": {
+            "name": "典型接线模式匹配",
+            "standard": "Q/GDW 10370-2023 / DL/T 5729-2023",
+            "description": "按供电区域、负荷水平、供电半径和可靠性要求选择单联络、环网、双环网等典型接线模式",
+            "check_method": "将供电区类别、负荷规模、供电半径和联络点数量与 topology.connection_modes 参数库比对",
+            "pass_criteria": "所选接线模式适用供电区类别且满足供电半径、负荷规模和可靠性要求"
         },
         "short_circuit": {
             "name": "短路电流校验",
@@ -126,6 +138,31 @@ def get_all_validation_rules():
                 "limit": "≤80%~90%",
                 "check_formula": "β = S_load / S_rated * 100",
                 "pass_criteria": "正常运行时变压器负荷率不超过80%~90%，N-1时允许短时过载"
+            },
+            "transformer_dynamic_loading": {
+                "name": "变压器动态负载",
+                "check_formula": "hot_spot_temperature, top_oil_temperature, aging_rate",
+                "pass_criteria": "动态负载下热点温度、顶层油温和相对老化率不超过标准或厂家限值"
+            },
+            "transformer_life_loss": {
+                "name": "变压器寿命损失",
+                "check_formula": "loss_of_life = sum(relative_aging_rate * duration)",
+                "pass_criteria": "累计寿命损失不超过规划寿命或运行策略限值"
+            },
+            "transformer_temperature": {
+                "name": "变压器温升",
+                "check_formula": "winding_temperature, hot_spot_temperature",
+                "pass_criteria": "绕组温升、热点温度和冷却方式满足对应标准要求"
+            },
+            "transformer_selection": {
+                "name": "变压器选型",
+                "check_formula": "voltage_level, capacity, vector_group, impedance",
+                "pass_criteria": "电压等级、容量、联结组别、阻抗和调压范围满足接入和运行要求"
+            },
+            "transformer_economy": {
+                "name": "变压器经济性",
+                "check_formula": "no_load_loss + load_loss * load_factor^2",
+                "pass_criteria": "能效等级、空载损耗、负载损耗和经济负载率满足规划口径"
             },
             "conductor_economy": {
                 "name": "导体经济截面积",
@@ -184,7 +221,8 @@ def get_all_validation_rules():
                     "A": "≤5min/户·年",
                     "B": "≤15min/户·年",
                     "C": "≤60min/户·年",
-                    "D": "≤120min/户·年"
+                    "D": "≤120min/户·年",
+                    "E": "≤240min/户·年"
                 }
             },
             "saifi_target": {
@@ -193,7 +231,8 @@ def get_all_validation_rules():
                     "A": "≤0.5次/户·年",
                     "B": "≤1.0次/户·年",
                     "C": "≤3.0次/户·年",
-                    "D": "≤5.0次/户·年"
+                    "D": "≤5.0次/户·年",
+                    "E": "≤8.0次/户·年"
                 }
             }
         },
@@ -224,6 +263,24 @@ def get_all_validation_rules():
                 "name": "电能质量校验",
                 "reference": "谐波规则参见电压质量校验中的谐波规则",
                 "description": "光伏接入后谐波电流含有率应满足GB/T 14549要求"
+            },
+            "energy_storage_safety": {
+                "name": "储能系统安全校验",
+                "reference": "GB/T 36558-2018",
+                "description": "储能系统应具备电池管理、绝缘监测、过充过放、过温和消防联动等安全保护",
+                "pass_criteria": "安全保护配置完整，运行边界和故障隔离策略满足储能系统通用技术条件"
+            },
+            "storage_grid_connection": {
+                "name": "储能并网接入校验",
+                "reference": "GB/T 34131-2023",
+                "description": "电化学储能站接入电网时应校核功率控制、无功支撑、电压适应性和并离网保护",
+                "pass_criteria": "储能站有功/无功控制、保护配置、电压频率适应性和电能质量满足并网要求"
+            },
+            "ev_charger_power_quality": {
+                "name": "充电设施电能质量校验",
+                "reference": "GB/T 18487.1-2023 / GB/T 14549-1993",
+                "description": "电动车导电充电设施接入后应满足功率因数、谐波和负荷接入要求",
+                "pass_criteria": "功率因数、谐波电流、接地和保护配置满足充电系统通用要求"
             }
         }
     }

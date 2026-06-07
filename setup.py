@@ -1,4 +1,12 @@
+from pathlib import Path
+
 from setuptools import find_packages, setup
+
+ROOT = Path(__file__).resolve().parent
+README = ROOT / "README.md"
+
+with README.open(encoding="utf-8") as readme_file:
+    long_description = readme_file.read()
 
 setup(
     name="cnpower",
@@ -6,7 +14,7 @@ setup(
     author="Gawg-AI",
     author_email="ahx@qq.com",
     description="中国10kV/0.4kV配电网工程参数库 - Chinese 10kV/0.4kV Distribution Grid Engineering Parameter Library",
-    long_description=open("README.md", encoding="utf-8").read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Gawg-AI/cnpower",
     license="MIT",

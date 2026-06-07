@@ -139,7 +139,7 @@ def get_all_protection():
                 "sensitivity_requirements": "熔断器额定电流应大于变压器最大负荷电流的1.5~2.0倍，且应躲过变压器励磁涌流；熔断时间特性应与低压侧保护选择性配合，允许短路电流下熔断时间不超过0.1s",
                 "coordination_notes": "高压熔断器与低压侧断路器保护配合，熔断器安秒特性曲线应位于低压保护曲线之上，确保低压侧故障由低压保护切除；熔断器最小熔断电流应大于变压器满载电流的1.5倍",
                 "standard": "DL/T 584",
-                "source_note": "DL/T 584-2021《3kV~110kV电网继电保护装置运行整定规程》及GB/T 15166.2-2008《高压交流熔断器》",
+                "source_note": "DL/T 584-2021《3kV~110kV电网继电保护装置运行整定规程》及GB/T 15166.2-2023《高压交流熔断器》",
             },
             "breaker_protection_large": {
                 "protection_scheme": "断路器保护",
