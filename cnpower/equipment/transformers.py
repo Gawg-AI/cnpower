@@ -1,0 +1,609 @@
+import math
+
+
+def _calc_three_phase_current_a(power_kva, voltage_kv):
+    if not power_kva or not voltage_kv:
+        return None
+    return round(float(power_kva) / (math.sqrt(3) * float(voltage_kv)), 1)
+
+
+def _loading_limits(kind):
+    base = {
+        "normal_percent": 80,
+        "economic_range_percent": [40, 75],
+        "n1_short_time_percent": 120,
+        "n1_short_time_duration_h": 2,
+        "emergency_percent": 130,
+        "emergency_duration_h": 0.5,
+        "source_type": "engineering_policy",
+        "note": "Planning defaults. Override with local utility rules, manufacturer loading guide, or project policy.",
+    }
+    if kind == "main":
+        base.update({
+            "normal_percent": 75,
+            "economic_range_percent": [45, 70],
+            "n1_short_time_percent": 110,
+            "emergency_percent": 120,
+        })
+    return base
+
+
+def _thermal_model(kind, cooling_type, insulation_class):
+    if kind == "dry":
+        return {
+            "standard": "GB/T 1094.11-2022",
+            "loading_guide": "GB/T 1094.12-2013",
+            "ambient_reference_c": 40,
+            "insulation_class": insulation_class,
+            "winding_temperature_alarm_c": 100,
+            "winding_temperature_trip_c": 130,
+            "hot_spot_temperature_limit_c": 155 if insulation_class == "F" else None,
+            "thermal_time_constant_h": None,
+            "relative_aging_model": "GB/T 1094.12 dry-type transformer loading guide",
+            "source_type": "standard_reference_and_engineering_default",
+        }
+    return {
+        "standard": "GB/T 1094.7-2024",
+        "ambient_reference_c": 20,
+        "cooling_type": cooling_type,
+        "top_oil_temperature_alarm_c": 80,
+        "top_oil_temperature_trip_c": 95,
+        "top_oil_temperature_limit_c": 105,
+        "hot_spot_temperature_limit_c": 120,
+        "thermal_time_constant_h": None,
+        "relative_aging_model": "GB/T 1094.7 relative thermal aging",
+        "source_type": "standard_reference_and_engineering_default",
+    }
+
+
+def _enhance_transformer_entry(entry, kind="distribution"):
+    if "sn_kva" in entry and "vn_hv_kv" in entry:
+        hv_current = _calc_three_phase_current_a(entry["sn_kva"], entry["vn_hv_kv"])
+        if hv_current is not None:
+            entry.setdefault("rated_current_hv_a", hv_current)
+    if "sn_kva" in entry and "vn_lv_kv" in entry:
+        lv_current = _calc_three_phase_current_a(entry["sn_kva"], entry["vn_lv_kv"])
+        if lv_current is not None:
+            entry.setdefault("rated_current_lv_a", lv_current)
+    if "sn_hv_mva" in entry and "vn_hv_kv" in entry:
+        entry.setdefault("rated_current_hv_a", _calc_three_phase_current_a(entry["sn_hv_mva"] * 1000, entry["vn_hv_kv"]))
+    if "sn_mv_mva" in entry and "vn_mv_kv" in entry:
+        entry.setdefault("rated_current_mv_a", _calc_three_phase_current_a(entry["sn_mv_mva"] * 1000, entry["vn_mv_kv"]))
+    if "sn_lv_mva" in entry and "vn_lv_kv" in entry:
+        entry.setdefault("rated_current_lv_a", _calc_three_phase_current_a(entry["sn_lv_mva"] * 1000, entry["vn_lv_kv"]))
+
+    rated_current = {"method": "S/(sqrt(3)*U)", "source_type": "derived_formula"}
+    for side in ("hv", "mv", "lv"):
+        value = entry.get(f"rated_current_{side}_a")
+        if value is not None:
+            rated_current[f"{side}_a"] = value
+    if len(rated_current) > 2:
+        entry.setdefault("rated_current", rated_current)
+
+    loading = _loading_limits("main" if kind == "main" else "distribution")
+    entry.setdefault("normal_loading_limit_percent", loading["normal_percent"])
+    entry.setdefault("economic_loading_range_percent", loading["economic_range_percent"])
+    entry.setdefault("n1_loading_limit_percent", loading["n1_short_time_percent"])
+    entry.setdefault("emergency_loading_limit_percent", loading["emergency_percent"])
+    entry.setdefault("loading_limits", loading)
+    entry.setdefault("design_life_years", 30)
+    entry.setdefault("maintenance_interval_years", 3 if kind == "main" else 5)
+
+    cooling_type = entry.get("cooling_type")
+    insulation_class = entry.get("insulation_class")
+    dry = kind == "dry" or insulation_class in ("F", "H") or entry.get("winding_type") == "cast_resin"
+    entry.setdefault("thermal_model", _thermal_model("dry" if dry else "oil", cooling_type, insulation_class))
+    entry.setdefault("energy_efficiency", {
+        "standard": "GB 20052-2024",
+        "grade": None,
+        "source_type": "standard_reference",
+        "note": "Grade-specific no-load and load-loss limits should be filled from GB 20052-2024 tables or manufacturer test reports.",
+    })
+    entry.setdefault("field_source_types", {
+        "rated_current": "derived_formula",
+        "loading_limits": "engineering_policy",
+        "thermal_model": "standard_reference_and_engineering_default",
+        "energy_efficiency": "standard_reference",
+    })
+    return entry
+
+
+def _enhance_all_transformers(data):
+    for category, models in data.items():
+        if category == "dry_type":
+            kind = "dry"
+        elif category in ("main_transformer_35kv", "main_transformer_110kv", "trafo3w_110kv"):
+            kind = "main"
+        elif category == "box_substation":
+            kind = "box"
+        else:
+            kind = "distribution"
+        for entry in models.values():
+            _enhance_transformer_entry(entry, kind=kind)
+    return data
+
+
+def get_all_transformers():
+    def _oil_10(sn, vk, vkr, pfe, i0, cooling, install, tw, ow, dl, dw, dh):
+        return {
+            "sn_kva": sn,
+            "vn_hv_kv": 10,
+            "vn_lv_kv": 0.4,
+            "vk_percent": vk,
+            "vkr_percent": vkr,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "vector_group": "Dyn11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -2,
+            "tap_max": 2,
+            "tap_step_percent": 2.5,
+            "tap_step_degree": 0,
+            "tap_changer_type": "Ratio",
+            "shift_degree": 30,
+            "cooling_type": cooling,
+            "winding_type": "layer",
+            "insulation_class": "A",
+            "installation": install,
+            "total_weight_kg": tw,
+            "oil_weight_kg": ow,
+            "dimension_l_mm": dl,
+            "dimension_w_mm": dw,
+            "dimension_h_mm": dh,
+            "vk0_percent": vk,
+            "vkr0_percent": vkr,
+            "mag0_percent": 100,
+            "mag0_rx": 0.0,
+            "si0_hv_partial": 0.9,
+            "zero_seq_note": "vk0=vk,vkr0=vkr为Dyn11从Y侧看简化假设;从D侧看零序阻抗近似无穷大;mag0=100为保守估算",
+            "standard": "GB/T 6451-2023",
+            "source_note": "国标表值",
+        }
+
+    oil_immersed = {}
+
+    s11_data = [
+        (30, 4.0, 2.0, 0.10, 2.8, "ONAN", "pole_mount", 340, 85, 980, 660, 1080),
+        (50, 4.0, 1.74, 0.13, 2.2, "ONAN", "pole_mount", 460, 105, 1050, 700, 1150),
+        (63, 4.0, 1.67, 0.15, 2.0, "ONAN", "pole_mount", 530, 120, 1100, 720, 1180),
+        (80, 4.0, 1.56, 0.18, 1.8, "ONAN", "pole_mount", 610, 135, 1150, 750, 1200),
+        (100, 4.0, 1.50, 0.20, 1.6, "ONAN", "pole_mount", 690, 150, 1200, 780, 1220),
+        (125, 4.0, 1.44, 0.24, 1.4, "ONAN", "pole_mount", 810, 170, 1250, 800, 1250),
+        (160, 4.0, 1.38, 0.28, 1.3, "ONAN", "pole_mount", 930, 195, 1300, 830, 1300),
+        (200, 4.0, 1.30, 0.34, 1.2, "ONAN", "pole_mount", 1070, 220, 1350, 860, 1350),
+        (250, 4.0, 1.20, 0.40, 1.1, "ONAN", "pole_mount", 1220, 250, 1400, 900, 1400),
+        (315, 4.0, 1.16, 0.48, 1.0, "ONAN", "pole_mount", 1420, 280, 1500, 950, 1450),
+        (400, 4.0, 1.08, 0.57, 0.9, "ONAN", "pole_mount", 1650, 320, 1550, 1000, 1500),
+        (500, 4.0, 1.02, 0.68, 0.85, "ONAN", "pole_mount", 1890, 360, 1600, 1050, 1550),
+        (630, 4.5, 0.98, 0.81, 0.78, "ONAN/ONAF", "pad_mount", 2850, 605, 1800, 1100, 1600),
+        (800, 4.5, 0.94, 0.98, 0.70, "ONAN/ONAF", "pad_mount", 3250, 680, 1900, 1150, 1650),
+        (1000, 4.5, 1.03, 1.15, 0.65, "ONAN/ONAF", "pad_mount", 3950, 820, 2000, 1200, 1700),
+        (1250, 4.5, 0.96, 1.36, 0.60, "ONAN/ONAF", "pad_mount", 4600, 950, 2100, 1250, 1750),
+        (1600, 5.0, 0.91, 1.64, 0.55, "ONAN/ONAF", "pad_mount", 5600, 1150, 2200, 1300, 1800),
+        (2000, 5.0, 0.88, 2.10, 0.50, "ONAN/ONAF", "pad_mount", 6500, 1350, 2400, 1400, 1900),
+        (2500, 5.0, 0.82, 2.50, 0.45, "ONAN/ONAF", "pad_mount", 7800, 1600, 2600, 1500, 2000),
+    ]
+    for d in s11_data:
+        entry = _oil_10(*d)
+        entry["deprecated"] = True
+        entry["deprecation_note"] = "S11不满足GB 20052-2024能效限定值,已淘汰,仅供存量设备参考"
+        oil_immersed[f"S11-{d[0]}/10"] = entry
+
+    s13_data = [
+        (30, 4.0, 2.0, 0.08, 2.2, "ONAN", "pole_mount", 340, 85, 980, 660, 1080),
+        (50, 4.0, 1.74, 0.10, 1.7, "ONAN", "pole_mount", 460, 105, 1050, 700, 1150),
+        (63, 4.0, 1.67, 0.12, 1.5, "ONAN", "pole_mount", 530, 120, 1100, 720, 1180),
+        (80, 4.0, 1.56, 0.14, 1.4, "ONAN", "pole_mount", 610, 135, 1150, 750, 1200),
+        (100, 4.0, 1.50, 0.15, 1.2, "ONAN", "pole_mount", 690, 150, 1200, 780, 1220),
+        (125, 4.0, 1.44, 0.18, 1.1, "ONAN", "pole_mount", 810, 170, 1250, 800, 1250),
+        (160, 4.0, 1.38, 0.22, 1.0, "ONAN", "pole_mount", 930, 195, 1300, 830, 1300),
+        (200, 4.0, 1.30, 0.27, 0.9, "ONAN", "pole_mount", 1070, 220, 1350, 860, 1350),
+        (250, 4.0, 1.20, 0.32, 0.85, "ONAN", "pole_mount", 1220, 250, 1400, 900, 1400),
+        (315, 4.0, 1.16, 0.38, 0.75, "ONAN", "pole_mount", 1420, 280, 1500, 950, 1450),
+        (400, 4.0, 1.08, 0.46, 0.7, "ONAN", "pole_mount", 1650, 320, 1550, 1000, 1500),
+        (500, 4.0, 1.02, 0.54, 0.65, "ONAN", "pole_mount", 1890, 360, 1600, 1050, 1550),
+        (630, 4.5, 0.98, 0.65, 0.60, "ONAN/ONAF", "pad_mount", 2850, 605, 1800, 1100, 1600),
+        (800, 4.5, 0.94, 0.78, 0.55, "ONAN/ONAF", "pad_mount", 3250, 680, 1900, 1150, 1650),
+        (1000, 4.5, 1.03, 0.92, 0.50, "ONAN/ONAF", "pad_mount", 3950, 820, 2000, 1200, 1700),
+        (1250, 4.5, 0.96, 1.08, 0.45, "ONAN/ONAF", "pad_mount", 4600, 950, 2100, 1250, 1750),
+        (1600, 5.0, 0.91, 1.30, 0.42, "ONAN/ONAF", "pad_mount", 5600, 1150, 2200, 1300, 1800),
+        (2000, 5.0, 0.88, 1.68, 0.38, "ONAN/ONAF", "pad_mount", 6500, 1350, 2400, 1400, 1900),
+        (2500, 5.0, 0.82, 2.00, 0.35, "ONAN/ONAF", "pad_mount", 7800, 1600, 2600, 1500, 2000),
+    ]
+    for d in s13_data:
+        oil_immersed[f"S13-{d[0]}/10"] = _oil_10(*d)
+
+    s15_data = [
+        (50, 4.0, 1.74, 0.06, 1.2, "ONAN", "pole_mount", 460, 105, 1050, 700, 1150),
+        (100, 4.0, 1.50, 0.10, 0.9, "ONAN", "pole_mount", 690, 150, 1200, 780, 1220),
+        (160, 4.0, 1.38, 0.14, 0.7, "ONAN", "pole_mount", 930, 195, 1300, 830, 1300),
+        (200, 4.0, 1.30, 0.17, 0.65, "ONAN", "pole_mount", 1070, 220, 1350, 860, 1350),
+        (250, 4.0, 1.20, 0.20, 0.60, "ONAN", "pole_mount", 1220, 250, 1400, 900, 1400),
+        (315, 4.0, 1.16, 0.24, 0.55, "ONAN", "pole_mount", 1420, 280, 1500, 950, 1450),
+        (400, 4.0, 1.08, 0.29, 0.50, "ONAN", "pole_mount", 1650, 320, 1550, 1000, 1500),
+        (500, 4.0, 1.02, 0.34, 0.48, "ONAN", "pole_mount", 1890, 360, 1600, 1050, 1550),
+        (630, 4.5, 0.98, 0.41, 0.42, "ONAN/ONAF", "pad_mount", 2850, 605, 1800, 1100, 1600),
+        (800, 4.5, 0.94, 0.49, 0.38, "ONAN/ONAF", "pad_mount", 3250, 680, 1900, 1150, 1650),
+        (1000, 4.5, 1.03, 0.58, 0.35, "ONAN/ONAF", "pad_mount", 3950, 820, 2000, 1200, 1700),
+        (1250, 4.5, 0.96, 0.68, 0.32, "ONAN/ONAF", "pad_mount", 4600, 950, 2100, 1250, 1750),
+        (1600, 5.0, 0.91, 0.82, 0.30, "ONAN/ONAF", "pad_mount", 5600, 1150, 2200, 1300, 1800),
+        (2000, 5.0, 0.88, 1.05, 0.28, "ONAN/ONAF", "pad_mount", 6500, 1350, 2400, 1400, 1900),
+        (2500, 5.0, 0.82, 1.25, 0.25, "ONAN/ONAF", "pad_mount", 7800, 1600, 2600, 1500, 2000),
+    ]
+    for d in s15_data:
+        oil_immersed[f"S15-{d[0]}/10"] = _oil_10(*d)
+
+    sh15_data = [
+        (30, 4.0, 2.0, 0.033, 0.6, "ONAN", "pole_mount", 340, 85, 980, 660, 1080),
+        (50, 4.0, 1.74, 0.043, 0.5, "ONAN", "pole_mount", 460, 105, 1050, 700, 1150),
+        (63, 4.0, 1.67, 0.050, 0.45, "ONAN", "pole_mount", 530, 120, 1100, 720, 1180),
+        (80, 4.0, 1.56, 0.060, 0.40, "ONAN", "pole_mount", 610, 135, 1150, 750, 1200),
+        (100, 4.0, 1.50, 0.075, 0.35, "ONAN", "pole_mount", 690, 150, 1200, 780, 1220),
+        (125, 4.0, 1.44, 0.085, 0.32, "ONAN", "pole_mount", 810, 170, 1250, 800, 1250),
+        (160, 4.0, 1.38, 0.100, 0.28, "ONAN", "pole_mount", 930, 195, 1300, 830, 1300),
+        (200, 4.0, 1.30, 0.120, 0.25, "ONAN", "pole_mount", 1070, 220, 1350, 860, 1350),
+        (250, 4.0, 1.20, 0.140, 0.22, "ONAN", "pole_mount", 1220, 250, 1400, 900, 1400),
+        (315, 4.0, 1.16, 0.170, 0.20, "ONAN", "pole_mount", 1420, 280, 1500, 950, 1450),
+        (400, 4.0, 1.08, 0.200, 0.18, "ONAN", "pole_mount", 1650, 320, 1550, 1000, 1500),
+        (500, 4.0, 1.02, 0.240, 0.16, "ONAN", "pole_mount", 1890, 360, 1600, 1050, 1550),
+        (630, 4.5, 0.98, 0.320, 0.14, "ONAN/ONAF", "pad_mount", 2850, 605, 1800, 1100, 1600),
+        (800, 4.5, 0.94, 0.380, 0.13, "ONAN/ONAF", "pad_mount", 3250, 680, 1900, 1150, 1650),
+        (1000, 4.5, 1.03, 0.450, 0.12, "ONAN/ONAF", "pad_mount", 3950, 820, 2000, 1200, 1700),
+        (1250, 4.5, 0.96, 0.530, 0.11, "ONAN/ONAF", "pad_mount", 4600, 950, 2100, 1250, 1750),
+        (1600, 5.0, 0.91, 0.630, 0.10, "ONAN/ONAF", "pad_mount", 5600, 1150, 2200, 1300, 1800),
+        (2000, 5.0, 0.88, 0.750, 0.09, "ONAN/ONAF", "pad_mount", 6500, 1350, 2400, 1400, 1900),
+        (2500, 5.0, 0.82, 0.900, 0.08, "ONAN/ONAF", "pad_mount", 7800, 1600, 2600, 1500, 2000),
+    ]
+    for d in sh15_data:
+        oil_immersed[f"SH15-{d[0]}/10"] = _oil_10(*d)
+
+    def _dry_10(sn, vk, vkr, pfe, i0, cooling, tw, dl, dw, dh):
+        return {
+            "sn_kva": sn,
+            "vn_hv_kv": 10,
+            "vn_lv_kv": 0.4,
+            "vk_percent": vk,
+            "vkr_percent": vkr,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "vector_group": "Dyn11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -2,
+            "tap_max": 2,
+            "tap_step_percent": 2.5,
+            "tap_step_degree": 0,
+            "tap_changer_type": "Ratio",
+            "shift_degree": 30,
+            "insulation_class": "F",
+            "cooling_type": cooling,
+            "winding_type": "cast_resin",
+            "enclosure_class": "IP20",
+            "installation": "indoor",
+            "total_weight_kg": tw,
+            "dimension_l_mm": dl,
+            "dimension_w_mm": dw,
+            "dimension_h_mm": dh,
+            "vk0_percent": vk,
+            "vkr0_percent": vkr,
+            "mag0_percent": 100,
+            "mag0_rx": 0.0,
+            "si0_hv_partial": 0.9,
+            "zero_seq_note": "vk0=vk,vkr0=vkr为Dyn11从Y侧看简化假设;从D侧看零序阻抗近似无穷大;mag0=100为保守估算",
+            "standard": "GB/T 10228-2023",
+            "source_note": "国标表值",
+        }
+
+    dry_type = {}
+
+    scb10_data = [
+        (30, 4.0, 2.20, 0.25, 3.5, "AN", 350, 800, 600, 900),
+        (50, 4.0, 2.00, 0.35, 3.0, "AN", 430, 850, 620, 950),
+        (80, 4.0, 1.80, 0.45, 2.6, "AN", 550, 900, 650, 1000),
+        (100, 4.0, 1.66, 0.50, 2.4, "AN", 620, 950, 680, 1050),
+        (125, 4.0, 1.58, 0.58, 2.1, "AN", 720, 1000, 700, 1100),
+        (160, 4.0, 1.50, 0.68, 1.9, "AN", 850, 1050, 730, 1150),
+        (200, 4.0, 1.42, 0.75, 1.7, "AN", 980, 1100, 760, 1200),
+        (250, 4.0, 1.35, 0.85, 1.5, "AN", 1150, 1150, 800, 1250),
+        (315, 4.0, 1.29, 1.00, 1.4, "AN", 1450, 1200, 850, 1300),
+        (400, 4.0, 1.22, 1.12, 1.2, "AN", 1750, 1300, 900, 1350),
+        (500, 4.0, 1.15, 1.25, 1.1, "AN", 2100, 1350, 950, 1400),
+        (630, 6.0, 1.10, 1.62, 1.0, "AN/AF", 2650, 1500, 1000, 1500),
+        (800, 6.0, 1.02, 1.90, 0.90, "AN/AF", 3200, 1600, 1050, 1550),
+        (1000, 6.0, 0.94, 2.20, 0.85, "AN/AF", 3800, 1700, 1100, 1600),
+        (1250, 6.0, 0.88, 2.50, 0.75, "AN/AF", 4500, 1800, 1150, 1650),
+        (1600, 6.0, 0.82, 2.80, 0.65, "AN/AF", 5200, 1900, 1200, 1700),
+        (2000, 6.0, 0.76, 3.20, 0.55, "AN/AF", 6200, 2100, 1300, 1800),
+        (2500, 6.0, 0.72, 3.60, 0.50, "AN/AF", 7200, 2300, 1400, 1900),
+    ]
+    for d in scb10_data:
+        dry_type[f"SCB10-{d[0]}/10"] = _dry_10(*d)
+
+    scb11_data = [
+        (30, 4.0, 2.20, 0.225, 3.15, "AN", 350, 800, 600, 900),
+        (50, 4.0, 2.00, 0.315, 2.70, "AN", 430, 850, 620, 950),
+        (80, 4.0, 1.80, 0.405, 2.34, "AN", 550, 900, 650, 1000),
+        (100, 4.0, 1.66, 0.45, 2.16, "AN", 620, 950, 680, 1050),
+        (125, 4.0, 1.58, 0.522, 1.89, "AN", 720, 1000, 700, 1100),
+        (160, 4.0, 1.50, 0.612, 1.71, "AN", 850, 1050, 730, 1150),
+        (200, 4.0, 1.42, 0.675, 1.53, "AN", 980, 1100, 760, 1200),
+        (250, 4.0, 1.35, 0.765, 1.35, "AN", 1150, 1150, 800, 1250),
+        (315, 4.0, 1.29, 0.90, 1.26, "AN", 1450, 1200, 850, 1300),
+        (400, 4.0, 1.22, 1.008, 1.08, "AN", 1750, 1300, 900, 1350),
+        (500, 4.0, 1.15, 1.125, 0.99, "AN", 2100, 1350, 950, 1400),
+        (630, 6.0, 1.10, 1.458, 0.90, "AN/AF", 2650, 1500, 1000, 1500),
+        (800, 6.0, 1.02, 1.71, 0.81, "AN/AF", 3200, 1600, 1050, 1550),
+        (1000, 6.0, 0.94, 1.98, 0.765, "AN/AF", 3800, 1700, 1100, 1600),
+        (1250, 6.0, 0.88, 2.25, 0.675, "AN/AF", 4500, 1800, 1150, 1650),
+        (1600, 6.0, 0.82, 2.52, 0.585, "AN/AF", 5200, 1900, 1200, 1700),
+        (2000, 6.0, 0.76, 2.88, 0.495, "AN/AF", 6200, 2100, 1300, 1800),
+        (2500, 6.0, 0.72, 3.24, 0.45, "AN/AF", 7200, 2300, 1400, 1900),
+    ]
+    for d in scb11_data:
+        dry_type[f"SCB11-{d[0]}/10"] = _dry_10(*d)
+
+    scb12_data = [
+        (30, 4.0, 2.20, 0.20, 2.80, "AN", 350, 800, 600, 900),
+        (50, 4.0, 2.00, 0.28, 2.40, "AN", 430, 850, 620, 950),
+        (80, 4.0, 1.80, 0.36, 2.08, "AN", 550, 900, 650, 1000),
+        (100, 4.0, 1.66, 0.40, 1.92, "AN", 620, 950, 680, 1050),
+        (125, 4.0, 1.58, 0.464, 1.68, "AN", 720, 1000, 700, 1100),
+        (160, 4.0, 1.50, 0.544, 1.52, "AN", 850, 1050, 730, 1150),
+        (200, 4.0, 1.42, 0.60, 1.36, "AN", 980, 1100, 760, 1200),
+        (250, 4.0, 1.35, 0.68, 1.20, "AN", 1150, 1150, 800, 1250),
+        (315, 4.0, 1.29, 0.80, 1.12, "AN", 1450, 1200, 850, 1300),
+        (400, 4.0, 1.22, 0.896, 0.96, "AN", 1750, 1300, 900, 1350),
+        (500, 4.0, 1.15, 1.00, 0.88, "AN", 2100, 1350, 950, 1400),
+        (630, 6.0, 1.10, 1.296, 0.80, "AN/AF", 2650, 1500, 1000, 1500),
+        (800, 6.0, 1.02, 1.52, 0.72, "AN/AF", 3200, 1600, 1050, 1550),
+        (1000, 6.0, 0.94, 1.76, 0.68, "AN/AF", 3800, 1700, 1100, 1600),
+        (1250, 6.0, 0.88, 2.00, 0.60, "AN/AF", 4500, 1800, 1150, 1650),
+        (1600, 6.0, 0.82, 2.24, 0.52, "AN/AF", 5200, 1900, 1200, 1700),
+        (2000, 6.0, 0.76, 2.56, 0.44, "AN/AF", 6200, 2100, 1300, 1800),
+        (2500, 6.0, 0.72, 2.88, 0.40, "AN/AF", 7200, 2300, 1400, 1900),
+    ]
+    for d in scb12_data:
+        dry_type[f"SCB12-{d[0]}/10"] = _dry_10(*d)
+
+    scb13_data = [
+        (30, 4.0, 2.20, 0.175, 2.45, "AN", 350, 800, 600, 900),
+        (50, 4.0, 2.00, 0.245, 2.10, "AN", 430, 850, 620, 950),
+        (80, 4.0, 1.80, 0.315, 1.82, "AN", 550, 900, 650, 1000),
+        (100, 4.0, 1.66, 0.35, 1.68, "AN", 620, 950, 680, 1050),
+        (125, 4.0, 1.58, 0.406, 1.47, "AN", 720, 1000, 700, 1100),
+        (160, 4.0, 1.50, 0.476, 1.33, "AN", 850, 1050, 730, 1150),
+        (200, 4.0, 1.42, 0.525, 1.19, "AN", 980, 1100, 760, 1200),
+        (250, 4.0, 1.35, 0.595, 1.05, "AN", 1150, 1150, 800, 1250),
+        (315, 4.0, 1.29, 0.70, 0.98, "AN", 1450, 1200, 850, 1300),
+        (400, 4.0, 1.22, 0.784, 0.84, "AN", 1750, 1300, 900, 1350),
+        (500, 4.0, 1.15, 0.875, 0.77, "AN", 2100, 1350, 950, 1400),
+        (630, 6.0, 1.10, 1.134, 0.70, "AN/AF", 2650, 1500, 1000, 1500),
+        (800, 6.0, 1.02, 1.33, 0.63, "AN/AF", 3200, 1600, 1050, 1550),
+        (1000, 6.0, 0.94, 1.54, 0.595, "AN/AF", 3800, 1700, 1100, 1600),
+        (1250, 6.0, 0.88, 1.75, 0.525, "AN/AF", 4500, 1800, 1150, 1650),
+        (1600, 6.0, 0.82, 1.96, 0.455, "AN/AF", 5200, 1900, 1200, 1700),
+        (2000, 6.0, 0.76, 2.24, 0.385, "AN/AF", 6200, 2100, 1300, 1800),
+        (2500, 6.0, 0.72, 2.52, 0.35, "AN/AF", 7200, 2300, 1400, 1900),
+    ]
+    for d in scb13_data:
+        dry_type[f"SCB13-{d[0]}/10"] = _dry_10(*d)
+
+    scbh15_data = [
+        (30, 4.0, 2.20, 0.088, 1.40, "AN", 350, 800, 600, 900),
+        (50, 4.0, 2.00, 0.123, 1.20, "AN", 430, 850, 620, 950),
+        (80, 4.0, 1.80, 0.158, 1.04, "AN", 550, 900, 650, 1000),
+        (100, 4.0, 1.66, 0.175, 0.96, "AN", 620, 950, 680, 1050),
+        (125, 4.0, 1.58, 0.203, 0.84, "AN", 720, 1000, 700, 1100),
+        (160, 4.0, 1.50, 0.238, 0.76, "AN", 850, 1050, 730, 1150),
+        (200, 4.0, 1.42, 0.263, 0.68, "AN", 980, 1100, 760, 1200),
+        (250, 4.0, 1.35, 0.298, 0.60, "AN", 1150, 1150, 800, 1250),
+        (315, 4.0, 1.29, 0.350, 0.56, "AN", 1450, 1200, 850, 1300),
+        (400, 4.0, 1.22, 0.392, 0.48, "AN", 1750, 1300, 900, 1350),
+        (500, 4.0, 1.15, 0.438, 0.44, "AN", 2100, 1350, 950, 1400),
+        (630, 6.0, 1.10, 0.567, 0.40, "AN/AF", 2650, 1500, 1000, 1500),
+        (800, 6.0, 1.02, 0.665, 0.36, "AN/AF", 3200, 1600, 1050, 1550),
+        (1000, 6.0, 0.94, 0.770, 0.34, "AN/AF", 3800, 1700, 1100, 1600),
+        (1250, 6.0, 0.88, 0.875, 0.30, "AN/AF", 4500, 1800, 1150, 1650),
+        (1600, 6.0, 0.82, 0.980, 0.26, "AN/AF", 5200, 1900, 1200, 1700),
+        (2000, 6.0, 0.76, 1.120, 0.22, "AN/AF", 6200, 2100, 1300, 1800),
+        (2500, 6.0, 0.72, 1.260, 0.20, "AN/AF", 7200, 2300, 1400, 1900),
+    ]
+    for d in scbh15_data:
+        dry_type[f"SCBH15-{d[0]}/10"] = _dry_10(*d)
+
+    box_substation = {}
+
+    def _box(sn, hv_fc, lv_fc, prot, cool, dl, dw, dh, std, src):
+        return {
+            "sn_kva": sn,
+            "vn_hv_kv": 10,
+            "vn_lv_kv": 0.4,
+            "hv_feeder_count": hv_fc,
+            "lv_feeder_count": lv_fc,
+            "protection_class": prot,
+            "cooling_type": cool,
+            "dimension_l_mm": dl,
+            "dimension_w_mm": dw,
+            "dimension_h_mm": dh,
+            "standard": std,
+            "source_note": src,
+        }
+
+    zbw_data = [
+        (50, 2, 6, "IP33", "ONAN", 1800, 1200, 1600),
+        (100, 2, 8, "IP33", "ONAN", 2000, 1400, 1700),
+        (160, 2, 8, "IP33", "ONAN", 2200, 1500, 1750),
+        (200, 3, 8, "IP33", "ONAN", 2300, 1550, 1800),
+        (250, 3, 10, "IP33", "ONAN", 2400, 1600, 1850),
+        (315, 3, 10, "IP33", "ONAN", 2500, 1650, 1900),
+        (400, 4, 10, "IP33", "ONAN", 2600, 1700, 1950),
+        (500, 4, 12, "IP33", "ONAN", 2700, 1750, 2000),
+        (630, 4, 12, "IP33", "ONAN", 3000, 1900, 2100),
+        (800, 4, 12, "IP33", "ONAN", 3200, 2000, 2200),
+        (1000, 4, 12, "IP33", "ONAN", 3500, 2100, 2300),
+        (1250, 4, 12, "IP33", "ONAN", 3800, 2200, 2400),
+    ]
+    for d in zbw_data:
+        box_substation[f"ZBW-{d[0]}/10"] = _box(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7], "GB/T 17467-2020", "国标表值")
+
+    zb_data = [
+        (100, 2, 4, "IP44", "ONAN", 1600, 1100, 1400),
+        (160, 2, 4, "IP44", "ONAN", 1700, 1200, 1450),
+        (200, 2, 6, "IP44", "ONAN", 1800, 1250, 1500),
+        (250, 3, 6, "IP44", "ONAN", 1900, 1300, 1550),
+        (315, 3, 6, "IP44", "ONAN", 2000, 1350, 1600),
+        (400, 3, 6, "IP44", "ONAN", 2100, 1400, 1650),
+        (500, 3, 8, "IP44", "ONAN", 2200, 1450, 1700),
+        (630, 4, 8, "IP44", "ONAN", 2400, 1550, 1800),
+    ]
+    for d in zb_data:
+        box_substation[f"ZB-{d[0]}/10"] = _box(d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7], "GB/T 17467-2020", "国标表值")
+
+    main_transformer_35kv = {}
+
+    def _main35(sn, vk, vkr, pfe, i0, tw, ow):
+        return {
+            "sn_kva": sn,
+            "vn_hv_kv": 35,
+            "vn_lv_kv": 10.5,
+            "vk_percent": vk,
+            "vkr_percent": vkr,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "vector_group": "YNd11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -3,
+            "tap_max": 3,
+            "tap_step_percent": 2.5,
+            "shift_degree": 30,
+            "cooling_type": "ONAN/ONAF",
+            "total_weight_kg": tw,
+            "oil_weight_kg": ow,
+            "vk0_percent": vk,
+            "vkr0_percent": vkr,
+            "mag0_percent": 100,
+            "mag0_rx": 0.0,
+            "si0_hv_partial": 0.9,
+            "zero_seq_note": "vk0=vk,vkr0=vkr为YNd11简化假设;实际零序参数需根据变压器结构确定",
+            "standard": "GB/T 6451-2023",
+            "source_note": "国标表值",
+        }
+
+    sz11_35_data = [
+        (2000, 6.5, 0.85, 2.0, 1.0, 5500, 1400),
+        (2500, 6.5, 0.82, 2.4, 0.95, 6500, 1600),
+        (3150, 6.5, 0.80, 2.8, 0.90, 7800, 1900),
+        (4000, 6.5, 0.78, 3.4, 0.85, 9500, 2200),
+        (5000, 6.5, 0.76, 4.0, 0.80, 11000, 2600),
+        (6300, 6.5, 0.74, 4.9, 0.75, 13500, 3100),
+        (8000, 7.0, 0.72, 5.8, 0.70, 16500, 3800),
+        (10000, 7.0, 0.70, 6.9, 0.65, 20000, 4500),
+        (12500, 7.0, 0.68, 8.2, 0.60, 24000, 5300),
+        (16000, 7.0, 0.66, 9.8, 0.55, 29000, 6200),
+        (20000, 7.5, 0.64, 11.6, 0.50, 35000, 7500),
+        (25000, 7.5, 0.62, 13.7, 0.45, 42000, 8800),
+        (31500, 7.5, 0.60, 16.2, 0.40, 50000, 10500),
+    ]
+    for d in sz11_35_data:
+        main_transformer_35kv[f"SZ11-{d[0]}/35"] = _main35(*d)
+
+    main_transformer_110kv = {}
+
+    def _main110(sn, vkr, pfe, i0, tw, ow):
+        return {
+            "sn_kva": sn,
+            "vn_hv_kv": 110,
+            "vn_lv_kv": 10.5,
+            "vk_percent": 10.5,
+            "vkr_percent": vkr,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "vector_group": "YNd11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -8,
+            "tap_max": 8,
+            "tap_step_percent": 1.25,
+            "shift_degree": 30,
+            "cooling_type": "ONAN/ONAF",
+            "total_weight_kg": tw,
+            "oil_weight_kg": ow,
+            "vk0_percent": 10.5,
+            "vkr0_percent": vkr,
+            "mag0_percent": 100,
+            "mag0_rx": 0.0,
+            "si0_hv_partial": 0.9,
+            "zero_seq_note": "vk0=vk,vkr0=vkr为YNd11简化假设;实际零序参数需根据变压器结构确定",
+            "standard": "GB/T 6451-2023",
+            "source_note": "国标表值",
+        }
+
+    sfz11_110_data = [
+        (10000, 0.75, 10.0, 0.80, 30000, 8000),
+        (12500, 0.72, 11.8, 0.75, 35000, 9200),
+        (16000, 0.70, 14.0, 0.70, 42000, 10800),
+        (20000, 0.68, 16.5, 0.65, 50000, 12500),
+        (25000, 0.66, 19.5, 0.60, 58000, 14200),
+        (31500, 0.64, 23.0, 0.55, 68000, 16500),
+        (40000, 0.62, 27.5, 0.50, 82000, 19500),
+        (50000, 0.60, 32.0, 0.45, 98000, 23000),
+        (63000, 0.58, 38.0, 0.40, 115000, 27000),
+    ]
+    for d in sfz11_110_data:
+        main_transformer_110kv[f"SFZ11-{d[0]}/110"] = _main110(*d)
+
+    trafo3w_110kv = {}
+
+    def _trafo3w(sn_mva, vkr_hv, vkr_mv, vkr_lv, pfe, i0):
+        return {
+            "sn_hv_mva": sn_mva,
+            "sn_mv_mva": sn_mva,
+            "sn_lv_mva": sn_mva,
+            "vn_hv_kv": 110,
+            "vn_mv_kv": 38.5,
+            "vn_lv_kv": 11,
+            "vk_hv_percent": 10.5,
+            "vk_mv_percent": 6.5,
+            "vk_lv_percent": 17.5,
+            "vkr_hv_percent": vkr_hv,
+            "vkr_mv_percent": vkr_mv,
+            "vkr_lv_percent": vkr_lv,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "shift_mv_degree": 0,
+            "shift_lv_degree": 30,
+            "vector_group": "YNyn0d11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -8,
+            "tap_max": 8,
+            "tap_step_percent": 1.25,
+            "tap_changer_type": "Ratio",
+            "standard": "GB/T 6451-2023",
+            "source_note": "国标表值",
+        }
+
+    sfsl_data = [
+        (10, 0.80, 0.65, 0.90, 14.0, 1.1),
+        (12.5, 0.78, 0.62, 0.88, 16.5, 1.0),
+        (16, 0.76, 0.60, 0.85, 19.5, 0.95),
+        (20, 0.74, 0.58, 0.82, 23.0, 0.90),
+        (31.5, 0.70, 0.55, 0.78, 32.0, 0.75),
+        (40, 0.68, 0.53, 0.75, 38.0, 0.65),
+        (50, 0.66, 0.50, 0.72, 45.0, 0.55),
+        (63, 0.64, 0.48, 0.70, 53.0, 0.50),
+    ]
+    for d in sfsl_data:
+        sn_int = int(d[0]) if d[0] == int(d[0]) else d[0]
+        trafo3w_110kv[f"SFSL-{sn_int}/110"] = _trafo3w(*d)
+
+    return _enhance_all_transformers({
+        "oil_immersed": oil_immersed,
+        "dry_type": dry_type,
+        "box_substation": box_substation,
+        "main_transformer_35kv": main_transformer_35kv,
+        "main_transformer_110kv": main_transformer_110kv,
+        "trafo3w_110kv": trafo3w_110kv,
+    })
