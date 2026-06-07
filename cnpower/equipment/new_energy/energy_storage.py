@@ -10,8 +10,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-100kWh": {
                 "rated_capacity_kwh": 100,
@@ -22,8 +22,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-200kWh": {
                 "rated_capacity_kwh": 200,
@@ -34,8 +34,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-500kWh": {
                 "rated_capacity_kwh": 500,
@@ -46,8 +46,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-1000kWh": {
                 "rated_capacity_kwh": 1000,
@@ -58,8 +58,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-2000kWh": {
                 "rated_capacity_kwh": 2000,
@@ -70,8 +70,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-5000kWh": {
                 "rated_capacity_kwh": 5000,
@@ -82,8 +82,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LFP-10000kWh": {
                 "rated_capacity_kwh": 10000,
@@ -94,8 +94,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 6000,
                 "self_discharge_percent_per_month": 3,
                 "round_trip_efficiency_percent": 95,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             }
         },
         "lead_carbon_battery": {
@@ -108,8 +108,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 3000,
                 "self_discharge_percent_per_month": 5,
                 "round_trip_efficiency_percent": 85,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LC-200kWh": {
                 "rated_capacity_kwh": 200,
@@ -120,8 +120,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 3000,
                 "self_discharge_percent_per_month": 5,
                 "round_trip_efficiency_percent": 85,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LC-500kWh": {
                 "rated_capacity_kwh": 500,
@@ -132,8 +132,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 3000,
                 "self_discharge_percent_per_month": 5,
                 "round_trip_efficiency_percent": 85,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LC-1000kWh": {
                 "rated_capacity_kwh": 1000,
@@ -144,8 +144,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 3000,
                 "self_discharge_percent_per_month": 5,
                 "round_trip_efficiency_percent": 85,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             },
             "LC-2000kWh": {
                 "rated_capacity_kwh": 2000,
@@ -156,8 +156,8 @@ def get_all_energy_storage():
                 "cycle_life_count": 3000,
                 "self_discharge_percent_per_month": 5,
                 "round_trip_efficiency_percent": 85,
-                "standard": "GB/T 36558-2018",
-                "source_note": "参数依据GB/T 36558-2018及主流厂家产品手册"
+                "standard": "GB/T 36558-2023",
+                "source_note": "参数依据GB/T 36558-2023及主流厂家产品手册"
             }
         },
         "pcs": {

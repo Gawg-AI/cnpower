@@ -132,58 +132,58 @@ def get_all_standards():
             "related_rules": ["conductor_economy", "conductor_ampacity", "conductor_voltage_drop"]
         },
         {
-            "code": "GB/T 12325-2008",
+            "code": "GB/T 12325-2023",
             "name": "电能质量 供电电压偏差",
-            "year": 2008,
+            "year": 2023,
             "scope": "电力系统供电电压偏差的允许值",
             "related_equipment": [],
             "related_rules": ["voltage_deviation"]
         },
         {
-            "code": "GB/T 12326-2008",
+            "code": "GB/T 12326-2023",
             "name": "电能质量 电压波动和闪变",
-            "year": 2008,
+            "year": 2023,
             "scope": "电力系统电压波动和闪变的允许值",
             "related_equipment": [],
             "related_rules": ["voltage_fluctuation_flicker"]
         },
         {
-            "code": "GB/T 14549-1993",
+            "code": "GB/T 14549-2024",
             "name": "电能质量 公用电网谐波",
-            "year": 1993,
-            "scope": "公用电网谐波电压含有率和总谐波畸变率的允许值",
+            "year": 2024,
+            "scope": "公用电网谐波电压含有率和总谐波畸变率的允许值（含间谐波2~9kHz评估）",
             "related_equipment": [],
             "related_rules": ["harmonic"]
         },
         {
-            "code": "GB/T 15543-2008",
+            "code": "GB/T 15543-2023",
             "name": "电能质量 三相电压不平衡",
-            "year": 2008,
+            "year": 2023,
             "scope": "电力系统三相电压不平衡度的允许值",
             "related_equipment": [],
             "related_rules": ["three_phase_unbalance"]
         },
         {
-            "code": "GB/T 15544-2023",
-            "name": "三相交流系统短路电流计算",
+            "code": "GB/T 15544.1-2023",
+            "name": "三相交流系统短路电流计算 第1部分：电流计算",
             "year": 2023,
             "scope": "三相交流系统短路电流计算方法",
             "related_equipment": ["断路器", "电缆"],
             "related_rules": ["three_phase_max", "single_phase_min", "cable_thermal_stability"]
         },
         {
-            "code": "GB 50052-2009",
+            "code": "GB 50052-2023",
             "name": "供配电系统设计规范",
-            "year": 2009,
-            "scope": "供配电系统的设计原则和要求",
+            "year": 2023,
+            "scope": "供配电系统的设计原则和要求（含分布式电源接入条件、660V电压等级）",
             "related_equipment": ["变压器", "导体", "断路器"],
             "related_rules": ["transformer_loading", "conductor_economy", "conductor_ampacity", "breaker_rating"]
         },
         {
-            "code": "GB 50054-2011",
+            "code": "GB 50054-2023",
             "name": "低压配电设计规范",
-            "year": 2011,
-            "scope": "低压配电网络的设计原则和要求",
+            "year": 2023,
+            "scope": "低压配电网络的设计原则和要求（适用范围扩展至1000V，含SELV/PELV/FELV系统、电气火灾防护）",
             "related_equipment": ["低压导体", "低压开关"],
             "related_rules": ["conductor_ampacity", "conductor_voltage_drop"]
         },
@@ -260,10 +260,10 @@ def get_all_standards():
             "related_rules": []
         },
         {
-            "code": "GB/T 36558-2018",
+            "code": "GB/T 36558-2023",
             "name": "电力系统电化学储能系统通用技术条件",
-            "year": 2018,
-            "scope": "电力系统电化学储能系统的通用技术要求",
+            "year": 2023,
+            "scope": "电力系统电化学储能系统的通用技术要求（含钠离子电池、水电解制氢/燃料电池；含功率控制响应时间、一次调频、惯量响应、黑启动、故障穿越、能量转换效率要求）",
             "related_equipment": ["energy_storage"],
             "related_rules": ["energy_storage_safety"]
         },
@@ -284,10 +284,10 @@ def get_all_standards():
             "related_rules": ["ev_charger_power_quality", "power_quality"]
         },
         {
-            "code": "GB/T 27930-2015",
+            "code": "GB/T 27930-2023",
             "name": "电动车非车载充电机与充电设备之间的通信协议",
-            "year": 2015,
-            "scope": "电动车充电通信协议规定",
+            "year": 2023,
+            "scope": "电动车非车载充电机与BMS之间的通信协议（含大功率充电、即插即充、预约充电、放电功能）",
             "related_equipment": ["充电桩"],
             "related_rules": []
         },
@@ -417,6 +417,22 @@ def get_all_standards():
             "year": 2018,
             "scope": "电力系统用蓄电池的技术要求",
             "related_equipment": ["蓄电池"],
+            "related_rules": []
+        },
+        {
+            "code": "GB/T 36276-2023",
+            "name": "电力储能用锂离子电池",
+            "year": 2023,
+            "scope": "电力储能用锂离子电池的技术要求和安全性能",
+            "related_equipment": ["储能系统"],
+            "related_rules": ["energy_storage_safety"]
+        },
+        {
+            "code": "GB/T 27930.2-2024",
+            "name": "电动汽车非车载充电机与车辆控制系统之间的通信协议 第2部分：直流充电协议",
+            "year": 2024,
+            "scope": "基于GB/T 20234.3直流充电接口的通信协议",
+            "related_equipment": ["充电桩"],
             "related_rules": []
         },
         {

@@ -519,8 +519,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 65,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW45-3200": {
                 "type": "acb",
@@ -530,8 +530,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 80,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW45-4000": {
                 "type": "acb",
@@ -541,8 +541,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 100,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW45-5000": {
                 "type": "acb",
@@ -552,8 +552,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 100,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW45-6300": {
                 "type": "acb",
@@ -563,8 +563,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 120,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-200": {
                 "type": "acb",
@@ -574,8 +574,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 20,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-400": {
                 "type": "acb",
@@ -585,8 +585,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 25,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-630": {
                 "type": "acb",
@@ -596,8 +596,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 30,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-1000": {
                 "type": "acb",
@@ -607,8 +607,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 40,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-1600": {
                 "type": "acb",
@@ -618,8 +618,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 40,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-2500": {
                 "type": "acb",
@@ -629,8 +629,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 60,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DW15-4000": {
                 "type": "acb",
@@ -640,8 +640,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 80,
                 "pole_count": 3,
                 "trip_type": "electronic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DZ20-100": {
                 "type": "mccb",
@@ -651,8 +651,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 14,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DZ20-225": {
                 "type": "mccb",
@@ -662,8 +662,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 25,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DZ20-400": {
                 "type": "mccb",
@@ -673,8 +673,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 30,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "DZ20-630": {
                 "type": "mccb",
@@ -684,8 +684,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 30,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-63": {
                 "type": "mccb",
@@ -695,8 +695,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 25,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-100": {
                 "type": "mccb",
@@ -706,8 +706,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 35,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-225": {
                 "type": "mccb",
@@ -717,8 +717,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 35,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-400": {
                 "type": "mccb",
@@ -728,8 +728,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 50,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-630": {
                 "type": "mccb",
@@ -739,8 +739,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 50,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "CM1-800": {
                 "type": "mccb",
@@ -750,8 +750,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 50,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB 50054-2011",
-                "source_note": "参数依据GB 50054-2011及主流厂家产品手册"
+                "standard": "GB 50054-2023",
+                "source_note": "参数依据GB 50054-2023及主流厂家产品手册"
             },
             "MCB-1P": {
                 "type": "mcb",
@@ -761,8 +761,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 6,
                 "pole_count": 1,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB/T 10963",
-                "source_note": "参数依据GB/T 10963及主流厂家产品手册"
+                "standard": "GB/T 10963.1-2023",
+                "source_note": "参数依据GB/T 10963.1-2023及主流厂家产品手册"
             },
             "MCB-2P": {
                 "type": "mcb",
@@ -772,8 +772,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 6,
                 "pole_count": 2,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB/T 10963",
-                "source_note": "参数依据GB/T 10963及主流厂家产品手册"
+                "standard": "GB/T 10963.1-2023",
+                "source_note": "参数依据GB/T 10963.1-2023及主流厂家产品手册"
             },
             "MCB-3P": {
                 "type": "mcb",
@@ -783,8 +783,8 @@ def get_all_switchgear():
                 "breaking_capacity_ka": 6,
                 "pole_count": 3,
                 "trip_type": "thermal_magnetic",
-                "standard": "GB/T 10963",
-                "source_note": "参数依据GB/T 10963及主流厂家产品手册"
+                "standard": "GB/T 10963.1-2023",
+                "source_note": "参数依据GB/T 10963.1-2023及主流厂家产品手册"
             }
         },
         "recloser": {

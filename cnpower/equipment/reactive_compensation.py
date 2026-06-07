@@ -18,7 +18,7 @@ def get_all_reactive_compensation():
             "dielectric_loss_percent": 0.05,
             "phase_count": 3,
             "connection_type": "delta",
-            "standard": "GB/T 11024",
+            "standard": "GB/T 11024-2019",
             "source_note": "BSMJ系列10kV并联电容器典型参数(角型接法)"
         }
 
@@ -35,7 +35,7 @@ def get_all_reactive_compensation():
             "dielectric_loss_percent": 0.05,
             "phase_count": 3,
             "connection_type": "star",
-            "standard": "GB/T 11024",
+            "standard": "GB/T 11024-2019",
             "source_note": "BSMJ系列10kV并联电容器典型参数(星型接法)"
         }
 

@@ -24,7 +24,7 @@ def get_compliance_constraint_library():
                 {"code": "GB/T 6451-2023", "name": "油浸式电力变压器技术参数和要求", "use": "油浸式变压器参数与温升"},
                 {"code": "GB/T 10228-2023", "name": "干式电力变压器技术参数和要求", "use": "干式变压器参数与温升"},
                 {"code": "GB/T 1094.3-2017", "name": "电力变压器 第3部分：绝缘水平、绝缘试验和外绝缘空气间隙", "use": "变压器绝缘水平"},
-                {"code": "GB 1094.5-2008", "name": "电力变压器 第5部分：承受短路的能力", "use": "变压器短路承受能力"},
+                {"code": "GB/T 1094.5-2008", "name": "电力变压器 第5部分：承受短路的能力", "use": "变压器短路承受能力"},
                 {"code": "GB/T 17467-2020", "name": "高压/低压预装式变电站", "use": "箱式变电站成套要求"},
                 {"code": "GB/T 12706.1~3-2020", "name": "额定电压1kV到35kV挤包绝缘电力电缆及附件", "use": "低压、中压电缆参数、试验和热稳定"},
                 {"code": "GB/T 15166.2-2023", "name": "高压交流熔断器 第2部分：限流熔断器", "use": "高压熔断器开断能力和时间-电流特性"},
@@ -32,6 +32,9 @@ def get_compliance_constraint_library():
                 {"code": "GB/T 14048.2-2020", "name": "低压开关设备和控制设备 第2部分：断路器", "use": "低压ACB/MCCB分断能力和额定值"},
                 {"code": "GB/T 20840.2-2014", "name": "互感器 第2部分：电流互感器的补充技术要求", "use": "CT热稳定、动稳定和准确级"},
                 {"code": "GB/T 20840.3-2013", "name": "互感器 第3部分：电磁式电压互感器的补充技术要求", "use": "PT二次负荷和准确级"},
+                {"code": "GB/T 36276-2023", "name": "电力储能用锂离子电池", "use": "储能电池SOC范围和安全性能"},
+                {"code": "GB 50054-2023", "name": "低压配电设计规范", "use": "低压配电设计和电气火灾防护"},
+                {"code": "GB 50052-2023", "name": "供配电系统设计规范", "use": "供配电系统设计原则"},
             ],
             "calculation_boundary": {
                 "pandapower_outputs": [
@@ -82,21 +85,21 @@ def get_compliance_constraint_library():
         "constraints_by_equipment_type": {
             "source_grid": [
                 _check("SRC_SC_001", "上级电网最大/最小短路容量完整性", ["s_sc_max_mva", "s_sc_min_mva", "rx_max", "rx_min"], [], "短路计算前必须录入上级电网最大、最小短路容量和R/X比。", "GB/T 15544.1-2023"),
-                _check("SRC_V_001", "电源电压设定范围", ["vn_kv", "vm_pu"], [], "vm_pu应处于规划或运行允许电压范围内。", "GB/T 12325-2008"),
+                _check("SRC_V_001", "电源电压设定范围", ["vn_kv", "vm_pu"], [], "vm_pu应处于规划或运行允许电压范围内。", "GB/T 12325-2023"),
             ],
             "busbar": [
-                _check("BUS_V_001", "母线运行电压偏差", ["vn_kv"], ["vm_pu"], "母线vm_pu应满足对应电压等级允许范围。", "GB/T 12325-2008"),
+                _check("BUS_V_001", "母线运行电压偏差", ["vn_kv"], ["vm_pu"], "母线vm_pu应满足对应电压等级允许范围。", "GB/T 12325-2023"),
                 _check("BUS_SC_001", "母线短路电流水平记录", ["vn_kv"], ["ikss_ka", "ip_ka", "ith_ka"], "母线短路电流作为下游开关、母排、互感器、箱变校验输入。", "GB/T 15544.1-2023", "warning"),
             ],
             "transformer_2w": [
-                _check("TR2_LOAD_001", "双绕组变压器正常负载率", ["sn_mva"], ["loading_percent"], "正常运行负载率不应超过工程参数库设定的normal_loading_limit_percent。", "GB 50052-2009"),
+                _check("TR2_LOAD_001", "双绕组变压器正常负载率", ["sn_mva"], ["loading_percent"], "正常运行负载率不应超过工程参数库设定的normal_loading_limit_percent。", "GB 50052-2023"),
                 _check("TR2_SC_PARAM_001", "双绕组变压器短路参数完整性", ["vk_percent", "vkr_percent", "vk0_percent", "vkr0_percent"], [], "三相和接地短路计算应具备正序及零序阻抗参数。", "GB/T 15544.1-2023"),
-                _check("TR2_THERMAL_001", "变压器短时热稳定校核", ["short_time_thermal_current_ka", "short_time_duration_s"], ["ith_ka"], "ith_ka不得超过变压器短时热稳定电流。", "GB 1094.5-2008 / GB/T 6451-2023 / GB/T 10228-2023"),
+                _check("TR2_THERMAL_001", "变压器短时热稳定校核", ["short_time_thermal_current_ka", "short_time_duration_s"], ["ith_ka"], "ith_ka不得超过变压器短时热稳定电流。", "GB/T 1094.5-2008 / GB/T 6451-2023 / GB/T 10228-2023"),
                 _check("TR2_INS_001", "变压器绝缘水平校核", ["rated_voltage_kv", "power_frequency_withstand_kv", "lightning_impulse_withstand_kv"], [], "绝缘水平应不低于设备最高电压对应要求。", "GB/T 1094.3-2017"),
                 _check("TR2_TEMP_001", "变压器温升/温控保护", ["cooling_type", "insulation_class"], ["loading_percent"], "长期负载、冷却方式和温度保护定值应匹配。", "GB/T 6451-2023 / GB/T 10228-2023"),
             ],
             "transformer_3w": [
-                _check("TR3_LOAD_001", "三绕组变压器负载率", ["sn_hv_mva", "sn_mv_mva", "sn_lv_mva"], ["loading_percent"], "各侧绕组负载率不应超过规划约束。", "GB 50052-2009"),
+                _check("TR3_LOAD_001", "三绕组变压器负载率", ["sn_hv_mva", "sn_mv_mva", "sn_lv_mva"], ["loading_percent"], "各侧绕组负载率不应超过规划约束。", "GB 50052-2023"),
                 _check("TR3_SC_PARAM_001", "三绕组短路阻抗完整性", ["vk_hv_percent", "vk_mv_percent", "vk_lv_percent", "vkr_hv_percent", "vkr_mv_percent", "vkr_lv_percent"], [], "三绕组短路计算前应具备各绕组短路阻抗。", "GB/T 15544.1-2023"),
             ],
             "box_substation": [
@@ -107,13 +110,13 @@ def get_compliance_constraint_library():
             "line_cable": [
                 _check("CAB_LOAD_001", "电缆持续载流量", ["max_i_ka"], ["i_ka"], "运行电流不得超过敷设方式修正后的允许载流量。", "GB/T 12706.1~3-2020"),
                 _check("CAB_THERMAL_001", "电缆短路热稳定", ["short_circuit_current_1s_ka"], ["ith_ka"], "按I²t折算后，短路热效应不得超过电缆热稳定能力。", "GB/T 12706.1~3-2020"),
-                _check("CAB_VDROP_001", "电缆压降", ["r_ohm_per_km", "x_ohm_per_km", "length_km"], ["voltage_drop_percent"], "线路末端压降应满足电压质量和规划目标。", "GB 50054-2011 / GB 50052-2009"),
+                _check("CAB_VDROP_001", "电缆压降", ["r_ohm_per_km", "x_ohm_per_km", "length_km"], ["voltage_drop_percent"], "线路末端压降应满足电压质量和规划目标。", "GB 50054-2023 / GB 50052-2023"),
                 _check("CAB_ZERO_001", "电缆零序参数完整性", ["r0_ohm_per_km", "x0_ohm_per_km", "c0_nf_per_km"], [], "接地短路计算应具备零序参数。", "GB/T 15544.1-2023", "warning"),
             ],
             "line_overhead": [
                 _check("OHL_LOAD_001", "架空线路持续载流量", ["max_i_ka"], ["i_ka"], "运行电流不得超过环境修正后的允许载流量。", "GB/T 1179-2017"),
                 _check("OHL_THERMAL_001", "架空导线热稳定", ["short_circuit_current_1s_ka"], ["ith_ka"], "导线短路热稳定应满足故障切除时间。", "GB/T 1179-2017"),
-                _check("OHL_VDROP_001", "架空线路压降", ["r_ohm_per_km", "x_ohm_per_km", "length_km"], ["voltage_drop_percent"], "末端压降应满足电压质量和规划目标。", "GB 50052-2009"),
+                _check("OHL_VDROP_001", "架空线路压降", ["r_ohm_per_km", "x_ohm_per_km", "length_km"], ["voltage_drop_percent"], "末端压降应满足电压质量和规划目标。", "GB 50052-2023"),
                 _check("OHL_MECH_001", "架空线路机械条件", ["span_m", "ice_thickness_mm", "wind_pressure_pa"], [], "杆塔、档距、覆冰、风压应满足线路机械设计条件。", "GB 50061-2010", "warning"),
             ],
             "switchgear_cabinet": [
@@ -148,9 +151,9 @@ def get_compliance_constraint_library():
                 _check("SEC_COORD_001", "分段器与上级重合器配合", ["counting_times"], [], "计数次数和动作逻辑应与上级重合器时序配合。", "DL/T 584-2021"),
             ],
             "circuit_breaker_lv": [
-                _check("LVCB_I_001", "低压断路器额定电流", ["rated_current_a"], ["max_current_a"], "最大工作电流不得超过整定或额定电流。", "GB/T 14048.2-2020 / GB 50054-2011"),
+                _check("LVCB_I_001", "低压断路器额定电流", ["rated_current_a"], ["max_current_a"], "最大工作电流不得超过整定或额定电流。", "GB/T 14048.2-2020 / GB 50054-2023"),
                 _check("LVCB_BREAK_001", "低压断路器分断能力", ["breaking_capacity_ka"], ["ikss_ka"], "安装点最大短路电流不得超过分断能力。", "GB/T 14048.2-2020"),
-                _check("LVCB_SELECT_001", "低压保护选择性", ["trip_type", "time_current_curve_data"], ["min_fault_current_a"], "上下级低压保护应具备选择性和灵敏度。", "GB 50054-2011", "warning"),
+                _check("LVCB_SELECT_001", "低压保护选择性", ["trip_type", "time_current_curve_data"], ["min_fault_current_a"], "上下级低压保护应具备选择性和灵敏度。", "GB 50054-2023", "warning"),
             ],
             "ring_main_unit": [
                 _check("RMU_I_001", "环网柜额定电流", ["rated_current_a"], ["max_current_a"], "最大工作电流不得超过额定电流。", "GB/T 3906-2020 / GB/T 11022-2020"),
@@ -158,8 +161,8 @@ def get_compliance_constraint_library():
             ],
             "reactive_compensation": [
                 _check("RC_V_001", "无功补偿额定电压", ["rated_voltage_kv"], ["operating_voltage_kv"], "运行电压不得超过电容器或SVG允许电压。", "GB/T 11024-2019 / GB/T 12747.1-2017"),
-                _check("RC_Q_001", "无功补偿容量匹配", ["rated_capacity_kvar"], ["q_mvar"], "投入容量应满足功率因数目标且不得引起电压越上限。", "GB 50052-2009"),
-                _check("RC_HARM_001", "电容器谐波/串抗匹配", ["detuning_reactor_percent"], ["harmonic_voltage_distortion_percent"], "存在谐波时应配置合适电抗率或滤波装置。", "GB/T 14549-1993", "warning"),
+                _check("RC_Q_001", "无功补偿容量匹配", ["rated_capacity_kvar"], ["q_mvar"], "投入容量应满足功率因数目标且不得引起电压越上限。", "GB 50052-2023"),
+                _check("RC_HARM_001", "电容器谐波/串抗匹配", ["detuning_reactor_percent"], ["harmonic_voltage_distortion_percent"], "存在谐波时应配置合适电抗率或滤波装置。", "GB/T 14549-2024", "warning"),
             ],
             "metering_ct_pt": [
                 _check("CT_I_001", "CT一次额定电流", ["rated_primary_a"], ["max_current_a"], "最大工作电流应在CT适用量程内。", "GB/T 20840.2-2014"),
@@ -173,18 +176,18 @@ def get_compliance_constraint_library():
                 _check("SA_DIS_001", "避雷器标称放电电流", ["nominal_discharge_current_ka"], [], "标称放电电流等级应匹配线路雷电活动和设备重要性。", "GB/T 11032-2020", "warning"),
             ],
             "load": [
-                _check("LOAD_PQ_001", "负荷功率因数", ["p_mw", "q_mvar"], [], "功率因数应满足供配电设计和无功补偿目标。", "GB 50052-2009", "warning"),
+                _check("LOAD_PQ_001", "负荷功率因数", ["p_mw", "q_mvar"], [], "功率因数应满足供配电设计和无功补偿目标。", "GB 50052-2023", "warning"),
                 _check("LOAD_PROFILE_001", "负荷时序曲线", ["profile_id"], [], "规划年、最大负荷、最小负荷场景应绑定典型负荷曲线。", "DL/T 5729-2023", "warning"),
             ],
             "pv_inverter": [
                 _check("PV_VRISE_001", "光伏接入电压升高", ["rated_power_kw"], ["voltage_rise_percent"], "PCC电压升高不得超过接入约束。", "NB/T 10994-2022"),
                 _check("PV_HOST_001", "光伏渗透率", ["rated_power_kw", "connected_transformer_capacity_kva"], [], "光伏容量占变压器/馈线容量比例应满足工程设定限值。", "NB/T 10994-2022"),
                 _check("PV_Q_001", "逆变器无功能力", ["sn_mva", "rated_power_kw", "power_factor_range"], ["q_mvar"], "逆变器应具备接入点要求的功率因数或Volt/Var能力。", "GB/T 19964-2012"),
-                _check("PV_PQ_001", "并网电能质量", ["harmonic_current_percent", "anti_islanding"], ["thd_percent"], "谐波和孤岛保护应满足并网要求。", "GB/T 14549-1993"),
+                _check("PV_PQ_001", "并网电能质量", ["harmonic_current_percent", "anti_islanding"], ["thd_percent"], "谐波和孤岛保护应满足并网要求。", "GB/T 14549-2024"),
             ],
             "wind_turbine": [
                 _check("WT_Q_001", "风机无功能力", ["rated_power_kw", "power_factor_range"], ["q_mvar"], "风机并网点功率因数或无功调节能力应满足要求。", "NB/T 10994-2022"),
-                _check("WT_PQ_001", "风机电能质量", ["flicker_limit", "harmonic_current_percent"], ["flicker_plt", "thd_percent"], "闪变、谐波应满足电能质量要求。", "GB/T 12326-2008 / GB/T 14549-1993"),
+                _check("WT_PQ_001", "风机电能质量", ["flicker_limit", "harmonic_current_percent"], ["flicker_plt", "thd_percent"], "闪变、谐波应满足电能质量要求。", "GB/T 12326-2023 / GB/T 14549-2024"),
             ],
             "storage": [
                 _check("ES_P_001", "储能PCS功率", ["rated_charge_discharge_power_kw"], ["p_mw"], "充放电功率不得超过PCS额定功率。", "GB/T 34131-2023 / GB/T 36558-2023"),
@@ -193,7 +196,7 @@ def get_compliance_constraint_library():
             ],
             "ev_charger": [
                 _check("EV_LOAD_001", "充电桩容量接入", ["rated_power_kw", "simultaneity_factor"], ["p_mw"], "充电负荷叠加后线路和变压器不得越限。", "GB/T 18487.1-2023"),
-                _check("EV_PQ_001", "充电设备电能质量", ["power_factor", "harmonic_current_percent"], ["thd_percent"], "功率因数和谐波电流应满足电能质量要求。", "GB/T 14549-1993 / GB/T 18487.1-2023"),
+                _check("EV_PQ_001", "充电设备电能质量", ["power_factor", "harmonic_current_percent"], ["thd_percent"], "功率因数和谐波电流应满足电能质量要求。", "GB/T 14549-2024 / GB/T 18487.1-2023"),
             ],
         },
         "equipment_library_mapping": {
