@@ -228,7 +228,6 @@ cnpower/
   validation/                校验规则
 docs/
   cnpower_project_guide.md   项目交接与使用说明
-  OPERATING_PARAMETERS.md    运行参数字段和来源说明
 examples/
   pandapower_network_builder.py
 tests/
@@ -258,7 +257,6 @@ python verify_fixes.py
 ## 文档
 
 - [`docs/cnpower_project_guide.md`](docs/cnpower_project_guide.md)：完整项目说明、模块关系、使用流程、维护清单。
-- [`docs/OPERATING_PARAMETERS.md`](docs/OPERATING_PARAMETERS.md)：运行字段、来源类型和维护边界。
 - [`cnpower_library_manifest.json`](cnpower_library_manifest.json)：机器可读项目清单。
 
 ## 许可证与署名

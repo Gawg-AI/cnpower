@@ -290,10 +290,9 @@ python verify_fixes.py
 1. [`../cnpower_library_manifest.json`](../cnpower_library_manifest.json)：项目机器清单、模型数量、标准索引摘要、验证入口。
 2. [`../README.md`](../README.md)：项目定位、快速使用、核心工作流。
 3. 本文档：模块关系、字段语义、维护规则。
-4. [`OPERATING_PARAMETERS.md`](OPERATING_PARAMETERS.md)：运行字段来源、维护边界。
-5. `cnpower/engineering/asset_schema.py`：资产对象 schema。
-6. `cnpower/engineering/compliance_constraints.py`：合规约束库。
-7. `cnpower/validation/rules.py`：规划与运行规则。
+4. `cnpower/engineering/asset_schema.py`：资产对象 schema。
+5. `cnpower/engineering/compliance_constraints.py`：合规约束库。
+6. `cnpower/validation/rules.py`：规划与运行规则。
 
 稳定入口优先级：
 
