@@ -1,3 +1,6 @@
+from functools import lru_cache
+
+
 def _enhance_protection_entry(name, entry):
     if not isinstance(entry, dict):
         return entry
@@ -42,6 +45,7 @@ def _enhance_all_protection(data):
     return data
 
 
+@lru_cache(maxsize=1)
 def get_all_protection():
     return _enhance_all_protection({
         "line_protection_mv": {
@@ -209,7 +213,7 @@ def get_all_protection():
             "gas_protection": {
                 "protection_scheme": "瓦斯保护",
                 "applicable_range": {
-                    "applicable_range_kva": (800, None),
+                    "applicable_range_kva": (800, float("inf")),
                     "voltage_level_kv": 10,
                     "note": "800kVA及以上油浸式变压器应装设瓦斯保护",
                 },

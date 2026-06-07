@@ -1,4 +1,8 @@
-﻿def get_all_ev_chargers():
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
+def get_all_ev_chargers():
     return {
         "ac_slow": {
             "AC-7kW": {
@@ -6,7 +10,7 @@
                 "rated_voltage_v": 220,
                 "rated_current_a": 32,
                 "charging_mode": "AC_Mode2",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 90,
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
@@ -19,7 +23,7 @@
                 "rated_voltage_v": 380,
                 "rated_current_a": 22,
                 "charging_mode": "AC_Mode3",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 90,
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
@@ -32,7 +36,7 @@
                 "rated_voltage_v": 380,
                 "rated_current_a": 32,
                 "charging_mode": "AC_Mode3",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 90,
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
@@ -47,7 +51,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 75,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 94,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
@@ -60,7 +64,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 150,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 94,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
@@ -73,7 +77,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 250,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 94,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
@@ -86,7 +90,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 500,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 94,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
@@ -101,7 +105,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 600,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 95,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
@@ -115,7 +119,7 @@
                 "rated_voltage_v": "200~1000DC",
                 "rated_current_a": 750,
                 "charging_mode": "DC_Mode4",
-                "communication_protocol": "GB/T 27930-2015",
+                "communication_protocol": "GB/T 27930-2023",
                 "efficiency_percent": 95,
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,

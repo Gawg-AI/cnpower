@@ -100,14 +100,14 @@ def _first_not_none(*values):
 
 
 def calc_q_mvar_from_power_factor(p_mw, power_factor, sign=1):
-    if p_mw is None or power_factor in (None, 0):
+    if p_mw is None or power_factor is None or power_factor == 0:
         return 0.0
     pf = first_number(power_factor)
     p = first_number(p_mw)
-    if pf is None or p is None:
+    if pf is None or p is None or pf == 0:
         return 0.0
     pf = max(min(pf, 1.0), -1.0)
-    if abs(pf) == 1.0:
+    if abs(pf) >= 1.0:
         return 0.0
     return sign * abs(p) * math.tan(math.acos(abs(pf)))
 
@@ -259,6 +259,12 @@ def normalize_equipment(equipment_type, equipment, *, context=None):
         side_current = normalized.get(f"rated_current_{current_side}_a")
         if side_current is not None:
             normalized.setdefault("rated_current_a", side_current)
+        # 根据联结组别推断shift_degree（仅当缺失时补充）
+        _VECTOR_GROUP_SHIFT = {"Dyn11": 330, "YNd11": 330, "Dyn1": 30, "YNd1": 30,
+                               "Yyn0": 0, "YNyn0": 0, "Dd0": 0, "Yd11": 330, "Dy11": 330}
+        vg = str(normalized.get("vector_group", "")).strip()
+        if "shift_degree" not in normalized and vg in _VECTOR_GROUP_SHIFT:
+            normalized["shift_degree"] = _VECTOR_GROUP_SHIFT[vg]
 
     if "rated_current_a" not in normalized:
         for key in ("frame_current_a", "max_i_ka", "rated_primary_a"):

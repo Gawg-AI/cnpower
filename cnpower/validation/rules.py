@@ -1,9 +1,13 @@
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
 def get_all_validation_rules():
     return {
         "voltage_quality": {
             "voltage_deviation": {
                 "name": "电压偏差",
-                "standard": "GB/T 12325-2008",
+                "standard": "GB/T 12325-2023",
                 "description": "用电单位端电压偏离额定电压的百分数不得超过规定限值",
                 "limits": {
                     "110kV": "±5%",
@@ -18,7 +22,7 @@ def get_all_validation_rules():
             },
             "voltage_fluctuation_flicker": {
                 "name": "电压波动和闪变",
-                "standard": "GB/T 12326-2008",
+                "standard": "GB/T 12326-2023",
                 "description": "电压波动和闪变不得超过规定限值，保证用电质量",
                 "limits": {
                     "voltage_fluctuation": {
@@ -38,7 +42,7 @@ def get_all_validation_rules():
             },
             "three_phase_unbalance": {
                 "name": "三相电压不平衡",
-                "standard": "GB/T 15543-2008",
+                "standard": "GB/T 15543-2023",
                 "description": "三相电压不平衡度不得超过规定限值",
                 "limits": {
                     "normal": "≤2%",
@@ -50,7 +54,7 @@ def get_all_validation_rules():
             },
             "harmonic": {
                 "name": "谐波",
-                "standard": "GB/T 14549-1993",
+                "standard": "GB/T 14549-2024",
                 "description": "公用电网谐波电压含有率和总谐波畸变率不得超过规定限值",
                 "limits_by_voltage_level": {
                     "0.4kV": {
@@ -131,7 +135,7 @@ def get_all_validation_rules():
         },
         "equipment_selection": {
             "name": "设备选型校验",
-            "standard": "GB 50052-2009",
+            "standard": "GB 50052-2023",
             "description": "配电网主要设备选型校验规则",
             "transformer_loading": {
                 "name": "变压器负荷率",
@@ -266,7 +270,7 @@ def get_all_validation_rules():
             },
             "energy_storage_safety": {
                 "name": "储能系统安全校验",
-                "reference": "GB/T 36558-2018",
+                "reference": "GB/T 36558-2023",
                 "description": "储能系统应具备电池管理、绝缘监测、过充过放、过温和消防联动等安全保护",
                 "pass_criteria": "安全保护配置完整，运行边界和故障隔离策略满足储能系统通用技术条件"
             },

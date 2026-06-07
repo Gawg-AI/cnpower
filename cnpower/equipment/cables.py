@@ -1,4 +1,7 @@
-﻿def _cable_operating_metadata(insulation_type, laying_methods, short_circuit_1s):
+from functools import lru_cache
+
+
+def _cable_operating_metadata(insulation_type, laying_methods, short_circuit_1s):
     is_pvc = insulation_type == "PVC"
     normal_temp = 70 if is_pvc else 90
     emergency_temp = 90 if is_pvc else 105
@@ -490,6 +493,7 @@ def _build_hv_110kv():
     return d
 
 
+@lru_cache(maxsize=1)
 def get_all_cables():
     return {
         "mv_10kv": _build_mv_10kv(),

@@ -91,8 +91,8 @@ def chinese_line_std_types():
                 name = key
             if not name:
                 continue
-            c_nf = _to_float(m.get("c_nf_per_km", 0.0))
-            r_ohm = _to_float(m.get("r_ohm_per_km", 0.0))
+            c_nf = _to_float(m.get("c_nf_per_km"))
+            r_ohm = _to_float(m.get("r_ohm_per_km"))
             x_ohm = _get_x_ohm_per_km_default(m)
             max_i = _get_max_i_ka(m)
             if None in (c_nf, r_ohm, x_ohm, max_i):
@@ -139,8 +139,8 @@ def chinese_line_std_types():
                 name = key
             if not name:
                 continue
-            c_nf = _to_float(m.get("c_nf_per_km", 0.0))
-            r_ohm = _to_float(m.get("r_ohm_per_km", 0.0))
+            c_nf = _to_float(m.get("c_nf_per_km"))
+            r_ohm = _to_float(m.get("r_ohm_per_km"))
             x_ohm = _get_x_ohm_per_km_default(m)
             max_i = _get_max_i_ka(m)
             if None in (c_nf, r_ohm, x_ohm, max_i):
@@ -296,7 +296,7 @@ def chinese_fuse_std_types():
             i_val = _to_float(i_a)
             if i_val is None:
                 continue
-            if i_val == int(i_val):
+            if abs(i_val - round(i_val)) < 1e-9:
                 suffix = f"{int(i_val)}A"
             else:
                 suffix = f"{i_val}A"

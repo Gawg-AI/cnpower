@@ -1,6 +1,8 @@
 import math
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1)
 def get_all_reactive_compensation():
     omega = 2 * math.pi * 50
 

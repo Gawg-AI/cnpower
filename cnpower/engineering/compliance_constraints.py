@@ -1,3 +1,6 @@
+from functools import lru_cache
+
+
 def _check(rule_id, name, required_equipment_fields, required_result_fields, criterion, standard, severity="error"):
     return {
         "rule_id": rule_id,
@@ -10,6 +13,7 @@ def _check(rule_id, name, required_equipment_fields, required_result_fields, cri
     }
 
 
+@lru_cache(maxsize=1)
 def get_compliance_constraint_library():
     return {
         "metadata": {
@@ -103,7 +107,7 @@ def get_compliance_constraint_library():
                 _check("TR3_SC_PARAM_001", "三绕组短路阻抗完整性", ["vk_hv_percent", "vk_mv_percent", "vk_lv_percent", "vkr_hv_percent", "vkr_mv_percent", "vkr_lv_percent"], [], "三绕组短路计算前应具备各绕组短路阻抗。", "GB/T 15544.1-2023"),
             ],
             "box_substation": [
-                _check("BOX_LOAD_001", "箱变容量校核", ["sn_kva"], ["loading_percent"], "箱变内变压器和低压出线负载率均应满足规划限值。", "GB/T 17467-2020"),
+                _check("BOX_LOAD_001", "箱变容量校核", ["sn_mva"], ["loading_percent"], "箱变内变压器和低压出线负载率均应满足规划限值。", "GB/T 17467-2020"),
                 _check("BOX_SC_001", "箱变成套短路耐受", ["rated_short_time_withstand_ka", "rated_peak_withstand_ka"], ["ith_ka", "ip_ka"], "箱变高低压成套设备短时和峰值耐受不应低于安装点短路水平。", "GB/T 17467-2020"),
                 _check("BOX_IP_001", "箱变外壳防护等级", ["protection_class", "installation_environment"], [], "户外或污染环境下防护等级应满足安装环境要求。", "GB/T 17467-2020", "warning"),
             ],

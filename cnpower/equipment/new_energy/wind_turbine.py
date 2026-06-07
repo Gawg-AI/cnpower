@@ -1,3 +1,7 @@
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
 def get_all_wind_turbines():
     return {
         "small_wind": {

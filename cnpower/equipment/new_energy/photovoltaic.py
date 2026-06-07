@@ -1,4 +1,8 @@
-﻿def get_all_photovoltaic():
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
+def get_all_photovoltaic():
     data = {
         "pv_module": {
             "mono_si": {
@@ -285,8 +289,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 97.5,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_5kW": {
                 "rated_power_kw": 5,
@@ -298,8 +302,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 97.8,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_8kW": {
                 "rated_power_kw": 8,
@@ -311,8 +315,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.0,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_10kW": {
                 "rated_power_kw": 10,
@@ -324,8 +328,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.0,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_15kW": {
                 "rated_power_kw": 15,
@@ -337,8 +341,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.2,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_20kW": {
                 "rated_power_kw": 20,
@@ -350,8 +354,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.3,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_30kW": {
                 "rated_power_kw": 30,
@@ -363,8 +367,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.4,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_50kW": {
                 "rated_power_kw": 50,
@@ -376,8 +380,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.5,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_80kW": {
                 "rated_power_kw": 80,
@@ -389,8 +393,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.6,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "string_100kW": {
                 "rated_power_kw": 100,
@@ -402,8 +406,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.7,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             }
         },
         "central_inverter": {
@@ -417,8 +421,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.8,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "central_250kW": {
                 "rated_power_kw": 250,
@@ -430,8 +434,8 @@
                 "power_factor_range": "0.8leading~0.8lagging",
                 "max_efficiency_percent": 98.9,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "central_500kW": {
                 "rated_power_kw": 500,
@@ -444,8 +448,8 @@
                 "max_efficiency_percent": 99.0,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
                 "voltage_note": "315V匹配升压变压器低压侧,需配10/0.315kV升压变接入配网",
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             },
             "central_630kW": {
                 "rated_power_kw": 630,
@@ -458,8 +462,8 @@
                 "max_efficiency_percent": 99.0,
                 "protection_functions": ["anti_islanding", "overvoltage", "undervoltage", "overfrequency", "underfrequency", "overcurrent"],
                 "voltage_note": "315V匹配升压变压器低压侧,需配10/0.315kV升压变接入配网",
-                "standard": "GB/T 19964-2012",
-                "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                "standard": "GB/T 37408-2019",
+                "source_note": "参数依据GB/T 37408-2019及主流厂家产品手册"
             }
         }
     }

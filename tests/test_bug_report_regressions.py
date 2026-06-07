@@ -106,7 +106,7 @@ def test_second_round_report_data_regressions():
     pv = get_all_photovoltaic()
     for module_group in pv["pv_module"].values():
         assert all("GB/T 9535.1-2025" in item["standard"] for item in module_group.values())
-    assert all("GB/T 19964-2012" in item["standard"] for item in pv["string_inverter"].values())
+    assert all("GB/T 37408-2019" in item["standard"] for item in pv["string_inverter"].values())
 
     svg = get_all_reactive_compensation()["svg"]["SVG-1000kvar-10kV"]
     assert svg["standard"] == "NB/T 10994-2022"

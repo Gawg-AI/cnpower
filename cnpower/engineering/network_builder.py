@@ -76,8 +76,8 @@ def _first_present(data, *keys):
 
 def _split_assets(model):
     grouped = {"buses": _as_list(model.get("buses") or model.get("busbars"))}
-    for group_name, _canonical in ELEMENT_GROUPS.values():
-        grouped[group_name] = _as_list(model.get(group_name))
+    for element_key, (group_name, _canonical) in ELEMENT_GROUPS.items():
+        grouped[group_name] = _as_list(model.get(group_name) or model.get(element_key))
 
     for asset in _as_list(model.get("assets")):
         if not isinstance(asset, dict):
@@ -282,7 +282,8 @@ def _transformer3w_power(data, side):
     value = _number(data, "sn_kva")
     if value is not None:
         return float(value) / 1000.0
-    raise ValueError(f"Three-winding transformer is missing sn_{side}_mva")
+    name = data.get("name", "unknown")
+    raise ValueError(f"Three-winding transformer '{name}' is missing sn_{side}_mva")
 
 
 def _create_transformer3w(pp, net, item, data):
@@ -447,7 +448,7 @@ def build_pandapower_net(model, *, add_std_types=True, run_powerflow=False):
         idx = pp.create_shunt(
             net,
             bus=_resolve_bus(bus_lookup, item.get("bus")),
-            q_mvar=_number(data, "q_mvar", 0.0),
+            q_mvar=-_number(data, "q_mvar", 0.0),  # pandapower约定: 容性(电容器)为负
             p_mw=_number(data, "p_mw", 0.0),
             name=data.get("name"),
             in_service=data.get("in_service", True),

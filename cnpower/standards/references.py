@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 _RELATED_EQUIPMENT_ALIASES = {
     "变压器": "transformer",
     "电缆": "line_cable",
@@ -49,6 +51,7 @@ def _normalize_standard_references(standards):
     return by_code
 
 
+@lru_cache(maxsize=1)
 def get_all_standards():
     _standards_list = [
         {

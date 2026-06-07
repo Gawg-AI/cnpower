@@ -1,3 +1,7 @@
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
 def get_all_instrument_transformers():
     ct_mv_specs = [
         (30, 5, "0.5", 10, 7.5, 3.0),

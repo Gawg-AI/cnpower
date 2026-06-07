@@ -1,3 +1,6 @@
+from functools import lru_cache
+
+
 def _max_number(value, default=None):
     if isinstance(value, (list, tuple)):
         numbers = [_max_number(item, None) for item in value]
@@ -14,8 +17,13 @@ def _enhance_switchgear_entry(entry, category):
         rated_current = _max_number(entry.get("frame_current_a"), None)
     if rated_current is not None:
         entry.setdefault("rated_current_max_a", rated_current)
-    if "frame_current_a" in entry and "rated_current_a" not in entry:
-        entry.setdefault("rated_current_a", entry["frame_current_a"])
+    if "rated_current_a" not in entry:
+        if "rated_current_series" in entry:
+            series_max = _max_number(entry["rated_current_series"])
+            if series_max is not None:
+                entry["rated_current_a"] = series_max
+        elif "frame_current_a" in entry:
+            entry["rated_current_a"] = entry["frame_current_a"]
     if "breaking_capacity_ka" in entry:
         entry.setdefault("rated_short_circuit_breaking_ka", entry["breaking_capacity_ka"])
 
@@ -90,6 +98,7 @@ def _enhance_all_switchgear(data):
     return data
 
 
+@lru_cache(maxsize=1)
 def get_all_switchgear():
     return _enhance_all_switchgear({
         "switchgear_cabinet": {

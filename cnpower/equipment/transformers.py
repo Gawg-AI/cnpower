@@ -1,15 +1,16 @@
 import math
+from functools import lru_cache
 
 
 def _calc_three_phase_current_a(power_kva, voltage_kv):
-    if not power_kva or not voltage_kv:
+    if power_kva is None or voltage_kv is None:
         return None
     try:
         power = float(power_kva)
         voltage = float(voltage_kv)
     except (TypeError, ValueError):
         return None
-    if not math.isfinite(power) or not math.isfinite(voltage) or power <= 0 or voltage < 1e-6:
+    if not math.isfinite(power) or not math.isfinite(voltage) or power < 0 or voltage < 1e-6:
         return None
     current = power / (math.sqrt(3) * voltage)
     if not math.isfinite(current):
@@ -67,7 +68,7 @@ def _thermal_model(kind, cooling_type, insulation_class):
 
 
 def _enhance_transformer_entry(entry, kind="distribution"):
-    if entry.get("vector_group") in {"Dyn11", "YNd11"}:
+    if entry.get("vector_group") in {"Dyn11", "YNd11", "Yd11", "Dy11"}:
         entry["shift_degree"] = 330
     if entry.get("vector_group") == "YNyn0d11":
         entry["shift_mv_degree"] = 0
@@ -157,6 +158,7 @@ def _enhance_all_transformers(data):
     return data
 
 
+@lru_cache(maxsize=1)
 def get_all_transformers():
     def _oil_10(sn, vk, vkr, pfe, i0, cooling, install, tw, ow, dl, dw, dh):
         return {
@@ -683,7 +685,7 @@ def get_all_transformers():
         (63, 0.64, 0.48, 0.70, 53.0, 0.50),
     ]
     for d in sfsl_data:
-        sn_int = int(d[0]) if d[0] == int(d[0]) else d[0]
+        sn_int = int(d[0]) if abs(d[0] - round(d[0])) < 1e-9 else d[0]
         trafo3w_110kv[f"SFSL-{sn_int}/110"] = _trafo3w(*d)
 
     return _enhance_all_transformers({
