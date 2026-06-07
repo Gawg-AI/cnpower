@@ -63,7 +63,7 @@ chore: 构建/工具变更
   `source_type` or `field_source_types` marker. Use `derived_formula` for
   calculated values, `standard_reference` for standards-backed methods, and
   `engineering_policy` for planning defaults.
-- See [docs/OPERATING_PARAMETERS.md](docs/OPERATING_PARAMETERS.md) before
+- See [docs/cnpower_project_guide.md](docs/cnpower_project_guide.md) before
   adding transformer loading, ampacity, endurance, protection-curve, or
   life-cycle data.
 - Run `python verify_fixes.py` to ensure all validations pass
