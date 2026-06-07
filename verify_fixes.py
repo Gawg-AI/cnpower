@@ -137,13 +137,13 @@ def test_references():
     data = get_all_standards()
     found = False
     for code, std in data.items():
-        if code == "GB/T 36558-2018":
+        if code == "GB/T 36558-2023":
             found = True
             name = std.get("name", "")
             check("GB/T 36558名称正确", "电化学储能" in name, f"got '{name}'")
             check("GB/T 36558关联设备含energy_storage",
                   "energy_storage" in std.get("related_equipment", []))
-    check("GB/T 36558-2018存在于references", found)
+    check("GB/T 36558-2023存在于references", found)
 
     section("S6b: references.py过时标准版本验证")
     outdated = {
@@ -153,6 +153,14 @@ def test_references():
         "GB/T 15166-2008": "GB/T 15166.2-2023",
         "GB/T 1207-2006": "GB/T 20840.3-2013",
         "GB/T 1208-2006": "GB/T 20840.2-2014",
+        "GB/T 36558-2018": "GB/T 36558-2023",
+        "GB/T 27930-2015": "GB/T 27930-2023",
+        "GB/T 12325-2008": "GB/T 12325-2023",
+        "GB/T 12326-2008": "GB/T 12326-2023",
+        "GB/T 15543-2008": "GB/T 15543-2023",
+        "GB 50052-2009": "GB 50052-2023",
+        "GB 50054-2011": "GB 50054-2023",
+        "GB/T 14549-1993": "GB/T 14549-2024",
     }
     codes_in_refs = list(data.keys())
     for old_code, new_code in outdated.items():
