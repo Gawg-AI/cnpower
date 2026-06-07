@@ -1,6 +1,8 @@
 import math
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1)
 def get_all_overhead_lines():
     return _enhance_all_overhead_lines({
         "mv_10kv_insulated": _build_mv_10kv_insulated(),
@@ -102,12 +104,21 @@ def _calc_reactance_bare(cross_section, dm_m):
     if cross_section <= 0 or dm_m <= 0:
         raise ValueError("cross_section and dm_m must be positive")
     r_eq = math.sqrt(cross_section / math.pi)
-    return round(0.1445 * math.log10(dm_m * 1000 / r_eq) + 0.0157, 4)
+    log_argument = dm_m * 1000 / r_eq
+    if log_argument <= 0:
+        raise ValueError("geometric mean distance must be greater than equivalent conductor radius")
+    return round(0.1445 * math.log10(log_argument) + 0.0157, 4)
 
 
 def _calc_reactance_table(cross_section):
     dm_list = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0]
-    return {str(d): _calc_reactance_bare(cross_section, d) for d in dm_list}
+    result = {}
+    for d in dm_list:
+        try:
+            result[str(d)] = _calc_reactance_bare(cross_section, d)
+        except (ValueError, ZeroDivisionError):
+            continue
+    return result
 
 
 def _calc_capacitance_nf(cross_section, dm_m=1.5):
@@ -214,7 +225,11 @@ def _build_lv_04kv_insulated():
     sections = [16, 25, 35, 50, 70, 95, 120, 150, 185, 240]
     models = {}
     for s in sections:
-        c_val = _calc_capacitance_nf(s, 0.8)
+        try:
+            c_val = _calc_capacitance_nf(s, 0.8)
+        except (ValueError, ZeroDivisionError):
+            c_val = None
+        _c_fields = {} if c_val is None else {"c_nf_per_km": c_val, "c0_nf_per_km": round(0.6 * c_val, 2)}
         models[f"JKLY-{s}-0.4kV"] = {
             "conductor_material": "Al",
             "cross_section_mm2": s,
@@ -222,10 +237,9 @@ def _build_lv_04kv_insulated():
             "insulation_type": "XLPE",
             "r_ohm_per_km": al_r[s],
             "x_ohm_per_km": x_map[s],
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "r0_ohm_per_km": round(3.0 * al_r[s], 4),
             "x0_ohm_per_km": round(2.0 * x_map[s], 4),
-            "c0_nf_per_km": round(0.6 * c_val, 2),
             "max_i_ka": al_i[s],
             "breaking_force_kn": round(s * 0.16, 2),
             "weight_kg_per_km": round(s * 2.8 + 30, 1),
@@ -243,10 +257,9 @@ def _build_lv_04kv_insulated():
             "insulation_type": "XLPE",
             "r_ohm_per_km": al_r[s],
             "x_ohm_per_km": x_map[s],
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "r0_ohm_per_km": round(3.0 * al_r[s], 4),
             "x0_ohm_per_km": round(2.0 * x_map[s], 4),
-            "c0_nf_per_km": round(0.6 * c_val, 2),
             "max_i_ka": al_i[s],
             "breaking_force_kn": round(s * 0.25, 2),
             "weight_kg_per_km": round(s * 3.5 + 40, 1),
@@ -264,10 +277,9 @@ def _build_lv_04kv_insulated():
             "insulation_type": "PVC",
             "r_ohm_per_km": al_r[s],
             "x_ohm_per_km": x_map[s],
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "r0_ohm_per_km": round(3.0 * al_r[s], 4),
             "x0_ohm_per_km": round(2.0 * x_map[s], 4),
-            "c0_nf_per_km": round(0.6 * c_val, 2),
             "max_i_ka": al_i[s],
             "breaking_force_kn": round(s * 0.14, 2),
             "weight_kg_per_km": round(s * 2.8 + 45, 1),
@@ -306,15 +318,19 @@ def _build_bare_conductor():
     models = {}
     for s in sections:
         x_table = _calc_reactance_table(s)
-        x_default = x_table["1.5"]
-        c_val = _calc_capacitance_nf(s, 1.5)
+        x_default = x_table.get("1.5", 0.0)
+        try:
+            c_val = _calc_capacitance_nf(s, 1.5)
+        except (ValueError, ZeroDivisionError):
+            c_val = None
+        _c_fields = {} if c_val is None else {"c_nf_per_km": c_val}
         models[f"LJ-{s}"] = {
             "conductor_material": "Al",
             "cross_section_mm2": s,
             "r_ohm_per_km": lj_r[s],
             "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "max_i_ka": lj_i[s],
             "breaking_force_kn": round(s * 0.16, 2),
             "weight_kg_per_km": round(s * 2.7, 1),
@@ -330,7 +346,7 @@ def _build_bare_conductor():
             "r_ohm_per_km": lgj_r[s],
             "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "max_i_ka": lj_i[s],
             "breaking_force_kn": round(s * 0.28, 2),
             "weight_kg_per_km": round(s * 3.5, 1),
@@ -346,7 +362,7 @@ def _build_bare_conductor():
             "r_ohm_per_km": tj_r[s],
             "x_ohm_per_km": x_default,
             "x_ohm_per_km_table": x_table,
-            "c_nf_per_km": c_val,
+            **_c_fields,
             "max_i_ka": round(1.3 * lj_i[s], 4),
             "breaking_force_kn": round(s * 0.22, 2),
             "weight_kg_per_km": round(s * 8.9, 1),
