@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-green.svg)
 ![Version](https://img.shields.io/badge/Version-1.0.0-informational.svg)
-![Models](https://img.shields.io/badge/Models-662-brightgreen.svg)
-![Standards](https://img.shields.io/badge/Standards-49-orange.svg)
+![Models](https://img.shields.io/badge/Models-677-brightgreen.svg)
+![Standards](https://img.shields.io/badge/Standards-45-orange.svg)
 
 English summary: `cnpower` is a Chinese distribution-grid engineering parameter library for equipment data, standards references, validation rules, normalization, compliance checks, and pandapower integration.
 
@@ -39,19 +39,19 @@ English summary: `cnpower` is a Chinese distribution-grid engineering parameter 
 - 基准容量：`BASE_MVA = 100.0`
 - 电压等级：`0.4 / 10 / 35 / 110 / 220kV`
 
-设备模型共 662 个：
+设备模型共 677 个：
 
 | 模块 | 数量 | 分类 |
 |---|---:|---|
 | 变压器 | 212 | 油浸式、干式、箱变、35kV 主变、110kV 主变、110kV 三绕组变 |
 | 电缆 | 178 | 10kV、35kV、0.4kV、110kV |
 | 架空线路 | 82 | 10kV 架空绝缘线、0.4kV 架空绝缘线、裸导线 |
-| 开关设备 | 61 | 开关柜、断路器、负荷开关、熔断器、重合器、分段器 |
+| 开关设备 | 60 | 开关柜、断路器、负荷开关、熔断器、重合器、分段器 |
 | 无功补偿 | 29 | 中压电容器、低压电容器、SVG |
 | 保护配置 | 10 | 中压线路保护、变压器保护 |
 | 互感器 | 32 | 中压 CT、低压 CT、中压 PT |
 | 避雷器 | 4 | 中压、低压避雷器 |
-| 光伏 | 17 | 光伏组件、组串式逆变器、集中式逆变器 |
+| 光伏 | 33 | 光伏组件（单晶硅、多晶硅、薄膜）、组串式逆变器、集中式逆变器 |
 | 充电桩 | 9 | 交流慢充、直流快充、直流超充 |
 | 储能 | 19 | 磷酸铁锂电池、铅碳电池、PCS |
 | 风机 | 9 | 小型分布式风机、中型分布式风机 |
@@ -79,7 +79,6 @@ git clone https://github.com/Gawg-AI/cnpower.git
 cd cnpower
 pip install -e ".[dev]"
 python -m pytest -q
-python verify_fixes.py
 ```
 
 ## 快速开始
@@ -193,7 +192,7 @@ print(net["cnpower_bus_lookup"])
 
 ## 标准与规则
 
-标准索引包含 49 项标准或规范引用。常见条目包括：
+标准索引包含 45 项标准或规范引用。常见条目包括：
 
 - `GB/T 6451-2023`：油浸式电力变压器技术参数和要求。
 - `GB/T 10228-2023`：干式电力变压器技术参数和要求。
@@ -238,13 +237,11 @@ tests/
 
 ```bash
 python -m pytest -q
-python verify_fixes.py
 ```
 
 当前期望：
 
 - `python -m pytest -q`：全部测试通过。
-- `python verify_fixes.py`：`756 PASS, 0 FAIL`。
 
 ## 维护原则
 
