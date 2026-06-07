@@ -30,15 +30,6 @@ English summary: `cnpower` is a Chinese distribution-grid engineering parameter 
 
 ## 当前覆盖
 
-基础参数：
-
-- 版本：`1.0.0`
-- 日期：`2026-06-07`
-- Python：`>=3.10`
-- 系统频率：`50Hz`
-- 基准容量：`BASE_MVA = 100.0`
-- 电压等级：`0.4 / 10 / 35 / 110 / 220kV`
-
 设备模型共 677 个：
 
 | 模块 | 数量 | 分类 |
