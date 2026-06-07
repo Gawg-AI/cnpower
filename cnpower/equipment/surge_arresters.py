@@ -5,6 +5,7 @@ def get_all_surge_arresters():
             "continuous_operating_voltage_kv": 13.6,
             "nominal_discharge_current_ka": 5,
             "residual_voltage_kv": 45.0,
+            "protected_equipment_bil_kv": 75,
             "standard": "GB/T 11032-2020",
             "source_note": "HY5WZ-17/45型10kV系统复合外套无间隙金属氧化物避雷器"
         },
@@ -13,6 +14,7 @@ def get_all_surge_arresters():
             "continuous_operating_voltage_kv": 40.8,
             "nominal_discharge_current_ka": 5,
             "residual_voltage_kv": 134.0,
+            "protected_equipment_bil_kv": 200,
             "standard": "GB/T 11032-2020",
             "source_note": "HY5WZ-51/134型35kV系统复合外套无间隙金属氧化物避雷器(5kA级)"
         },
@@ -21,6 +23,7 @@ def get_all_surge_arresters():
             "continuous_operating_voltage_kv": 40.8,
             "nominal_discharge_current_ka": 10,
             "residual_voltage_kv": 134.0,
+            "protected_equipment_bil_kv": 200,
             "standard": "GB/T 11032-2020",
             "source_note": "HY10WZ-51/134型35kV系统复合外套无间隙金属氧化物避雷器(10kA级)"
         },
@@ -32,6 +35,7 @@ def get_all_surge_arresters():
             "continuous_operating_voltage_kv": 0.25,
             "nominal_discharge_current_ka": 1.5,
             "residual_voltage_kv": 1.3,
+            "protected_equipment_bil_kv": 6,
             "standard": "GB/T 11032-2020",
             "source_note": "HY1.5W-0.28/1.3型0.4kV系统复合外套无间隙金属氧化物避雷器"
         },

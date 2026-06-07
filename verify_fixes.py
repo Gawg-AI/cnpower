@@ -69,8 +69,8 @@ def test_transformers():
             if "Dyn11" in vg or "YNd11" in vg:
                 check(
                     f"{cat}/{name} shift_degree={sd}",
-                    sd == 30,
-                    f"expected 30 for {vg}, got {sd}",
+                    sd == 330,
+                    f"expected 330 for {vg}, got {sd}",
                 )
 
     section("S2: 零序参数注释验证")
@@ -255,15 +255,15 @@ def test_pandapower_compatibility():
                         "vkr_percent", "pfe_kw", "i0_percent", "shift_degree"):
             check(f"trafo/{name} 含{req_key}", req_key in entry,
                   f"missing {req_key}")
-        check(f"trafo/{name} shift_degree=30", entry.get("shift_degree") == 30,
+        check(f"trafo/{name} shift_degree=330", entry.get("shift_degree") == 330,
               f"got {entry.get('shift_degree')}")
         break
 
     trafo3w_types = chinese_trafo3w_std_types()
     check("chinese_trafo3w_std_types返回dict", isinstance(trafo3w_types, dict))
     for name, entry in trafo3w_types.items():
-        check(f"trafo3w/{name} shift_lv_degree=30",
-              entry.get("shift_lv_degree") == 30,
+        check(f"trafo3w/{name} shift_lv_degree=330",
+              entry.get("shift_lv_degree") == 330,
               f"got {entry.get('shift_lv_degree')}")
         break
 

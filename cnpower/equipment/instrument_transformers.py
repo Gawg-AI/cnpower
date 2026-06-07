@@ -48,6 +48,8 @@ def get_all_instrument_transformers():
     ]
     ct_lv = {}
     for pri_a, sec_a, acc, burden_va in ct_lv_specs:
+        thermal_current_ka_1s = round(pri_a * 60 / 1000.0, 2)
+        dynamic_current_ka = round(thermal_current_ka_1s * 2.5, 2)
         key = f"BH-LMZ/{pri_a}A"
         ct_lv[key] = {
             "rated_voltage_kv": 0.4,
@@ -55,8 +57,10 @@ def get_all_instrument_transformers():
             "rated_secondary_a": sec_a,
             "accuracy_class": acc,
             "rated_secondary_burden_va": burden_va,
+            "dynamic_current_ka": dynamic_current_ka,
+            "thermal_current_ka_1s": thermal_current_ka_1s,
             "standard": "GB/T 20840.2-2014",
-            "source_note": "BH/LMZ系列0.4kV电流互感器典型参数"
+            "source_note": "BH/LMZ系列0.4kV电流互感器典型参数;动热稳定按60In/1s和2.5倍动稳定系数估算"
         }
 
     pt_mv = {

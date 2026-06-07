@@ -1,4 +1,4 @@
-def get_all_ev_chargers():
+﻿def get_all_ev_chargers():
     return {
         "ac_slow": {
             "AC-7kW": {
@@ -11,8 +11,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "AC-14kW": {
                 "rated_power_kw": 14,
@@ -24,8 +24,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "AC-21kW": {
                 "rated_power_kw": 21,
@@ -37,8 +37,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.95,
                 "harmonic_current_limit_percent": 5,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             }
         },
         "dc_fast": {
@@ -52,8 +52,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "DC-60kW": {
                 "rated_power_kw": 60,
@@ -65,8 +65,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "DC-120kW": {
                 "rated_power_kw": 120,
@@ -78,8 +78,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "DC-240kW": {
                 "rated_power_kw": 240,
@@ -91,8 +91,8 @@ def get_all_ev_chargers():
                 "power_factor": 0.99,
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP54",
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             }
         },
         "dc_superfast": {
@@ -107,8 +107,8 @@ def get_all_ev_chargers():
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP55",
                 "liquid_cooled": True,
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             },
             "DC-600kW": {
                 "rated_power_kw": 600,
@@ -121,8 +121,8 @@ def get_all_ev_chargers():
                 "harmonic_current_limit_percent": 3,
                 "protection_class": "IP55",
                 "liquid_cooled": True,
-                "standard": "GB/T 18487-2017",
-                "source_note": "参数依据GB/T 18487-2017及主流厂家产品手册"
+                "standard": "GB/T 18487.1-2023",
+                "source_note": "参数依据GB/T 18487.1-2023及主流厂家产品手册"
             }
         }
     }

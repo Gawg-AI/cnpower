@@ -4,7 +4,17 @@ import math
 def _calc_three_phase_current_a(power_kva, voltage_kv):
     if not power_kva or not voltage_kv:
         return None
-    return round(float(power_kva) / (math.sqrt(3) * float(voltage_kv)), 1)
+    try:
+        power = float(power_kva)
+        voltage = float(voltage_kv)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(power) or not math.isfinite(voltage) or power <= 0 or voltage < 1e-6:
+        return None
+    current = power / (math.sqrt(3) * voltage)
+    if not math.isfinite(current):
+        return None
+    return round(current, 1)
 
 
 def _loading_limits(kind):
@@ -57,6 +67,12 @@ def _thermal_model(kind, cooling_type, insulation_class):
 
 
 def _enhance_transformer_entry(entry, kind="distribution"):
+    if entry.get("vector_group") in {"Dyn11", "YNd11"}:
+        entry["shift_degree"] = 330
+    if entry.get("vector_group") == "YNyn0d11":
+        entry["shift_mv_degree"] = 0
+        entry["shift_lv_degree"] = 330
+
     if "sn_kva" in entry and "vn_hv_kv" in entry:
         hv_current = _calc_three_phase_current_a(entry["sn_kva"], entry["vn_hv_kv"])
         if hv_current is not None:
@@ -88,6 +104,24 @@ def _enhance_transformer_entry(entry, kind="distribution"):
     entry.setdefault("loading_limits", loading)
     entry.setdefault("design_life_years", 30)
     entry.setdefault("maintenance_interval_years", 3 if kind == "main" else 5)
+    if kind == "main":
+        entry.setdefault("tap_step_degree", 0)
+        entry.setdefault("tap_changer_type", "Ratio")
+
+    if "sn_hv_mva" in entry:
+        for side in ("hv", "mv", "lv"):
+            vk_key = f"vk_{side}_percent"
+            vkr_key = f"vkr_{side}_percent"
+            if vk_key in entry:
+                entry.setdefault(f"vk0_{side}_percent", entry[vk_key])
+            if vkr_key in entry:
+                entry.setdefault(f"vkr0_{side}_percent", entry[vkr_key])
+        entry.setdefault("vk0_percent", entry.get("vk0_hv_percent"))
+        entry.setdefault("vkr0_percent", entry.get("vkr0_hv_percent"))
+        entry.setdefault("mag0_percent", 100)
+        entry.setdefault("mag0_rx", 0.0)
+        entry.setdefault("si0_hv_partial", 0.9)
+        entry.setdefault("zero_seq_note", "三绕组零序参数按各侧短路阻抗作工程占位;实际工程应以厂家试验报告或短路试验数据修正")
 
     cooling_type = entry.get("cooling_type")
     insulation_class = entry.get("insulation_class")
@@ -141,7 +175,7 @@ def get_all_transformers():
             "tap_step_percent": 2.5,
             "tap_step_degree": 0,
             "tap_changer_type": "Ratio",
-            "shift_degree": 30,
+            "shift_degree": 330,
             "cooling_type": cooling,
             "winding_type": "layer",
             "insulation_class": "A",
@@ -275,7 +309,7 @@ def get_all_transformers():
             "tap_step_percent": 2.5,
             "tap_step_degree": 0,
             "tap_changer_type": "Ratio",
-            "shift_degree": 30,
+            "shift_degree": 330,
             "insulation_class": "F",
             "cooling_type": cooling,
             "winding_type": "cast_resin",
@@ -414,8 +448,48 @@ def get_all_transformers():
 
     box_substation = {}
 
-    def _box(sn, hv_fc, lv_fc, prot, cool, dl, dw, dh, std, src):
+    def _box_electrical_defaults(sn):
+        defaults = {
+            50: (4.0, 1.74, 0.10, 1.7),
+            100: (4.0, 1.50, 0.15, 1.2),
+            160: (4.0, 1.38, 0.22, 1.0),
+            200: (4.0, 1.30, 0.27, 0.9),
+            250: (4.0, 1.20, 0.32, 0.85),
+            315: (4.0, 1.16, 0.38, 0.75),
+            400: (4.0, 1.08, 0.46, 0.7),
+            500: (4.0, 1.02, 0.54, 0.65),
+            630: (4.5, 0.98, 0.65, 0.60),
+            800: (4.5, 0.94, 0.78, 0.55),
+            1000: (4.5, 1.03, 0.92, 0.50),
+            1250: (4.5, 0.96, 1.08, 0.45),
+        }
+        default_key = sn if sn in defaults else min(defaults, key=lambda key: abs(key - sn))
+        vk, vkr, pfe, i0 = defaults[default_key]
         return {
+            "vk_percent": vk,
+            "vkr_percent": vkr,
+            "pfe_kw": pfe,
+            "i0_percent": i0,
+            "vector_group": "Dyn11",
+            "tap_side": "hv",
+            "tap_neutral": 0,
+            "tap_min": -2,
+            "tap_max": 2,
+            "tap_step_percent": 2.5,
+            "tap_step_degree": 0,
+            "tap_changer_type": "Ratio",
+            "shift_degree": 330,
+            "vk0_percent": vk,
+            "vkr0_percent": vkr,
+            "mag0_percent": 100,
+            "mag0_rx": 0.0,
+            "si0_hv_partial": 0.9,
+            "zero_seq_note": "箱变内置配变按Dyn11油浸式10/0.4kV配变默认参数估算;实际工程应以厂家试验报告为准",
+            "electrical_parameter_source": f"S13 oil-immersed 10/0.4kV transformer defaults for pandapower compatibility; matched_capacity_kva={default_key}",
+        }
+
+    def _box(sn, hv_fc, lv_fc, prot, cool, dl, dw, dh, std, src):
+        entry = {
             "sn_kva": sn,
             "vn_hv_kv": 10,
             "vn_lv_kv": 0.4,
@@ -429,6 +503,8 @@ def get_all_transformers():
             "standard": std,
             "source_note": src,
         }
+        entry.update(_box_electrical_defaults(sn))
+        return entry
 
     zbw_data = [
         (50, 2, 6, "IP33", "ONAN", 1800, 1200, 1600),
@@ -477,7 +553,9 @@ def get_all_transformers():
             "tap_min": -3,
             "tap_max": 3,
             "tap_step_percent": 2.5,
-            "shift_degree": 30,
+            "tap_step_degree": 0,
+            "tap_changer_type": "Ratio",
+            "shift_degree": 330,
             "cooling_type": "ONAN/ONAF",
             "total_weight_kg": tw,
             "oil_weight_kg": ow,
@@ -507,7 +585,10 @@ def get_all_transformers():
         (31500, 7.5, 0.60, 16.2, 0.40, 50000, 10500),
     ]
     for d in sz11_35_data:
-        main_transformer_35kv[f"SZ11-{d[0]}/35"] = _main35(*d)
+        entry = _main35(*d)
+        entry["deprecated"] = True
+        entry["deprecation_note"] = "SZ11不满足GB 20052-2024能效限定值,已淘汰,仅供存量设备参考"
+        main_transformer_35kv[f"SZ11-{d[0]}/35"] = entry
 
     main_transformer_110kv = {}
 
@@ -526,7 +607,9 @@ def get_all_transformers():
             "tap_min": -8,
             "tap_max": 8,
             "tap_step_percent": 1.25,
-            "shift_degree": 30,
+            "tap_step_degree": 0,
+            "tap_changer_type": "Ratio",
+            "shift_degree": 330,
             "cooling_type": "ONAN/ONAF",
             "total_weight_kg": tw,
             "oil_weight_kg": ow,
@@ -552,7 +635,10 @@ def get_all_transformers():
         (63000, 0.58, 38.0, 0.40, 115000, 27000),
     ]
     for d in sfz11_110_data:
-        main_transformer_110kv[f"SFZ11-{d[0]}/110"] = _main110(*d)
+        entry = _main110(*d)
+        entry["deprecated"] = True
+        entry["deprecation_note"] = "SFZ11不满足GB 20052-2024能效限定值,已淘汰,仅供存量设备参考"
+        main_transformer_110kv[f"SFZ11-{d[0]}/110"] = entry
 
     trafo3w_110kv = {}
 
@@ -573,13 +659,14 @@ def get_all_transformers():
             "pfe_kw": pfe,
             "i0_percent": i0,
             "shift_mv_degree": 0,
-            "shift_lv_degree": 30,
+            "shift_lv_degree": 330,
             "vector_group": "YNyn0d11",
             "tap_side": "hv",
             "tap_neutral": 0,
             "tap_min": -8,
             "tap_max": 8,
             "tap_step_percent": 1.25,
+            "tap_step_degree": 0,
             "tap_changer_type": "Ratio",
             "standard": "GB/T 6451-2023",
             "source_note": "国标表值",

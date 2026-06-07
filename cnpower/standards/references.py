@@ -1,10 +1,61 @@
+_RELATED_EQUIPMENT_ALIASES = {
+    "变压器": "transformer",
+    "电缆": "line_cable",
+    "架空绝缘电缆": "line_overhead_insulated",
+    "架空导线": "line_overhead",
+    "断路器": "switch_breaker",
+    "导体": "conductor",
+    "低压导体": "conductor_lv",
+    "低压开关": "switch_lv",
+    "接地装置": "grounding",
+    "开关": "switchgear",
+    "光伏逆变器": "pv_inverter",
+    "光伏组件": "pv_module",
+    "储能系统": "energy_storage",
+    "充电桩": "ev_charger",
+    "熔断器": "fuse",
+    "风机": "wind_turbine",
+    "负荷开关": "load_switch",
+    "电压互感器": "voltage_transformer",
+    "电流互感器": "current_transformer",
+    "避雷器": "surge_arrester",
+    "箱式变电站": "box_substation",
+    "并联电容器": "capacitor",
+    "电容器": "capacitor",
+    "蓄电池": "battery",
+    "继电保护装置": "protection",
+    "互感器": "instrument_transformer",
+    "电能质量终端": "power_quality_terminal",
+}
+
+
+def _normalize_related_equipment(equipment):
+    normalized = []
+    for item in equipment:
+        key = _RELATED_EQUIPMENT_ALIASES.get(item, item)
+        if key not in normalized:
+            normalized.append(key)
+    return normalized
+
+
+def _normalize_standard_references(standards):
+    by_code = {}
+    for standard in standards:
+        standard["related_equipment"] = _normalize_related_equipment(standard.get("related_equipment", []))
+        code = standard["code"]
+        if code in by_code:
+            raise ValueError(f"Duplicate standard code: {code}")
+        by_code[code] = standard
+    return by_code
+
+
 def get_all_standards():
     _standards_list = [
         {
             "code": "GB/T 6451-2023",
             "name": "油浸式电力变压器技术参数和要求",
             "year": 2023,
-            "scope": "电压等级为6kV、110kV的油浸式电力变压器",
+            "scope": "电压等级为6kV、10kV、35kV、66kV、110kV、220kV、330kV、500kV的油浸式电力变压器",
             "related_equipment": ["变压器"],
             "related_rules": ["transformer_loading"]
         },
@@ -12,7 +63,7 @@ def get_all_standards():
             "code": "GB/T 10228-2023",
             "name": "干式电力变压器技术参数和要求",
             "year": 2023,
-            "scope": "电压等级为6kV、35kV的干式电力变压器",
+            "scope": "电压等级为6kV、10kV、20kV、35kV的干式电力变压器",
             "related_equipment": ["变压器"],
             "related_rules": ["transformer_loading"]
         },
@@ -49,7 +100,7 @@ def get_all_standards():
             "related_rules": ["transformer_selection", "transformer_economy"]
         },
         {
-            "code": "GB/T 12706-2020",
+            "code": "GB/T 12706.1~3-2020",
             "name": "额定电压1kV到35kV挤包绝缘电力电缆及其附件",
             "year": 2020,
             "scope": "额定电压1kV到35kV的挤包绝缘电力电缆及附件",
@@ -178,8 +229,6 @@ def get_all_standards():
         },
         {
             "code": "GB/T 45418-2025",
-            "canonical_name": "配电网通用技术导则",
-            "canonical_scope": "配电网规划、建设、运行、改造和设备选型的通用技术要求",
             "name": "配电网通用技术导则",
             "year": 2025,
             "scope": "配电网规划设计的总体规范要求",
@@ -203,6 +252,14 @@ def get_all_standards():
             "related_rules": ["pv_penetration_limit", "voltage_rise_check"]
         },
         {
+            "code": "GB/T 9535.1-2025",
+            "name": "光伏组件设计鉴定和定型 第1部分: 试验要求",
+            "year": 2025,
+            "scope": "光伏组件设计鉴定和定型试验要求",
+            "related_equipment": ["光伏组件"],
+            "related_rules": []
+        },
+        {
             "code": "GB/T 36558-2018",
             "name": "电力系统电化学储能系统通用技术条件",
             "year": 2018,
@@ -216,7 +273,7 @@ def get_all_standards():
             "year": 2023,
             "scope": "电化学储能站接入电网的技术要求",
             "related_equipment": ["储能系统"],
-            "related_rules": ["pv_penetration_limit", "voltage_rise_check"]
+            "related_rules": ["storage_grid_connection", "power_quality"]
         },
         {
             "code": "GB/T 18487.1-2023",
@@ -224,7 +281,7 @@ def get_all_standards():
             "year": 2023,
             "scope": "电动车导电充电系统的通用技术要求",
             "related_equipment": ["充电桩"],
-            "related_rules": ["pv_penetration_limit"]
+            "related_rules": ["ev_charger_power_quality", "power_quality"]
         },
         {
             "code": "GB/T 27930-2015",
@@ -323,7 +380,7 @@ def get_all_standards():
             "related_rules": []
         },
         {
-            "code": "GB/T 1094-2013",
+            "code": "GB/T 1094.1-2013",
             "name": "电力变压器 第1部分：总则",
             "year": 2013,
             "scope": "电力变压器的总则技术要求",
@@ -347,10 +404,10 @@ def get_all_standards():
             "related_rules": ["voltage_deviation", "voltage_rise_check"]
         },
         {
-            "code": "GB/T 12747-2004",
-            "name": "标称电压1kV及以下交流电力系统用自愈式串联电容器",
-            "year": 2004,
-            "scope": "低压自愈式串联电容器的技术要求",
+            "code": "GB/T 12747.1-2017",
+            "name": "标称电压1kV及以下交流电力系统用自愈式并联电容器 第1部分: 总则",
+            "year": 2017,
+            "scope": "低压自愈式并联电容器的技术要求",
             "related_equipment": ["电容器"],
             "related_rules": ["voltage_deviation"]
         },
@@ -371,14 +428,6 @@ def get_all_standards():
             "related_rules": ["single_phase_min"]
         },
         {
-            "code": "GB/T 19069-2003",
-            "name": "电力系统远动保护技术规定",
-            "year": 2003,
-            "scope": "电力系统远动保护的技术要求",
-            "related_equipment": ["保护装置"],
-            "related_rules": ["single_phase_min"]
-        },
-        {
             "code": "GB/T 2900-2007",
             "name": "电工术语 变压器、互感器、调压器和电抗器",
             "year": 2007,
@@ -395,4 +444,4 @@ def get_all_standards():
             "related_rules": ["voltage_deviation", "harmonic"]
         }
     ]
-    return {s["code"]: s for s in _standards_list}
+    return _normalize_standard_references(_standards_list)

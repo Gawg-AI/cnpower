@@ -1,3 +1,5 @@
+import re
+
 from .compliance_constraints import get_compliance_constraint_library
 from .normalization import (
     canonical_equipment_type,
@@ -5,6 +7,13 @@ from .normalization import (
     normalize_equipment,
     normalize_results,
 )
+
+
+_NUMBER_RE = re.compile(r"[-+]?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?")
+
+
+def _numbers(value):
+    return [float(match.group(0)) for match in _NUMBER_RE.finditer(str(value))]
 
 
 FIELD_ALIASES = {
@@ -16,6 +25,9 @@ FIELD_ALIASES = {
     "short_circuit_current_1s_ka": "short_time_thermal_current_ka",
     "rated_short_circuit_making_ka": "rated_peak_withstand_ka",
     "dynamic_current_ka": "rated_peak_withstand_ka",
+    "rated_peak_withstand_ka": "dynamic_current_ka",
+    "short_time_thermal_current_ka": "thermal_current_ka_1s",
+    "harmonic_current_percent": "harmonic_current_limit_percent",
     "max_i_ka": "rated_current_a",
     "frame_current_a": "rated_current_a",
     "vn_kv": "rated_voltage_kv",
@@ -33,6 +45,8 @@ TYPE_ALIASES_FOR_CONSTRAINTS = {
     "overhead_line": "line_overhead",
     "switch": "switch_breaker",
     "breaker": "switch_breaker",
+    "fuse_mv": "fuse",
+    "switchgear.fuse_mv": "fuse",
     "pv": "pv_inverter",
     "sgen": "pv_inverter",
     "battery": "storage",
@@ -45,6 +59,11 @@ def _canonical_type(equipment_type):
 
 
 def _has_field(data, field):
+    if field == "anti_islanding":
+        protections = data.get("protection_functions")
+        return data.get(field) is not None or (
+            isinstance(protections, (list, tuple, set)) and "anti_islanding" in protections
+        )
     if field in data and data[field] is not None:
         return True
     alias = FIELD_ALIASES.get(field)
@@ -55,6 +74,12 @@ def _has_field(data, field):
 
 def _get(data, *names):
     for name in names:
+        if name == "anti_islanding":
+            if name in data and data[name] is not None:
+                return data[name]
+            protections = data.get("protection_functions")
+            if isinstance(protections, (list, tuple, set)):
+                return "anti_islanding" in protections
         if name in data and data[name] is not None:
             return data[name]
         alias = FIELD_ALIASES.get(name)
@@ -168,10 +193,28 @@ def _evaluate_rule(rule, equipment, results):
         soc = first_number(_get(results, "soc_percent"))
         soc_range = _get(equipment, "soc_range_percent")
         if soc is not None and soc_range is not None:
-            nums = [float(x) for x in str(soc_range).replace("~", " ").split() if x.replace(".", "", 1).isdigit()]
+            nums = _numbers(soc_range)
             if len(nums) >= 2:
                 passed = min(nums) <= soc <= max(nums)
                 return _finding(rule_id, passed, "SOC must remain inside equipment operating range.", severity=severity)
+    if rule_id == "SA_RES_001":
+        residual = first_number(_get(equipment, "residual_voltage_kv"))
+        bil = first_number(_get(equipment, "protected_equipment_bil_kv"))
+        if residual is not None and bil is not None:
+            return _finding(rule_id, residual < bil, "Surge arrester residual voltage must be below protected equipment BIL.", severity=severity)
+    if rule_id in {"PV_PQ_001", "EV_PQ_001"}:
+        limit = first_number(_get(equipment, "harmonic_current_percent"))
+        thd = first_number(_get(results, "thd_percent"))
+        checks = []
+        if limit is not None and thd is not None:
+            checks.append(("harmonic current", thd <= limit))
+        if rule_id == "PV_PQ_001":
+            checks.append(("anti-islanding", bool(_get(equipment, "anti_islanding"))))
+        if checks:
+            passed = all(item[1] for item in checks)
+            failed_labels = [label for label, ok in checks if not ok]
+            message = "Rule evaluated successfully." if passed else "Limit exceeded: " + ", ".join(failed_labels)
+            return _finding(rule_id, passed, message, severity=severity)
     if "_P_" in rule_id:
         checks.append(("active power", abs(first_number(_get(results, "p_mw"), 0.0) * 1000.0), _get(equipment, "rated_charge_discharge_power_kw", "rated_power_kw")))
     if "_Q_" in rule_id or rule_id.startswith("RC_Q"):

@@ -1,5 +1,5 @@
-def get_all_photovoltaic():
-    return {
+﻿def get_all_photovoltaic():
+    data = {
         "pv_module": {
             "mono_si": {
                 "mono_300Wp": {
@@ -13,8 +13,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1580×808×35",
                     "weight_kg": 18.5,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_350Wp": {
                     "rated_power_wp": 350,
@@ -27,8 +27,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1650×992×35",
                     "weight_kg": 20.0,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_400Wp": {
                     "rated_power_wp": 400,
@@ -41,8 +41,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1722×1134×30",
                     "weight_kg": 21.5,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_450Wp": {
                     "rated_power_wp": 450,
@@ -55,8 +55,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1767×1134×30",
                     "weight_kg": 23.0,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_500Wp": {
                     "rated_power_wp": 500,
@@ -69,8 +69,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "2094×1134×30",
                     "weight_kg": 26.5,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_550Wp": {
                     "rated_power_wp": 550,
@@ -83,8 +83,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "2278×1134×30",
                     "weight_kg": 28.5,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "mono_600Wp": {
                     "rated_power_wp": 600,
@@ -97,8 +97,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "2278×1134×35",
                     "weight_kg": 30.0,
                     "cell_type": "mono_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 }
             },
             "poly_si": {
@@ -113,8 +113,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1640×992×35",
                     "weight_kg": 18.0,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "poly_270Wp": {
                     "rated_power_wp": 270,
@@ -127,8 +127,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1640×992×35",
                     "weight_kg": 18.5,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "poly_300Wp": {
                     "rated_power_wp": 300,
@@ -141,8 +141,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1650×992×35",
                     "weight_kg": 19.0,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "poly_330Wp": {
                     "rated_power_wp": 330,
@@ -155,8 +155,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1680×992×35",
                     "weight_kg": 19.5,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "poly_350Wp": {
                     "rated_power_wp": 350,
@@ -169,8 +169,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1700×992×35",
                     "weight_kg": 20.0,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "poly_370Wp": {
                     "rated_power_wp": 370,
@@ -183,8 +183,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1700×992×35",
                     "weight_kg": 20.5,
                     "cell_type": "poly_si",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 }
             },
             "thin_film": {
@@ -199,8 +199,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 12.0,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "thin_280Wp": {
                     "rated_power_wp": 280,
@@ -213,8 +213,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 12.0,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "thin_310Wp": {
                     "rated_power_wp": 310,
@@ -227,8 +227,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 12.5,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "thin_340Wp": {
                     "rated_power_wp": 340,
@@ -241,8 +241,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 12.5,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "thin_360Wp": {
                     "rated_power_wp": 360,
@@ -255,8 +255,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 13.0,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 },
                 "thin_380Wp": {
                     "rated_power_wp": 380,
@@ -269,8 +269,8 @@ def get_all_photovoltaic():
                     "dimensions_mm": "1200×600×7",
                     "weight_kg": 13.0,
                     "cell_type": "thin_film",
-                    "standard": "GB/T 19964-2012",
-                    "source_note": "参数依据GB/T 19964-2012及主流厂家产品手册"
+                    "standard": "GB/T 9535.1-2025 / IEC 61215",
+                    "source_note": "组件参数依据GB/T 9535.1-2025、IEC 61215及主流厂家产品手册"
                 }
             }
         },
@@ -463,3 +463,14 @@ def get_all_photovoltaic():
             }
         }
     }
+    return _enhance_photovoltaic(data)
+
+
+def _enhance_photovoltaic(data):
+    for category in ("string_inverter", "central_inverter"):
+        for entry in data.get(category, {}).values():
+            protections = entry.get("protection_functions", [])
+            if isinstance(protections, (list, tuple, set)):
+                entry.setdefault("anti_islanding", "anti_islanding" in protections)
+            entry.setdefault("harmonic_current_limit_percent", 5)
+    return data

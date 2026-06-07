@@ -16,7 +16,7 @@ def get_engineering_asset_schema():
     return {
         "metadata": {
             "name": "中国10kV-0.4kV配网规划系统工程对象模型",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "purpose": "为图元库拖拽建模、参数录入、pandapower映射、规范校验和规划方案比较提供统一元数据。",
         },
         "base_system": {
@@ -285,4 +285,3 @@ def get_engineering_asset_schema():
             },
         },
     }
-

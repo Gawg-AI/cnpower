@@ -53,7 +53,7 @@ def get_all_reactive_compensation():
             "dielectric_loss_percent": 0.10,
             "phase_count": 3,
             "connection_type": "delta",
-            "standard": "GB/T 12747",
+            "standard": "GB/T 12747.1-2017",
             "source_note": "BSMJ系列0.4kV自愈式并联电容器典型参数"
         }
 
@@ -77,7 +77,7 @@ def get_all_reactive_compensation():
             "response_time_ms": resp_ms,
             "efficiency_percent": eff_pct,
             "harmonic_content_percent": harm_pct,
-            "standard": "GB/T 36287",
+            "standard": "NB/T 10994-2022",
             "source_note": "SVG静止无功发生器典型参数"
         }
 

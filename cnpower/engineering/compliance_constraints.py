@@ -14,7 +14,7 @@ def get_compliance_constraint_library():
     return {
         "metadata": {
             "name": "中国配网一次设备合规约束库",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "purpose": "pandapower负责计算潮流、短路、时序和优化结果，本库负责按设备类型判定一次设备是否满足国标/行标/工程约束。",
             "standard_reference_basis": [
                 {"code": "GB/T 15544.1-2023", "name": "三相交流系统短路电流计算 第1部分：电流计算", "use": "短路电流计算结果口径"},
@@ -157,7 +157,7 @@ def get_compliance_constraint_library():
                 _check("RMU_SC_001", "环网柜短路耐受/开断", ["rated_short_circuit_breaking_ka", "rated_short_time_withstand_ka_4s"], ["ikss_ka", "ith_ka"], "环网柜回路开断能力和短时耐受应不低于安装点短路水平。", "GB/T 3906-2020 / GB/T 11022-2020"),
             ],
             "reactive_compensation": [
-                _check("RC_V_001", "无功补偿额定电压", ["rated_voltage_kv"], ["operating_voltage_kv"], "运行电压不得超过电容器或SVG允许电压。", "GB/T 11024-2019 / GB/T 12747.1-2004"),
+                _check("RC_V_001", "无功补偿额定电压", ["rated_voltage_kv"], ["operating_voltage_kv"], "运行电压不得超过电容器或SVG允许电压。", "GB/T 11024-2019 / GB/T 12747.1-2017"),
                 _check("RC_Q_001", "无功补偿容量匹配", ["rated_capacity_kvar"], ["q_mvar"], "投入容量应满足功率因数目标且不得引起电压越上限。", "GB 50052-2009"),
                 _check("RC_HARM_001", "电容器谐波/串抗匹配", ["detuning_reactor_percent"], ["harmonic_voltage_distortion_percent"], "存在谐波时应配置合适电抗率或滤波装置。", "GB/T 14549-1993", "warning"),
             ],
@@ -169,7 +169,7 @@ def get_compliance_constraint_library():
             ],
             "surge_arrester": [
                 _check("SA_UC_001", "避雷器持续运行电压", ["continuous_operating_voltage_kv"], ["max_phase_voltage_kv"], "系统最高相电压不得超过避雷器持续运行电压。", "GB/T 11032-2020"),
-                _check("SA_RES_001", "避雷器残压与绝缘配合", ["residual_voltage_kv"], ["protected_equipment_bil_kv"], "避雷器残压应低于被保护设备绝缘耐受水平并保留配合裕度。", "GB/T 11032-2020"),
+                _check("SA_RES_001", "避雷器残压与绝缘配合", ["residual_voltage_kv", "protected_equipment_bil_kv"], [], "避雷器残压应低于被保护设备绝缘耐受水平并保留配合裕度。", "GB/T 11032-2020"),
                 _check("SA_DIS_001", "避雷器标称放电电流", ["nominal_discharge_current_ka"], [], "标称放电电流等级应匹配线路雷电活动和设备重要性。", "GB/T 11032-2020", "warning"),
             ],
             "load": [
